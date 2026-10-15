@@ -13,7 +13,7 @@ chmod 755 $APP/bin/typst && echo "Typst：$($APP/bin/typst --version)"
 su -s /bin/bash mathweb -c "export PATH=/opt/node/bin:/usr/bin:/bin; cd $APP && npm ci --omit=dev --registry=https://registry.npmmirror.com --no-audit --no-fund" >/dev/null
 find $APP/node_modules/mathjax/es5 -name '*.js' ! -name '*.gz' -exec gzip -9kf {} \;
 cp $APP/deploy/maki-math.service /etc/systemd/system/ && systemctl daemon-reload
-install -m 755 $APP/deploy/pull.sh /usr/local/bin/maki-update   # 以后用 maki-update 从 GitHub 更新
+install -m 755 $APP/deploy/pull.sh /usr/local/bin/maki-update && ln -sf /usr/local/bin/maki-update /usr/bin/maki-update   # 以后用 maki-update 从 GitHub 更新（sudo -i 的命令路径里没有 /usr/local/bin）
 systemctl restart maki-math
 for i in $(seq 1 90); do curl -sf http://127.0.0.1:3000/healthz >/dev/null && { echo "== 更新完成"; exit 0; }; sleep 1; done
 echo "启动失败，请运行 journalctl -u maki-math -n 50 查看"; exit 1
