@@ -350,7 +350,7 @@ async function resolveFeedback(u, id, resolution) {
   if (!f) throw httpError(404, '反馈不存在');
   if (!canReview(u, f.course)) throw httpError(403, '你没有这门课的审核权限');
   resolution = str(resolution || '', 1000, '处理结果').trim();
-  if (!resolution) throw httpError(400, '请写明处理结果，它会公开显示');
+  if (!resolution) throw httpError(400, '请写明处理结果（只有审核者能看到）');
   await run("UPDATE feedback SET status = 'resolved', resolution = ?, handler_id = ?, decided_at = ? WHERE id = ?", resolution, u.id, now(), id);
 }
 

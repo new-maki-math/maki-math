@@ -172,7 +172,7 @@ test('完整流程', async () => {
   assert.equal((await ed('PUT', '/api/draft/shuxue-jichu', { items: [] })).status, 200);
   assert.equal((await one("SELECT COUNT(*)::int AS n FROM drafts")).n, 0);
 
-  /* 反馈 → 处理 → 公开 */
+  /* 反馈 → 处理：反馈内容不可控，只有审核者能看到 */
   /* 访客也能反馈，但要先做计算验证 */
   assert.equal((await anon('POST', '/api/feedback/shuxue-jichu/prop', { kind: '内容有错', text: 'x' })).status, 400);
   assert.equal((await anon('POST', '/api/feedback/shuxue-jichu/prop', { kind: '内容有错', text: '访客反馈', pow: await solve(anon) })).status, 200);
@@ -181,7 +181,9 @@ test('完整流程', async () => {
   assert.equal(fbs.length, 2);
   const fb = fbs[1];
   assert.equal((await admin('POST', `/api/feedback/${fb.id}/resolve`, { resolution: '已在例题里补充' })).status, 200);
-  assert.equal((await anon('GET', '/api/node/shuxue-jichu/prop/history')).body.feedback.length, 1);
+  assert.equal((await anon('GET', '/api/node/shuxue-jichu/prop/history')).body.feedback.length, 0);
+  assert.equal((await ed('GET', '/api/node/shuxue-jichu/prop/history')).body.feedback.length, 0);   // 编辑也看不到
+  assert.equal((await admin('GET', '/api/node/shuxue-jichu/prop/history')).body.feedback.length, 1);
 
   /* 路线：保存（私有）→ 申请分享 → 审核通过 → 分享链接可见 */
   const route = await ed('POST', '/api/routes', { course: 'shuxue-jichu', title: '命题入门', descr: '三节课', items: [{ id: 'prop', p: 0, note: '先讲定义' }, { id: 'not', p: 0 }], wantFeatured: true });

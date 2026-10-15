@@ -190,7 +190,8 @@ app.post('/api/applications', async req => { const u = need(req); await wf.apply
 app.get('/api/node/:slug/:id/history', async req => {
   await needCourse(req.params.slug);
   const rows = await all('SELECT v.version, v.summary, v.created_at, v.data_json IS NULL AS deleted, r.nickname AS reviewer FROM versions v LEFT JOIN users r ON r.id = v.reviewer_id WHERE v.course = ? AND v.target = ? ORDER BY v.version DESC', req.params.slug, req.params.id);
-  const fb = await all("SELECT f.id, f.kind, f.text, f.resolution, f.decided_at, h.nickname AS handler FROM feedback f LEFT JOIN users h ON h.id = f.handler_id WHERE f.course = ? AND f.node_id = ? AND f.status = 'resolved' ORDER BY f.id DESC LIMIT 50", req.params.slug, req.params.id);
+  /* 反馈是任何人都能写的，内容不可控：只给这门课的审核者看，普通访客的页面上一律不显示 */
+  const fb = !(req.user && auth.canReview(req.user, req.params.slug)) ? [] : await all("SELECT f.id, f.kind, f.text, f.resolution, f.decided_at, h.nickname AS handler FROM feedback f LEFT JOIN users h ON h.id = f.handler_id WHERE f.course = ? AND f.node_id = ? AND f.status = 'resolved' ORDER BY f.id DESC LIMIT 50", req.params.slug, req.params.id);
   return { versions: rows, feedback: fb };
 });
 app.get('/api/version/:slug/:target/:version', async req => {
