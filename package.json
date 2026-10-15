@@ -18,6 +18,7 @@
     "fastify": "5.4.0",
     "htmlparser2": "^12.0.0",
     "markdown-it": "^15.0.2",
+    "markdown-it-cjk-friendly": "3.0.0",
     "mathjax": "3.2.2",
     "pg": "^8.13.1",
     "tex2typst": "^0.6.2"

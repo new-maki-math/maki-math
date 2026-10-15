@@ -14,8 +14,10 @@ const { Element, Text } = require('domhandler');
 const render = require('dom-serializer').default;
 
 const TYPST = process.env.TYPST_BIN || (fs.existsSync(path.join(__dirname, '..', 'bin', 'typst')) ? path.join(__dirname, '..', 'bin', 'typst') : 'typst');
+const cjk = require('markdown-it-cjk-friendly');   // 中文标点紧挨 ** 时也能加粗
 const md = new MarkdownIt('default', { html: false, linkify: false, typographer: false, breaks: false })
-  .disable(['link', 'image', 'autolink', 'heading', 'lheading', 'code', 'fence', 'reference', 'html_block', 'html_inline', 'hr']);
+  .disable(['link', 'autolink', 'heading', 'lheading', 'code', 'fence', 'reference', 'html_block', 'html_inline', 'hr'])
+  .use(cjk.default || cjk);
 
 /* 常见 LaTeX 命令 → Typst 写法，用来给出修改提示 */
 const HINT = {
@@ -33,7 +35,9 @@ const HINT = {
 function latexProblem(f) {
   const m = /\\([A-Za-z]+)/.exec(f);
   if (m) return `用了 LaTeX 命令 \\${m[1]}，请改成 Typst 写法${HINT[m[1]] ? `：${HINT[m[1]]}` : ''}`;
-  if (f.includes('#')) return '公式里不能用 #（不能调用 Typst 代码）';
+  /* # 只允许作为矩阵参数里的字面量（mat(delim: #none, augment: #2, align: #center)）和转义的 \# */
+  const rest = f.replace(/\\#/g, '').replace(/#(?:none|auto|left|right|center|true|false|-?\d+(?:\.\d+)?(?:em|pt)?|"[^"#\\]*"|\((?:vline|hline): *\(?[-\d, ]*\)?(?:, *(?:vline|hline): *\(?[-\d, ]*\)?)?\))(?![\w(.])/g, '');
+  if (rest.includes('#')) return '公式里不能用 #（不能调用 Typst 代码；显示井号请写 \\#）';
   return null;
 }
 
@@ -68,14 +72,14 @@ const wrap = (x, i) => `#html.elem("${x.display ? 'div' : 'span'}", attrs: (id: 
 async function compileFormulas(list) {
   const out = list.map(x => ({ ...x }));
   for (const x of out) { const p = latexProblem(x.f); if (p) x.err = p; else if (!x.f) x.err = '空公式'; }
-  for (let round = 0; round < 40; round++) {
+  for (let round = 0; round < 300; round++) {
     const todo = out.map((x, i) => [x, i]).filter(([x]) => !x.err && x.mml == null);
     if (!todo.length) break;
     const lines = [...PRE], at = [];
     for (const [x, i] of todo) { at.push([lines.length + 1, i]); lines.push(...wrap(x, i).split('\n')); }
     const r = await runTypst(lines.join('\n') + '\n');
     if (r.ok) {
-      for (const m of r.html.matchAll(/<(span|div) id="m(\d+)">([\s\S]*?)<\/\1>/g)) out[+m[2]].mml = fixMathML(m[3]);
+      for (const m of r.html.matchAll(/<(span|div) id="m(\d+)">([\s\S]*?)<\/\1>/g)) out[+m[2]].mml = augmentLines(out[+m[2]].f, fixMathML(m[3]));
       for (const [x] of todo) if (x.mml == null) x.err = '编译结果缺失';
       for (const m of r.log.matchAll(/m\.typ:(\d+):\d+: warning: (.*) (?:was|were) ignored during MathML export/g)) {
         let hit = null;
@@ -109,6 +113,50 @@ const ACC = { '\u0305': ['\u203E', true], '\u0304': ['\u00AF', false], '\u0302':
   '\u0308': ['\u00A8', false], '\u20D7': ['\u2192', false], '\u0301': ['\u00B4', false], '\u0300': ['\u0060', false], '\u030C': ['\u02C7', false],
   '\u0306': ['\u02D8', false], '\u030A': ['\u02DA', false], '\u20D6': ['\u2190', false], '\u20E1': ['\u2194', false] };
 const OPEN = new Set(['(', '[', '{', '|', '‖', '⌊', '⌈', '⟨', '⟦']);
+/* 网页导出会丢掉 mat 的 augment（增广矩阵的竖线、横线），这里按源码补成 MathML 的 columnlines / rowlines。
+   源码里能生成表格的结构（多行公式本身、mat、cases、vec）按出现顺序与输出里的 <mtable> 一一对应 */
+function augmentLines(f, mml) {
+  if (!/augment:/.test(f) || !mml) return mml;
+  const src = f.replace(/"(?:[^"\\]|\\.)*"/g, m => ' '.repeat(m.length));
+  const tables = [];
+  let d = 0, topBreak = false;
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === '\\' && src[i + 1] !== ' ' && src[i + 1] !== '\n' && i + 1 < src.length) { i++; continue; }
+    if ('([{'.includes(c)) d++; else if (')]}'.includes(c)) d--;
+    else if (!d && (c === '&' || (c === '\\'))) topBreak = true;
+  }
+  if (topBreak) tables.push(null);
+  for (const m of src.matchAll(/\b(mat|cases|vec)\(/g)) {
+    let spec = null;
+    if (m[1] === 'mat') {
+      const rest = src.slice(m.index);
+      const a = /^mat\((?:[^()]|\([^()]*\))*?augment: *#(?:(-?\d+)|\(([^()]*(?:\([^()]*\)[^()]*)*)\))/.exec(rest);
+      if (a) {
+        const nums = x => x == null ? [] : (x.match(/-?\d+/g) || []).map(Number);
+        if (a[1] != null) spec = { v: nums(a[1]), h: [] };
+        else { const h = /hline: *(\([^)]*\)|-?\d+)/.exec(a[2]), v = /vline: *(\([^)]*\)|-?\d+)/.exec(a[2]); spec = { h: nums(h && h[1]), v: nums(v && v[1]) }; }
+      }
+    }
+    tables.push(spec);
+  }
+  if (!tables.some(Boolean)) return mml;
+  const doc = parseDocument(mml, { xmlMode: true, decodeEntities: true });
+  const all = [];
+  const walk = n => { for (const c of n.children || []) if (c.type === 'tag') { if (c.name === 'mtable') all.push(c); walk(c); } };
+  walk(doc);
+  if (all.length === tables.length - 1 && tables[0] === null) tables.shift();   // 只有 & 没有换行时不一定生成表格
+  if (all.length !== tables.length) return mml;
+  all.forEach((t, k) => {
+    const spec = tables[k]; if (!spec) return;
+    const rows = (t.children || []).filter(c => c.type === 'tag' && c.name === 'mtr');
+    const cols = Math.max(0, ...rows.map(r => (r.children || []).filter(c => c.type === 'tag' && c.name === 'mtd').length));
+    const lines = (n, at) => { const set = new Set(at.map(x => x < 0 ? n + x : x)); return Array.from({ length: n - 1 }, (_, i) => set.has(i + 1) ? 'solid' : 'none').join(' '); };
+    if (spec.v.length && cols > 1) t.attribs.columnlines = lines(cols, spec.v);
+    if (spec.h.length && rows.length > 1) t.attribs.rowlines = lines(rows.length, spec.h);
+  });
+  return render(doc.children, { xmlMode: false, selfClosingTags: true, encodeEntities: 'utf8' });
+}
 function fixMathML(s) {
   const doc = parseDocument(s, { xmlMode: true, decodeEntities: true });
   const kids = n => (n.children || []).filter(c => c.type === 'tag');
@@ -190,9 +238,16 @@ function fixMathML(s) {
 const textOf = n => (n.children || []).map(c => c.type === 'text' ? c.data : textOf(c)).join('');
 
 /* ---------- Markdown 部分 ---------- */
+/* 用 + 开头的列表不显示圆点（选择题选项、分条列出的结论） */
+md.renderer.rules.bullet_list_open = (tokens, i, opts, env, self) => tokens[i].markup === '+' ? '<ol class="plain">\n' : self.renderToken(tokens, i, opts);
+md.renderer.rules.bullet_list_close = (tokens, i, opts, env, self) => tokens[i].markup === '+' ? '</ol>\n' : self.renderToken(tokens, i, opts);
+/* 图片只允许本站 /fig/ 下的文件 */
+md.renderer.rules.image = (tokens, i) => { const src = tokens[i].attrGet('src') || ''; return /^\/fig\/[\w\/.-]+\.(svg|png|jpg)$/.test(src) ? `<img src="${src}" alt="">` : ''; };
 function mdToHtml(s) {
   s = s.replace(/^-# (.*)$/gm, '@@small@@$1');
   let h = md.render(s);
+  /* 没有表头的表格：去掉空的表头行 */
+  h = h.replace(/<thead>\s*<tr>\s*(?:<th>\s*<\/th>\s*)+<\/tr>\s*<\/thead>\s*/g, '');
   h = h.replace(/<p>@@small@@/g, '<p class="small">').replace(/@@small@@/g, '')
     .replace(/<blockquote>/g, '<div class="tip">').replace(/<\/blockquote>/g, '</div>')
     .replace(/<table>/g, '<div class="tt-wrap"><table class="tt">').replace(/<\/table>/g, '</table></div>')

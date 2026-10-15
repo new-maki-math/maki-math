@@ -197,6 +197,11 @@ function compileTyp(src, hash) {
   return new Promise((resolve, reject) => {
     const dir = fs.mkdtempSync(path.join(OUT, 'job-'));
     fs.writeFileSync(path.join(dir, 'main.typ'), src);
+    /* 讲义里用到的图：从 public/fig 复制进来（Typst 只能读编译目录里的文件） */
+    for (const m of src.matchAll(/image\("(fig\/[\w\/-]+\.(?:svg|png|jpg))"/g)) {
+      const from = path.join(FIGDIR, m[1].slice(4));
+      if (from.startsWith(FIGDIR) && fs.existsSync(from)) { fs.mkdirSync(path.dirname(path.join(dir, m[1])), { recursive: true }); fs.copyFileSync(from, path.join(dir, m[1])); }
+    }
     const { TYPST } = require('./render');
     execFile(TYPST, ['compile', '--diagnostic-format', 'short', '--root', dir, 'main.typ', 'main.pdf'], { cwd: dir, timeout: 60_000, env: { PATH: process.env.PATH, HOME: dir } }, (err, stdout, stderr) => {
       try {

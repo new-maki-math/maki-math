@@ -210,9 +210,16 @@ test('完整流程', async () => {
   const x3 = await admin('POST', '/api/submissions', { course: LA, kind: 'node', target: 'vec', payload: vecNode(['shuxue-jichu:prop']), summary: '新增向量' });
   assert.equal(x3.status, 200, JSON.stringify(x3.body));
   assert.equal((await admin('POST', `/api/submissions/${x3.body.id}/decide`, { approve: true, score: 2 })).status, 200);
-  assert.equal((await anon('GET', `/c/${LA}/data.js`)).status, 404);   // 下架的课程只有超管看得到
-  assert.equal((await anon('GET', '/c/kaoyan/kb')).status, 404);
-  assert.ok(!(await anon('GET', '/api/courses')).body.cats.some(c => c.courses.some(x => x.id === 'kaoyan')));
+  /* 下架的课程只有超管看得到 */
+  assert.equal((await anon('GET', `/c/${LA}/data.js`)).status, 200);
+  await pool.query(`UPDATE courses SET settings_json = settings_json || '{"hidden": true}'::jsonb WHERE slug = $1`, [LA]);
+  require('../server/course').invalidate(LA);
+  assert.equal((await anon('GET', `/c/${LA}/data.js`)).status, 404);
+  assert.equal((await admin('GET', `/c/${LA}/data.js`)).status, 200);
+  assert.ok(!(await anon('GET', '/api/courses')).body.cats.some(c => c.courses.some(x => x.id === LA)));
+  assert.ok((await admin('GET', '/api/courses')).body.cats.some(c => c.courses.some(x => x.id === LA && x.hidden)));
+  await pool.query(`UPDATE courses SET settings_json = settings_json - 'hidden' WHERE slug = $1`, [LA]);
+  require('../server/course').invalidate(LA);
   const laJs = (await admin('GET', `/c/${LA}/data.js`)).raw.body;
   assert.match(laJs, /"shuxue-jichu:prop":\{"title":"命题"/);
   assert.match(laJs, /"prereqs":\["shuxue-jichu","xiandai-feishuxue"\]/);

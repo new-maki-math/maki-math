@@ -1,0 +1,548 @@
+{
+ "rn_def/body": {
+  "src": "$$ RR^n = {(x_1 , ..., x_n) : med x_1 , ..., x_n in RR}, $$\n\n称为 $n$ 维实向量空间，它的元素叫做（实）向量。\n\n- $RR^2$ 中的向量：$(1, - 2) in RR^2$；$(x, y)$，其中 $x, y in RR$。\n- $RR^3$ 中的向量：$(3, - 4, pi) in RR^3$；$(x, y, z)$，其中 $x, y, z in RR$。\n\n向量中的各个坐标是有顺序的：$(1, 2) !=(2, 1)$。\n\n**标量**：一个实数（或复数）。**向量**：一个实向量（或复向量）。"
+ },
+ "vec_add/body": {
+  "src": "设 $x = (x_1 , ..., x_n) in RR^n$，$y = (y_1 , ..., y_n) in RR^n$，定义\n\n$$ x + y = (x_1 + y_1 , ..., x_n + y_n) . $$\n\n**例.** $(1, 2, 3) + (- 1, 4, 7) = (0, 6, 10)$；$(1, 2, 3, 4, 5, 6) + (- 1, - 2, - 3, - 4, - 5, - 6) = (0, 0, 0, 0, 0, 0)$。\n\n**注.** 我们只能对同一维数的两个向量做加法运算。"
+ },
+ "scalar_mult/body": {
+  "src": "标量 $dot.op$ 向量 $=$ 向量。设 $x = (x_1 , ..., x_n) in RR^n$，$a in RR$，定义\n\n$$ a x = (a x_1 , ..., a x_n) in RR^n . $$\n\n**例.** $3(- 2, 1, 0) = (- 6, 3, 0)$；$-2(0, 1, 3) = (0, - 2, - 6)$；$-(1, 2, 3, 4) = (- 1, - 2, - 3, - 4)$。"
+ },
+ "vec_len/body": {
+  "src": "设 $x = (x_1 , ..., x_n) in RR^n$，定义\n\n$$ | x | = sqrt(x_1^2 + dots.c + x_n^2) . $$\n\n$RR^2$ 中 $|(a, b) | = sqrt(a^2 + b^2)$（勾股定理），$RR^3$ 中 $|(a, b, c) | = sqrt(a^2 + b^2 + c^2)$。\n\n**例.** $|(3, 4) | = sqrt(3^2 + 4^2) = 5$；$|(- 1, 1) | = sqrt(2)$；$|(3, 4, 12) | = sqrt(9 + 16 + 144) = 13$；$RR^n$ 中 $|(1, ..., 1) | = sqrt(n)$。\n\n由定义直接可得 $| a x | = | a | | x |$（$a in RR$）。"
+ },
+ "lincomb_def/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$，$a_1 , ..., a_m in RR$，则称\n\n$$ a_1 x_1 + dots.c + a_m x_m $$\n\n是 $x_1 , ..., x_m$ 的一个**线性组合**。$m = 2$ 时就是 $a x + b y$。\n\n**例.** $2 x + 3 y$，$-x + y$，$x = x + 0 y$，$0 = 0 x + 0 y$ 都是 $x$ 和 $y$ 的线性组合（这里的 $0$ 是零向量——符号滥用）；$(3 x + 5 y) + (x - 3 y) = 4 x + 2 y$ 也是。$x_1 + dots.c + x_m$，$x_1 + 2 x_2 + dots.c + m x_m$ 都是 $x_1 , ..., x_m$ 的线性组合。"
+ },
+ "ex_lincomb/body": {
+  "src": "计算 $2(1, 2, 0) - 3(4, 2, 6)$ 与 $2(1, 2) -(2, 4)$。"
+ },
+ "ex_lincomb/p0": {
+  "src": "$$ 2(1, 2, 0) - 3(4, 2, 6) = (2 dot.op 1 - 3 dot.op 4, med 2 dot.op 2 - 3 dot.op 2, med 2 dot.op 0 - 3 dot.op 6) = (- 10, - 2, - 18) . $$\n$$ 2(1, 2) -(2, 4) = (2 dot.op 1 - 2, med 2 dot.op 2 - 4) = (0, 0) . $$"
+ },
+ "lincomb_closed/body": {
+  "src": "假如 $u, v$ 都是 $x_1 , ..., x_m$ 的线性组合，那么 $u + v$ 是 $x_1 , ..., x_m$ 的一个线性组合；更一般地，$u, v$ 的任何线性组合仍是 $x_1 , ..., x_m$ 的一个线性组合。"
+ },
+ "lincomb_closed/p0": {
+  "src": "若 $u = a_1 x_1 + dots.c + a_m x_m$，$v = b_1 x_1 + dots.c + b_m x_m$（$a_i , b_i in RR$），则\n\n$$ u + v = (a_1 + b_1) x_1 + dots.c + (a_m + b_m) x_m . $$\n\n同理 $c u + d v = (c a_1 + d b_1) x_1 + dots.c + (c a_m + d b_m) x_m$（补全）。"
+ },
+ "span_def/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$，定义\n\n$$ op(\"span\")(x_1 , ..., x_m) = {x_1 , ..., x_m med \"的所有线性组合\"} = {a_1 x_1 + dots.c + a_m x_m : med a_1 , ..., a_m in RR} . $$\n\n若 $op(\"span\")(x_1 , ..., x_m) = RR^n$，则称 $x_1 , ..., x_m$ **张成**了 $RR^n$。"
+ },
+ "ex_span/body": {
+  "src": "判断：(1) $(1, 0), (0, 1)$；(2) $(2, 4), (3, 7)$；(3) $(2, 4), (3, 6)$ 是否张成 $RR^2$。（以及 $(1, 0, 0), (0, 1, 0), (0, 0, 1)$ 张成 $RR^3$。）"
+ },
+ "ex_span/p0": {
+  "src": "(1) 张成。对任意 $(a, b)$，$(a, b) = a(1, 0) + b(0, 1)$。同理 $(1, 0, 0), (0, 1, 0), (0, 0, 1)$ 张成 $RR^3$。\n\n(2) 张成。两个向量不在同一条直线上，任意向量都可以沿这两个方向分解成平行四边形的两边。（补全：解 $a(2, 4) + b(3, 7) = (p, q)$，得 $b = q - 2 p$，$a = (7 p - 3 q)/2$，总有解。）\n\n(3) 不张成。$(3, 6) = 3/2 (2, 4)$，两个向量在同一条过原点的直线上，$op(\"span\")((2, 4), (3, 6))$ 就是这条直线，直线外的点（例如 $(1, 0)$）不在其中。"
+ },
+ "indep_def/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$。称 $x_1 , ..., x_m$ 是**线性无关**的 $<==>$ 对任意 $a_1 , ..., a_m in RR$，\n\n$$ a_1 x_1 + dots.c + a_m x_m = 0 med ==> med a_1 = dots.c = a_m = 0 . $$\n\n即：不存在不平凡的线性组合等于零向量（平凡的线性组合：$0 x_1 + dots.c + 0 x_m$）。\n\n反之，若存在一组不全为零的 $a_1 , ..., a_m$ 使 $a_1 x_1 + dots.c + a_m x_m = 0$，则称它们是**线性相关**的。\n\n**例.** $(1, 2), (2, 4)$ 是线性相关的，因为 $2(1, 2) -(2, 4) = (0, 0)$。"
+ },
+ "indep_test/body": {
+  "src": "要证明 $x_1 , ..., x_m in RR^n$ 是线性无关的，只需要证明\n\n$$ cases(x_1 !=(0 comma ... comma 0) comma, x_2 in.not op(\"span\")(x_1) comma, x_3 in.not op(\"span\")(x_1 comma x_2) comma, quad dots.v, x_m in.not op(\"span\")(x_1 comma ... comma x_(m - 1)) .) $$"
+ },
+ "indep_test/p0": {
+  "src": "笔记只给了结论，这里补上证明。用反证法：假设 $a_1 x_1 + dots.c + a_m x_m = 0$，而 $a_1 , ..., a_m$ 不全为零。设 $k$ 是使 $a_k != 0$ 的最大下标，则 $a_1 x_1 + dots.c + a_k x_k = 0$。\n\n若 $k = 1$，则 $a_1 x_1 = 0$，$a_1 != 0$，所以 $x_1 = 0$，矛盾。\n\n若 $k >= 2$，则\n\n$$ x_k = - (a_1)/(a_k) x_1 - dots.c - (a_(k - 1))/(a_k) x_(k - 1) in op(\"span\")(x_1 , ..., x_(k - 1)), $$\n\n矛盾。所以 $a_1 = dots.c = a_m = 0$。"
+ },
+ "basis_def/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$。称 $x_1 , ..., x_m$ 构成 $RR^n$ 的一组**基**\n\n$$ <==> cases(x_1 comma ... comma x_m med \"张成了\" med RR^n comma, x_1 comma ... comma x_m med \"是线性无关的\" .) $$\n\n同样可以定义一个线性子空间 $V$ 的基（张成 $V$ 且线性无关），基中向量的个数叫做 $V$ 的**维数** $dim V$。"
+ },
+ "basis_props/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$。\n\n+ (1) 若 $x_1 , ..., x_m$ 构成 $RR^n$ 的一组基，则 $m = n$；\n+ (2) 若 $x_1 , ..., x_m$ 张成了 $RR^n$，则 $m >= n$；\n+ (3) 若 $x_1 , ..., x_m$ 是线性无关的，则 $m <= n$。\n\n**注.** (2)(3) 需要证明，(1) 是 (2)(3) 的结论。证明要用到行阶梯形，放在第 7 章：[[basis\\_props\\_pf]]。"
+ },
+ "subspace_def/body": {
+  "src": "设 $V subset RR^n$。称 $V$ 是 $RR^n$ 的一个**线性子空间**（简称子空间）\n\n$$ <==> cases(0 in V comma, \"若 \" v comma w in V comma med \"则 \" v + w in V comma, \"若 \" v in V comma med a in RR comma med \"则 \" a v in V .) $$\n\n后两条合起来就是：对线性组合封闭。\n\n称 $RR^n$ 的 $1$ 维子空间为**直线**（line），$2$ 维子空间为**平面**（plane），$(n - 1)$ 维子空间为**超平面**（hyperplane）。"
+ },
+ "ex_subspace_list/body": {
+  "src": "判断：$nothing$；$x$ 轴；$RR^3$ 中过原点的直线；$RR^n$ 中若干向量的张成。"
+ },
+ "ex_subspace_list/p0": {
+  "src": "- $nothing$ 不是 $RR^n$ 的线性子空间（不含 $0$）。\n- $x$ 轴是 $RR^2$ 的线性子空间（见下一个例子）。\n- 过原点的直线 ${t v : t in RR}$ 是 $RR^3$ 的线性子空间。\n- $RR^n$ 中若干向量的张成是 $RR^n$ 的线性子空间，见 [[span\\_subspace]]。"
+ },
+ "span_subspace/body": {
+  "src": "设 $x_1 , ..., x_m in RR^n$，则 $op(\"span\")(x_1 , ..., x_m)$ 是 $RR^n$ 的线性子空间。"
+ },
+ "span_subspace/p0": {
+  "src": "$0 = 0 x_1 + dots.c + 0 x_m$ 在其中；两个线性组合的和、线性组合的倍数仍是 $x_1 , ..., x_m$ 的线性组合（[[lincomb\\_closed]]）。"
+ },
+ "ex_sub_axis/body": {
+  "src": "证明 $V = {(x, 0, ..., 0) : med x in RR} subset RR^n$ 是 $RR^n$ 的线性子空间。"
+ },
+ "ex_sub_axis/p0": {
+  "src": "① $(0, ..., 0) = (0, 0, ..., 0) in V$。\n\n② 设 $v = (x, 0, ..., 0)$，$w = (y, 0, ..., 0) in V$，则 $v + w = (x + y, 0, ..., 0) in V$。\n\n③ 设 $v = (x, 0, ..., 0) in V$，$a in RR$，则 $a v = (a x, 0, ..., 0) in V$。"
+ },
+ "ex_sub_W/body": {
+  "src": "证明 $W = {(x, y, x + y) : med x, y in RR} subset RR^3$ 是 $RR^3$ 的线性子空间。"
+ },
+ "ex_sub_W/p0": {
+  "src": "① $(0, 0, 0) = (0, 0, 0 + 0) in W$。\n\n② 设 $v_1 = (x, y, x + y)$，$v_2 = (z, w, z + w) in W$，则 $v_1 + v_2 = (x + z, med y + w, med (x + z) + (y + w)) in W$。\n\n③ 设 $v = (x, y, x + y) in W$，$a in RR$，则 $a v = (a x, a y, a x + a y) in W$。"
+ },
+ "ex_sub_W/p1": {
+  "src": "$$ (x, y, x + y) = (x, 0, x) + (0, y, y) = x(1, 0, 1) + y(0, 1, 1), $$\n$$ W = {x(1, 0, 1) + y(0, 1, 1) : med x, y in RR} = op(\"span\")((1, 0, 1), (0, 1, 1)), $$\n\n张成是子空间。"
+ },
+ "dot_def/body": {
+  "src": "设 $x = (x_1 , ..., x_n)$，$y = (y_1 , ..., y_n) in RR^n$，定义\n\n$$ x dot.op y = x_1 y_1 + dots.c + x_n y_n in RR . $$\n\n向量 $dot.op$ 向量 $=$ 标量。"
+ },
+ "dot_props/body": {
+  "src": "设 $x, y, z in RR^n$，$a in RR$，则\n\n$$ cases((x + y) dot.op z = x dot.op z + y dot.op z & ①, (a x) dot.op y = x dot.op (a y) = a(x dot.op y) & ②, x dot.op y = y dot.op x & ③, x dot.op x = | x |^2 & ④) $$"
+ },
+ "dot_props/p0": {
+  "src": "设 $x = (x_1 , ..., x_n)$，$y = (y_1 , ..., y_n)$，$z = (z_1 , ..., z_n)$。\n\n① 左 $= (x_1 + y_1 , ..., x_n + y_n) dot.op (z_1 , ..., z_n) = (x_1 + y_1) z_1 + dots.c + (x_n + y_n) z_n = x_1 z_1 + y_1 z_1 + dots.c + x_n z_n + y_n z_n$；右 $= x_1 z_1 + dots.c + x_n z_n + y_1 z_1 + dots.c + y_n z_n$。\n\n② $(a x_1 , ..., a x_n) dot.op (y_1 , ..., y_n) = a x_1 y_1 + dots.c + a x_n y_n$；$(x_1 , ..., x_n) dot.op (a y_1 , ..., a y_n) = a x_1 y_1 + dots.c + a x_n y_n$；$a(x_1 y_1 + dots.c + x_n y_n) = a x_1 y_1 + dots.c + a x_n y_n$。\n\n③ 左 $= x_1 y_1 + dots.c + x_n y_n$，右 $= y_1 x_1 + dots.c + y_n x_n$。\n\n④ 左 $= x_1^2 + dots.c + x_n^2$，右 $= | x |^2 = (sqrt(x_1^2 + dots.c + x_n^2))^2 = x_1^2 + dots.c + x_n^2$。"
+ },
+ "cs_ineq/body": {
+  "src": "设 $x, y in RR^n$，则\n\n$$ -| x | | y | <= x dot.op y <= | x | | y |, wide \"即\" wide | x dot.op y | <= | x | | y | . $$\n\n注意各个符号的含义：$x dot.op y$ 是向量点乘，结果是实数，$| x dot.op y |$ 是它的绝对值；$| x |, | y |$ 是 $RR^n$ 中的长度，$| x | | y |$ 是实数乘法。"
+ },
+ "cs_ineq/p0": {
+  "src": "1° 若 $x = 0$ 或 $y = 0$，则原不等式显然成立（两边都是 $0$）。\n\n2° 假设 $x != 0$ 且 $y != 0$。只需证明\n\n$$ lr(|x/(| x |) dot.op y/(| y |)|) = lr(|(x dot.op y)/(| x | | y |)|) = (| x dot.op y |)/(| x | | y |) <= 1 . $$\n\n设 $u = x/(| x |)$，$v = y/(| y |)$，则 $| u | = | x/(| x |) | = 1/(| x |) | x | = 1$（用了 $| a x | = | a | | x |$），同理 $| v | = 1$。\n\n因此我们只需证明：若 $u, v in RR^n$ 且 $| u | = | v | = 1$，则 $| u dot.op v | <= 1$，或等价地 $-1 <= u dot.op v <= 1$。\n\n考虑\n\n$$ 0 <=(u + v) dot.op (u + v) = u dot.op u + u dot.op v + v dot.op u + v dot.op v = | u |^2 + 2(u dot.op v) + | v |^2 = 2 + 2(u dot.op v), $$\n\n故 $2(u dot.op v) >= - 2$，即 $u dot.op v >= - 1$。另一方面\n\n$$ 0 <=(u - v) dot.op (u - v) = | u |^2 - 2(u dot.op v) + | v |^2 = 2 - 2(u dot.op v), $$\n\n故 $2(u dot.op v) <= 2$，即 $u dot.op v <= 1$。"
+ },
+ "ex_cs_check/body": {
+  "src": "设 $v = (1, - 2, 0)$，$w = (3, 4, 5)$，检验 $| v dot.op w | <= | v | dot.op | w |$。"
+ },
+ "ex_cs_check/p0": {
+  "src": "$v dot.op w = 3 - 8 = - 5$，$| v dot.op w | = | - 5 | = 5$。$| v | = sqrt(1^2 + 2^2) = sqrt(5)$，$| w | = sqrt(3^2 + 4^2 + 5^2) = sqrt(50) = 5 sqrt(2)$。\n\n$$ | v | dot.op | w | = sqrt(5) dot.op 5 sqrt(2) = 5 sqrt(10) approx 15.81 . $$\n\n经检验，$| v dot.op w | <= | v | dot.op | w |$。"
+ },
+ "angle_def/body": {
+  "src": "回顾：中学阶段我们有 $arrow(u) dot.op arrow(v) = | arrow(u) | | arrow(v) | cos theta$，其中 $cos theta in [- 1, 1]$。\n\n在 $RR^n$ 中，希望定义 $x, y in RR^n$（$x, y != 0$）的夹角 $theta$ 满足 $cos theta = (x dot.op y)/(| x | | y |)$，即 $theta = arccos ((x dot.op y)/(| x | | y |))$。这必须要有 $-1 <= (x dot.op y)/(| x | | y |) <= 1$，而这就是 C-S 不等式。\n\n**定义.** 设 $x, y in RR^n$，$x, y != 0$，定义 $x, y$ 之间的夹角为\n\n$$ arccos ((x dot.op y)/(| x | | y |)) . $$"
+ },
+ "ex_cs_sum/body": {
+  "src": "设 $x_1 , ..., x_n in RR$，求证 $(x_1 + dots.c + x_n)^2 <= n(x_1^2 + dots.c + x_n^2)$。"
+ },
+ "ex_cs_sum/p0": {
+  "src": "$x_1^2 + dots.c + x_n^2 = |(x_1 , ..., x_n) |^2$，$x_1 + dots.c + x_n = (1, ..., 1) dot.op (x_1 , ..., x_n)$。设 $x = (x_1 , ..., x_n)$，$y = (1, ..., 1) in RR^n$，则由 C-S 不等式 $(x dot.op y)^2 <= | x |^2 | y |^2$，即\n\n$$ (x_1 + dots.c + x_n)^2 <=(1^2 + dots.c + 1^2)(x_1^2 + dots.c + x_n^2) = n(x_1^2 + dots.c + x_n^2) . $$"
+ },
+ "ex_cs_frac/body": {
+  "src": "设 $a_1 , ..., a_n >= 0$，$b_1 , ..., b_n > 0$，求证\n\n$$ (sqrt(a_1) + dots.c + sqrt(a_n))^2 <=((a_1)/(b_1) + dots.c + (a_n)/(b_n))(b_1 + dots.c + b_n) . $$\n\n（笔记写 $b_i >= 0$；$b_i$ 在分母上，应为 $b_i > 0$。）"
+ },
+ "ex_cs_frac/p0": {
+  "src": "通过观察，原式具有 $(x dot.op y)^2 <= | x |^2 | y |^2$ 的形式。设\n\n$$ x = (sqrt(a_1)/sqrt(b_1) , ..., sqrt(a_n)/sqrt(b_n)), wide y = (sqrt(b_1) , ..., sqrt(b_n)), $$\n\n则 $x dot.op y = sqrt(a_1) + dots.c + sqrt(a_n)$，$| x |^2 = (a_1)/(b_1) + dots.c + (a_n)/(b_n)$，$| y |^2 = b_1 + dots.c + b_n$。因此 $(x dot.op y)^2 <= | x |^2 | y |^2$ 就是原式。\n\n**注.** 原式等价于：若 $a_i >= 0$，$b_i > 0$，则\n\n$$ (a_1)/(b_1) + dots.c + (a_n)/(b_n) >= ((sqrt(a_1) + dots.c + sqrt(a_n))^2)/(b_1 + dots.c + b_n) . $$"
+ },
+ "dot_geom/body": {
+  "src": "根据定义 $v dot.op w = | v | | w | cos theta$，其中 $theta$ 是 $v, w$ 之间的夹角，$v, w in RR^n$，$v, w != 0$。\n\n$$ cases(v parallel w <==> v dot.op w = plus.minus | v | | w | <==> | v dot.op w | = | v | | w | comma, v comma w med \"同向\" <==> v dot.op w = | v | | w | comma, v comma w med \"反向\" <==> v dot.op w = - | v | | w | comma, v bot w <==> v dot.op w = 0 .) $$\n\n因此，假设给定了 $| v |$ 和 $| w |$（$v, w != 0$），那么 $v dot.op w$：取到最大值 $| v | | w | <==> v, w$ 同向；取到 $0 <==> v bot w$；取到最小值 $-| v | | w | <==> v, w$ 反向。"
+ },
+ "ex_perp/body": {
+  "src": "求证 $(3, 1) bot (- 1, 3)$，$(3, 1) bot (- 2, 6)$。"
+ },
+ "ex_perp/p0": {
+  "src": "$(3, 1) dot.op (- 1, 3) = - 3 + 3 = 0$，$(3, 1) dot.op (- 2, 6) = - 6 + 6 = 0$。"
+ },
+ "perp_comb/body": {
+  "src": "如果 $u bot v$ 且 $u bot w$，则对任意 $a, b in RR$，都有 $u bot (a v + b w)$。"
+ },
+ "perp_comb/p0": {
+  "src": "$$ u dot.op (a v + b w) = u dot.op (a v) + u dot.op (b w) = a(u dot.op v) + b(u dot.op w) = 0 . $$"
+ },
+ "perp_subspace/body": {
+  "src": "若 $v in RR^n$，则 $W = {w in RR^n : med v dot.op w = 0} subset RR^n$ 是 $RR^n$ 的线性子空间。"
+ },
+ "perp_subspace/p0": {
+  "src": "① $v dot.op 0 = 0$，故 $0 in W$。\n\n② 设 $w_1 , w_2 in W$，即 $v dot.op w_1 = v dot.op w_2 = 0$，则 $v dot.op (w_1 + w_2) = v dot.op w_1 + v dot.op w_2 = 0$，故 $w_1 + w_2 in W$。\n\n③ 设 $w in W$，即 $v dot.op w = 0$，设 $a in RR$，则 $v dot.op (a w) = a(v dot.op w) = 0$，故 $a w in W$。\n\n②③：对线性组合封闭。"
+ },
+ "proj_def/body": {
+  "src": "$op(\"proj\")_w (v)$：$v$ 在 $w$ 方向上的投影。\n\n**推导.** 设 $op(\"proj\")_w (v) = k w$，其中 $k in RR$。从 $v$ 的终点向 $w$ 所在直线作垂线，垂足就是 $k w$，所以 $k w - v bot w$：\n\n$$ (k w - v) dot.op w = 0 med (w != 0) med => med (k w) dot.op w - v dot.op w = 0 med => med k(w dot.op w) = v dot.op w med => med k | w |^2 = v dot.op w med => med k = (v dot.op w)/(| w |^2) . $$\n\n**定义.** 设 $w in RR^n$，$w != 0$，$v in RR^n$，定义\n\n$$ op(\"proj\")_w (v) = (v dot.op w)/(| w |^2) w, $$\n\n其中 $(v dot.op w)/(| w |^2) in RR$，$w in RR^n$。"
+ },
+ "ex_proj_axis/body": {
+  "src": "设 $w = (1, 0)$，$v = (a, b) in RR^2$，检验 $op(\"proj\")_w (v) = (a, 0)$。"
+ },
+ "ex_proj_axis/p0": {
+  "src": "$$ op(\"proj\")_w (v) = (v dot.op w)/(| w |^2) w = a/1 (1, 0) = (a, 0) . $$"
+ },
+ "ex_proj_3d/body": {
+  "src": "设 $v = (2, 4, 6)$，$w = (- 5, 3, 2) in RR^3$，求 $op(\"proj\")_w (v)$。"
+ },
+ "ex_proj_3d/p0": {
+  "src": "$$ op(\"proj\")_w (v) &= (v dot.op w)/(| w |^2) w = (-10 + 12 + 12)/(25 + 9 + 4) (- 5, 3, 2) = 14/38 (- 5, 3, 2) \\ &= 7/19 (- 5, 3, 2) = (- 35/19 , med 21/19 , med 14/19) . $$"
+ },
+ "ex_proj_parallel/body": {
+  "src": "设 $v, w in RR^n$，$w != 0$，且 $v parallel w$，检验 $op(\"proj\")_w (v) = v$。"
+ },
+ "ex_proj_parallel/p0": {
+  "src": "设 $v = k w$，其中 $k in RR$。\n\n$$ op(\"proj\")_w (v) = (v dot.op w)/(| w |^2) w = ((k w) dot.op w)/(| w |^2) w = (k | w |^2)/(| w |^2) w = k w = v . $$"
+ },
+ "map_review/body": {
+  "src": "**映射** $f : X -> Y$：对任意 $x in X$，存在唯一与之对应的 $f(x) in Y$。$X$ 叫做定义域，$Y$ 叫做陪域，$op(\"range\")(f) = {f(x) : x in X}$ 叫做值域，显然 $op(\"range\")(f) subset Y$。\n\n- **满射**：$op(\"range\")(f) = Y$，即对任意 $y in Y$，都存在 $x in X$ 使得 $y = f(x)$。\n- **单射**：对任意 $x, y in X$，$x != y => f(x) != f(y)$；或等价地，$f(x) = f(y) => x = y$。\n- **双射**：既是单射又是满射。此时 $f$ 是 $X$ 与 $Y$ 中元素的一一对应，存在逆映射 $f^(-1) : Y -> X$，满足对任意 $x in X$，$f^(-1) (f(x)) = x$；对任意 $y in Y$，$f(f^(-1) (y)) = y$。\n\n详细内容见「数学基础」：[[shuxue-jichu:map\\_def]]、[[shuxue-jichu:surj\\_def]]、[[shuxue-jichu:inj\\_def]]、[[shuxue-jichu:bij\\_def]]、[[shuxue-jichu:bij\\_inv]]。"
+ },
+ "linmap_def/body": {
+  "src": "设 $f : RR^n -> RR^m$ 是一个映射。称 $f$ 是一个**线性映射**（具有线性性的映射）\n\n$$ <==> cases(\"对任意 \" v comma w in RR^n comma med f(v + w) = f(v) + f(w) comma, \"对任意 \" v in RR^n comma med a in RR comma med f(a v) = a f(v) .) $$\n\n第一条：$f$ 保持了加法运算；第二条：$f$ 保持了标量乘法。"
+ },
+ "linmap_props/body": {
+  "src": "设 $f : RR^n -> RR^m$ 是线性映射，则\n\n$$ cases(f(0) = 0 & ①, \"若 \" v comma w in RR^n comma med a comma b in RR comma med \"则 \" f(a v + b w) = a f(v) + b f(w) & ②) $$\n\n实际上，只要证明了对任意 $v, w in RR^n$，$a, b in RR$ 都有 $f(a v + b w) = a f(v) + b f(w)$，就能证明 $f : RR^n -> RR^m$ 是一个线性映射（取 $a = b = 1$ 得到第一条，取 $b = 0$ 得到第二条）。"
+ },
+ "linmap_props/p0": {
+  "src": "① $f(0) = f(0 + 0) = f(0) + f(0)$，两边减去 $f(0)$，故 $f(0) = 0$。\n\n②（补全）$f(a v + b w) = f(a v) + f(b w) = a f(v) + b f(w)$。"
+ },
+ "ex_xy_nonlinear/body": {
+  "src": "设 $f : RR^2 -> RR$，$f(x, y) = x y$。求证 $f$ 不是线性映射。"
+ },
+ "ex_xy_nonlinear/p0": {
+  "src": "设 $v = (1, 2)$，$w = (3, 4)$，则 $v + w = (4, 6)$，$f(v + w) = 4 dot.op 6 = 24$。而 $f(v) + f(w) = 1 dot.op 2 + 3 dot.op 4 = 14$。因此 $f$ 不是线性映射。"
+ },
+ "ex_linmap/body": {
+  "src": "设 $f : RR^2 -> RR^3$，$f(x, y) = (3 x + 2 y, med - y, med 4 x - 7 y)$。求证 $f$ 是一个线性映射。"
+ },
+ "ex_linmap/p0": {
+  "src": "① 设 $v_1 = (x, y)$，$v_2 = (z, w) in RR^2$，要证明 $f(v_1 + v_2) = f(v_1) + f(v_2)$。\n\n$$ \"左\" &= f(x + z, y + w) = (3(x + z) + 2(y + w), med -(y + w), med 4(x + z) - 7(y + w)) \\ &= (3 x + 3 z + 2 y + 2 w, med - y - w, med 4 x + 4 z - 7 y - 7 w), \\ \"右\" &= (3 x + 2 y, - y, 4 x - 7 y) + (3 z + 2 w, - w, 4 z - 7 w), $$\n\n两者相等。\n\n② 设 $v = (x, y) in RR^2$，$a in RR$，要证明 $f(a v) = a f(v)$。\n\n$$ \"左\" = f(a x, a y) = (3 a x + 2 a y, med - a y, med 4 a x - 7 a y) = a(3 x + 2 y, - y, 4 x - 7 y) = a f(v) = \"右\" . $$"
+ },
+ "ex_linmap/p1": {
+  "src": "设 $v_1 = (x, y)$，$v_2 = (z, w)$，$a, b in RR$，要证明 $f(a v_1 + b v_2) = a f(v_1) + b f(v_2)$。\n\n$$ \"左\" &= f(a x + b z, med a y + b w) = (3 a x + 3 b z + 2 a y + 2 b w, med - a y - b w, med 4 a x + 4 b z - 7 a y - 7 b w) \\ &= (3 a x + 2 a y, - a y, 4 a x - 7 a y) + (3 b z + 2 b w, - b w, 4 b z - 7 b w) \\ &= a(3 x + 2 y, - y, 4 x - 7 y) + b(3 z + 2 w, - w, 4 z - 7 w) = a f(v_1) + b f(v_2) = \"右\" . $$"
+ },
+ "std_basis/body": {
+  "src": "定义 $RR^n$ 中的标准正交基\n\n$$ cases(e_1 = (1 comma 0 comma ... comma 0) comma, e_2 = (0 comma 1 comma 0 comma ... comma 0) comma, quad dots.v, e_n = (0 comma ... comma 0 comma 1) .) $$\n\n对任意 $x = (x_1 , ..., x_n)$，$x = x_1 e_1 + dots.c + x_n e_n$。"
+ },
+ "linmap_matrix/body": {
+  "src": "设 $f : RR^n -> RR^m$ 是一个线性映射。则对任意 $x = (x_1 , ..., x_n)$，\n\n$$ f(x_1 , ..., x_n) = x_1 f(e_1) + dots.c + x_n f(e_n) . $$\n\n这 $n$ 个 $m$ 维的向量 $f(e_1), ..., f(e_n)$ 决定了整个映射。设\n\n$$ f(e_1) = mat(a_11; dots.v; a_(m 1)), med ..., med f(e_n) = mat(a_(1 n); dots.v; a_(m n)), wide \"则\" wide f mat(x_1; dots.v; x_n) = mat(a_11 x_1 + dots.c + a_(1 n) x_n; dots.v; a_(m 1) x_1 + dots.c + a_(m n) x_n) $$\n\n（列向量写法；行向量写法：$f(x_1 , ..., x_n) = (a_11 x_1 + dots.c + a_(1 n) x_n , med ..., med a_(m 1) x_1 + dots.c + a_(m n) x_n)$）。矩阵\n\n$$ mat(a_11, dots.c, a_(1 n); dots.v, , dots.v; a_(m 1), dots.c, a_(m n)) = (f(e_1) med dots.c med f(e_n)) $$\n\n被称为与 $f$ 对应的矩阵：它的第 $j$ 列就是 $f(e_j)$。"
+ },
+ "linmap_matrix/p0": {
+  "src": "$$ f(x) &= f((x_1 , 0, ..., 0) + (0, x_2 , 0, ..., 0) + dots.c + (0, ..., 0, x_n)) \\ &= f(x_1 (1, 0, ..., 0) + x_2 (0, 1, 0, ..., 0) + dots.c + x_n (0, ..., 0, 1)) \\ &= f(x_1 e_1 + dots.c + x_n e_n) = x_1 f(e_1) + dots.c + x_n f(e_n), $$\n\n其中 $f(e_j) in RR^m$。再把每个 $f(e_j)$ 写成列向量、逐个坐标相加即得。"
+ },
+ "ex_rotation/body": {
+  "src": "$RR^2$ 中绕原点逆时针旋转 $theta$，这是一个从 $RR^2$ 到 $RR^2$ 的线性映射。求它对应的矩阵。"
+ },
+ "ex_rotation/p0": {
+  "src": "只需求出列向量 $f mat(1; 0)$ 和 $f mat(0; 1)$。画图：$mat(1; 0)$ 转到 $mat(cos theta; sin theta)$，$mat(0; 1)$ 转到 $mat(-sin theta; cos theta)$。这意味着与之对应的矩阵是\n\n$$ (f mat(1; 0) med med f mat(0; 1)) = mat(cos theta, -sin theta; sin theta, cos theta) quad (\"二维旋转矩阵\") . $$\n\n因此\n\n$$ f mat(x; y) = mat(x cos theta - y sin theta; x sin theta + y cos theta) . wide \"例：\" f mat(3; 4) = mat(3 cos theta - 4 sin theta; 3 sin theta + 4 cos theta) . $$"
+ },
+ "linmap_ops/body": {
+  "src": "设 $f, g : RR^n -> RR^m$ 是线性映射，$a, b in RR$。定义\n\n$$ (f + g)(x) = f(x) + g(x), wide (a f)(x) = a f(x), wide (a f + b g)(x) = a f(x) + b g(x) . $$\n\n那么 $f + g$、$a f$、$a f + b g : RR^n -> RR^m$ 都是线性映射。"
+ },
+ "linmap_ops/p0": {
+  "src": "（$f + g$ 与 $a f$ 是 $a f + b g$ 的特例。）设 $x, y in RR^n$，$c, d in RR$，只需证明 $(a f + b g)(c x + d y) = c(a f + b g)(x) + d(a f + b g)(y)$。\n\n$$ \"左\" &= a f(c x + d y) + b g(c x + d y) = a(c f(x) + d f(y)) + b(c g(x) + d g(y)) \\ &= a c f(x) + a d f(y) + b c g(x) + b d g(y) = c(a f(x) + b g(x)) + d(a f(y) + b g(y)) \\ &= c(a f + b g)(x) + d(a f + b g)(y) = \"右\" . $$"
+ },
+ "linmap_comp/body": {
+  "src": "设 $f : RR^n -> RR^m$，$g : RR^m -> RR^p$ 是线性映射，则\n\n$$ g compose f : RR^n -> RR^p , wide (g compose f)(x) = g(f(x)) $$\n\n也是线性映射。"
+ },
+ "linmap_comp/p0": {
+  "src": "设 $x, y in RR^n$，$a, b in RR$，只需证明 $(g compose f)(a x + b y) = a(g compose f)(x) + b(g compose f)(y)$。\n\n$$ \"左\" = g(f(a x + b y)) = g(a f(x) + b f(y)) med (f \" 是线性的\") = a g(f(x)) + b g(f(y)) med (g \" 是线性的\") = \"右\" . $$"
+ },
+ "img_preimg_sub/body": {
+  "src": "设 $f : RR^n -> RR^m$ 是线性映射，则\n\n+ ① 若 $V subset RR^n$ 是 $RR^n$ 的线性子空间，则 $f(V) = {f(v) : v in V}$（$V$ 在 $f$ 下的像）是 $RR^m$ 的线性子空间；\n+ ② 若 $W subset RR^m$ 是 $RR^m$ 的线性子空间，则 $f^(-1) (W) = {v in RR^n : f(v) in W}$（$W$ 在 $f$ 下的原像）是 $RR^n$ 的线性子空间。"
+ },
+ "img_preimg_sub/p0": {
+  "src": "**①** 1° $f(0) = 0 in f(V)$。2° 设 $f(v_1), f(v_2) in f(V)$，其中 $v_1 , v_2 in V$，设 $a, b in RR$。只需证明 $a f(v_1) + b f(v_2) in f(V)$：\n\n$$ a f(v_1) + b f(v_2) = f(underbrace(a v_1 + b v_2, in V med (V \" 是线性子空间\"))) in f(V) . $$\n\n**②** 1° $f(0) = 0 in W$，故 $0 in f^(-1) (W)$。2° 设 $v_1 , v_2 in f^(-1) (W)$，即 $f(v_1), f(v_2) in W$，设 $a, b in RR$。只需证明 $a v_1 + b v_2 in f^(-1) (W)$，即 $f(a v_1 + b v_2) in W$：\n\n$$ f(a v_1 + b v_2) = a underbrace(f(v_1), in W) + b underbrace(f(v_2), in W) in W quad (W \" 是线性子空间\") . $$"
+ },
+ "mat_def/body": {
+  "src": "$RR^(m times n) = {m times n med \"实矩阵\"}$。形如\n\n$$ A = mat(a_11, dots.c, a_(1 n); dots.v, , dots.v; a_(m 1), dots.c, a_(m n)) = (a_(i j))_(1 <= i <= m \\ 1 <= j <= n) = (a_(i j)), wide a_(i j) in RR $$\n\n的矩阵叫做一个 $m times n$ 实矩阵。$a_(i j)$（也记作 $A_(i j)$）是第 $i$ 行第 $j$ 列的元素。\n\n我们可以用 $RR^(n times 1)$ 或 $RR^(1 times n)$ 来理解 $RR^n$：$n times 1$ 矩阵 $<-->$ 列向量（本课默认用这一种）；$1 times n$ 矩阵 $<-->$ 行向量。"
+ },
+ "mat_add/body": {
+  "src": "设 $A = (a_(i j)), med B = (b_(i j)) in RR^(m times n)$，$a in RR$，定义\n\n$$ A + B = (a_(i j) + b_(i j)), wide a A = (a a_(i j)) . $$\n\n**例.**\n\n$$ mat(3, -4; 6, pi; e, sqrt(2)) + mat(1, 2; 3, 4; 5, 6) = mat(4, -2; 9, pi + 4; e + 5, sqrt(2) + 6) . $$"
+ },
+ "mat_cols/body": {
+  "src": "设 $A = mat(3, -4; 6, pi; e, sqrt(2))$。则 $A = (v_1 med v_2)$，其中 $v_1 = mat(3; 6; e)$，$v_2 = mat(-4; pi; sqrt(2))$；\n\n且 $A = mat(w_1; w_2; w_3)$，其中 $w_1 = (3 med med - 4)$，$w_2 = (6 med med pi)$，$w_3 = (e med med sqrt(2))$。"
+ },
+ "mat_lincomb/body": {
+  "src": "① 若 $A = (v_1 med dots.c med v_n)$，$B = (w_1 med dots.c med w_n)$，则 $A + B = (v_1 + w_1 med dots.c med v_n + w_n)$。\n\n② 若 $A = (v_1 med dots.c med v_n)$，$a in RR$，则 $a A = (a v_1 med dots.c med a v_n)$。\n\n③ 设 $A = (a_(i j)), med B = (b_(i j)) in RR^(m times n)$，$a, b in RR$，则 $a A + b B = (a a_(i j) + b b_(i j))$。"
+ },
+ "mat_lincomb/p0": {
+  "src": "设 $1 <= i <= m$，$1 <= j <= n$，则\n\n$$ (a A + b B)_(i j) = (a A)_(i j) + (b B)_(i j) = a A_(i j) + b B_(i j) = a a_(i j) + b b_(i j) . $$\n\n①② 就是逐列看这个式子。"
+ },
+ "rowcol_mult/body": {
+  "src": "设 $A = (a_1 med dots.c med a_n) in RR^(1 times n)$，$B = mat(b_1; dots.v; b_n) in RR^(n times 1)$（都是 $n$ 维），定义\n\n$$ A dot.op B = A B = (a_1 med dots.c med a_n) mat(b_1; dots.v; b_n) = (a_1 b_1 + dots.c + a_n b_n) in RR^(1 times 1) . $$\n\n$(1 times n) dot.op (n times 1) = (1 times 1)$。很快会知道，矩阵的乘法就是 $(m times n) dot.op (n times p) = (m times p)$。条件：前一个矩阵的列数 $=$ 后一个矩阵的行数。\n\n**例.** $(1 med 2 med 3) mat(4; 5; 6) = (4 + 10 + 18) = (32)$。"
+ },
+ "transpose_def/body": {
+  "src": "设 $A = (a_(i j)) in RR^(m times n)$，定义\n\n$$ A^T = mat(a_11, dots.c, a_(m 1); dots.v, , dots.v; a_(1 n), dots.c, a_(m n)) in RR^(n times m) , wide (A^T)_(i j) = A_(j i) = a_(j i) quad (1 <= i <= n, med 1 <= j <= m) . $$\n\n**例.** $(1 med 2 med 3) = mat(1; 2; 3)^T$，$mat(1; 2; 3)^T = (1 med 2 med 3)$。"
+ },
+ "rowcol_dot/body": {
+  "src": "若 $A in RR^(1 times n)$，$B in RR^(n times 1)$，则 $A B = A^T dot.op B$（左边是矩阵乘法；右边 $A^T$、$B$ 都是列向量，$dot.op$ 是点乘）。\n\n反之，若 $v, w in RR^(n times 1)$，则 $v dot.op w = v^T w$（左边点乘，右边是 $1 times n$ 乘 $n times 1$ 的矩阵乘法）。\n\n**例.** $(1 med 2 med 3) mat(4; 5; 6) = mat(1; 2; 3) dot.op mat(4; 5; 6)$。"
+ },
+ "rowcol_dot/p0": {
+  "src": "两边都等于 $a_1 b_1 + dots.c + a_n b_n$（把 $1 times 1$ 矩阵和实数等同）。"
+ },
+ "transpose_props/body": {
+  "src": "设 $A, B in RR^(m times n)$，$a, b in RR$，则\n\n$$ cases((A^T)^T = A & ①, (A + B)^T = A^T + B^T & ②, (a A)^T = a A^T & ③, (a A + b B)^T = a A^T + b B^T & ④) $$\n\n**注.** 之后会知道 $(A B)^T = B^T A^T$，见 [[matmul\\_props]]。"
+ },
+ "transpose_props/p0": {
+  "src": "① 显然。④ 由 ②③ 可以得到。\n\n② 设 $1 <= i <= n$，$1 <= j <= m$，则 $((A + B)^T)_(i j) = (A + B)_(j i) = A_(j i) + B_(j i) = (A^T)_(i j) + (B^T)_(i j) = (A^T + B^T)_(i j)$。\n\n③ 设 $1 <= i <= n$，$1 <= j <= m$，则 $((a A)^T)_(i j) = (a A)_(j i) = a A_(j i) = a(A^T)_(i j) = (a A^T)_(i j)$。"
+ },
+ "matmul_def/body": {
+  "src": "设 $A = (a_(i j)) in RR^(m times n)$，$B = (b_(i j)) in RR^(n times p)$，定义\n\n$$ A B = (a_(i 1) b_(1 j) + dots.c + a_(i n) b_(n j))_(1 <= i <= m \\ 1 <= j <= p) in RR^(m times p) . $$\n\n即对任意 $1 <= i <= m$，$1 <= j <= p$，\n\n$$ (A B)_(i j) = (A med \"的第\" med i med \"行\")(B med \"的第\" med j med \"列\") = a_(i 1) b_(1 j) + dots.c + a_(i n) b_(n j) = sum_(k = 1)^n a_(i k) b_(k j) . $$\n\n$A$ 有 $m$ 个（$n$ 维的）行向量，$B$ 有 $p$ 个（$n$ 维的）列向量，两两相乘排成 $m times p$ 的表。"
+ },
+ "ex_matmul/body": {
+  "src": "$$ mat(1, 2, 3; 0, -1, 2) mat(-1, 1, 2, 3; 0, 1, -1, 1; 2, 0, 1, -2) = med ? $$"
+ },
+ "ex_matmul/p0": {
+  "src": "$(2 times 3) dot.op (3 times 4) = (2 times 4)$。第一行 $(1, 2, 3)$ 依次乘四列：$-1 + 0 + 6 = 5$，$1 + 2 + 0 = 3$，$2 - 2 + 3 = 3$，$3 + 2 - 6 = - 1$；第二行 $(0, - 1, 2)$：$0 + 0 + 4 = 4$，$0 - 1 + 0 = - 1$，$0 + 1 + 2 = 3$，$0 - 1 - 4 = - 5$。\n\n$$ = mat(5, 3, 3, -1; 4, -1, 3, -5) . $$"
+ },
+ "ex_outer/body": {
+  "src": "$$ mat(4; 5; 6)(1 med 2 med 3) = med ? $$"
+ },
+ "ex_outer/p0": {
+  "src": "$(3 times 1)(1 times 3) = (3 times 3)$，得到一个方阵：\n\n$$ mat(4, 8, 12; 5, 10, 15; 6, 12, 18) . $$"
+ },
+ "matmul_props/body": {
+  "src": "设 $A in RR^(m times n)$，$B in RR^(n times p)$，$C in RR^(p times q)$。\n\n$$ cases(A(B C) = (A B) C & ①, \"一般来说，\" A B != B A & ②, (A B)^T = B^T A^T & ③, (A B C)^T = C^T B^T A^T & ④, (A_1 dots.c A_k)^T = A_k^T dots.c A_1^T & ⑤) $$"
+ },
+ "matmul_props/p0": {
+  "src": "① 要证明 $A(B C) = (A B) C$：两边都是 $m times q$ 矩阵。设 $1 <= i <= m$，$1 <= j <= q$，则\n\n$$ (A(B C))_(i j) = sum_(k = 1)^n A_(i k) (B C)_(k j) = sum_(k = 1)^n A_(i k) (sum_(l = 1)^p B_(k l) C_(l j)) = sum_(k = 1)^n sum_(l = 1)^p A_(i k) B_(k l) C_(l j) . $$\n$$ ((A B) C)_(i j) = sum_(l = 1)^p (A B)_(i l) C_(l j) = sum_(l = 1)^p (sum_(k = 1)^n A_(i k) B_(k l)) C_(l j) = sum_(l = 1)^p sum_(k = 1)^n A_(i k) B_(k l) C_(l j) . $$\n\n有限和可以交换求和顺序，两者相等。\n\n② $(1 med 2 med 3) mat(4; 5; 6) != mat(4; 5; 6)(1 med 2 med 3)$：左边是 $1 times 1$，右边是 $3 times 3$。\n\n③ 两边都是 $p times m$ 矩阵。设 $1 <= i <= p$，$1 <= j <= m$，则\n\n$$ ((A B)^T)_(i j) = (A B)_(j i) = sum_(k = 1)^n A_(j k) B_(k i) = sum_(k = 1)^n (A^T)_(k j) (B^T)_(i k) = sum_(k = 1)^n (B^T)_(i k) (A^T)_(k j) = (B^T A^T)_(i j) . $$\n\n④ $(A B C)^T = (A(B C))^T = (B C)^T A^T = C^T B^T A^T$。\n\n⑤ 笔记不证；对 $k$ 归纳，同 ④ 的做法（补全）。"
+ },
+ "sym_def/body": {
+  "src": "设 $A in RR^(n times n)$。称 $A$ 是一个**对称矩阵** $<==> A = A^T$，即对于任意的 $1 <= i, j <= n$，都有 $a_(i j) = a_(j i)$。\n\n**例.** $mat(1, 2; 3, 4)$ 不是对称矩阵；而 $mat(1, 2; 2, 3)$ 是对称矩阵；$mat(1, 4, -5; 4, 7, 0; -5, 0, -2)$ 是对称矩阵。"
+ },
+ "ata_sym/body": {
+  "src": "设 $A in RR^(m times n)$，则 $A^T A$（$n times n$）一定是对称矩阵，$A A^T$（$m times m$）也一定是对称矩阵。"
+ },
+ "ata_sym/p0": {
+  "src": "$$ (A^T A)^T = A^T (A^T)^T = A^T A, wide (A A^T)^T = (A^T)^T A^T = A A^T . $$"
+ },
+ "ex_abat/body": {
+  "src": "求 $(A B A^T)^T$。由此说明：如果 $B$ 是对称矩阵，那么 $A B A^T$ 也是对称矩阵。"
+ },
+ "ex_abat/p0": {
+  "src": "$$ (A B A^T)^T = (A^T)^T B^T A^T = A B^T A^T . $$\n\n因此，如果 $B = B^T$，那么 $(A B A^T)^T = A B A^T$，$A B A^T$ 也是对称矩阵。"
+ },
+ "comp_matmul/body": {
+  "src": "设 $f : RR^n -> RR^m$，$g : RR^m -> RR^p$ 是线性映射，设 $B$ 和 $A$ 分别是 $f, g$ 对应的矩阵。则\n\n- 对于任意列向量 $x in RR^n$，$f(x) = B x$；对于任意列向量 $y in RR^m$，$g(y) = A y$（右边都是矩阵乘法）；\n- 线性映射 $g compose f : RR^n -> RR^p$ 对应的矩阵就是 $A B$，即对于任意列向量 $x in RR^n$，$(g compose f)(x) = (A B) x$。\n\n这就是矩阵乘法要这样定义的原因。"
+ },
+ "comp_matmul/p0": {
+  "src": "设 $f(e_1) = mat(b_11; dots.v; b_(m 1)), med ..., med f(e_n) = mat(b_(1 n); dots.v; b_(m n))$，则 $f mat(x_1; dots.v; x_n) = mat(b_11 x_1 + dots.c + b_(1 n) x_n; dots.v; b_(m 1) x_1 + dots.c + b_(m n) x_n)$。\n\n设 $B = (b_(i j))$，$x = mat(x_1; dots.v; x_n)$，则由矩阵乘法的定义\n\n$$ B x = mat(b_11 x_1 + dots.c + b_(1 n) x_n; dots.v; b_(m 1) x_1 + dots.c + b_(m n) x_n) = f(x), $$\n\n故 $f(x) = B x$。同理 $g(y) = A y$。\n\n接下来，\n\n$$ (g compose f)(x) = g(f(x)) = g(B x) = A(B x) = (A B) x quad (\"矩阵乘法的结合律\") . $$"
+ },
+ "ex_comp_1n/body": {
+  "src": "设 $A = (a_1 med dots.c med a_n) in RR^(1 times n)$，$B = mat(b_1; dots.v; b_n) in RR^(n times 1)$。设线性映射 $f : RR^n -> RR^1$ 与 $A$ 对应，$g : RR^1 -> RR^n$ 与 $B$ 对应。验证 $f compose g$ 对应 $A B$。"
+ },
+ "ex_comp_1n/p0": {
+  "src": "此时 $A B = (a_1 b_1 + dots.c + a_n b_n) in RR^(1 times 1)$。设 $x in RR^(1 times 1)$，$(A B) x = (a_1 b_1 + dots.c + a_n b_n) x = a_1 b_1 x + dots.c + a_n b_n x$。\n\n另一方面 $f mat(x_1; dots.v; x_n) = (a_1 med dots.c med a_n) mat(x_1; dots.v; x_n) = a_1 x_1 + dots.c + a_n x_n$，$g(x) = mat(b_1 x; dots.v; b_n x)$，\n\n$$ (f compose g)(x) = f(g(x)) = f mat(b_1 x; dots.v; b_n x) = a_1 b_1 x + dots.c + a_n b_n x . $$"
+ },
+ "trace_def/body": {
+  "src": "设 $A in RR^(n times n)$，定义\n\n$$ op(\"tr\")(A) = sum_(i = 1)^n a_(i i) = a_11 + dots.c + a_(n n) , $$\n\n称为 $A$ 的**迹**（对角线元素之和）。\n\n**例.** 设 $A = mat(1, 2, 3; 4, 5, 6; 7, 8, 9)$，则 $op(\"tr\")(A) = 1 + 5 + 9 = 15$。"
+ },
+ "trace_props/body": {
+  "src": "设 $A, B, C in RR^(n times n)$，$k, l in RR$，则\n\n$$ cases(op(\"tr\")(A + B) = op(\"tr\")(A) + op(\"tr\")(B) & ①, op(\"tr\")(k A) = k op(\"tr\")(A) & ②, op(\"tr\")(k A + l B) = k op(\"tr\")(A) + l op(\"tr\")(B) & ③, op(\"tr\")(A B) = op(\"tr\")(B A) & ④, op(\"tr\")(A B C) = op(\"tr\")(B C A) = op(\"tr\")(C A B) & ⑤) $$\n\n**注（练习）.** 一般 $op(\"tr\")(A B) != op(\"tr\")(A) op(\"tr\")(B)$，$op(\"tr\")(A B C) != op(\"tr\")(A C B)$。"
+ },
+ "trace_props/p0": {
+  "src": "①②③ 由定义直接得到（补全：对角线元素逐个相加、相乘）。\n\n④ 要证明 $op(\"tr\")(A B) = op(\"tr\")(B A)$。\n\n$$ \"左\" = sum_(i = 1)^n (A B)_(i i) = sum_(i = 1)^n sum_(j = 1)^n A_(i j) B_(j i) = sum_(j = 1)^n sum_(i = 1)^n B_(j i) A_(i j) = sum_(j = 1)^n (B A)_(j j) = \"右\" . $$\n\n⑤ $op(\"tr\")(A B C) = op(\"tr\")(A(B C)) limits(=)^(④) op(\"tr\")((B C) A) = op(\"tr\")(B C A) = op(\"tr\")(B(C A)) limits(=)^(④) op(\"tr\")(C A B)$。"
+ },
+ "trace_formula/body": {
+  "src": "设 $A, B, C in RR^(n times n)$，则\n\n$$ op(\"tr\")(A B C) = sum_(i = 1)^n sum_(j = 1)^n sum_(k = 1)^n a_(i j) b_(j k) c_(k i) = sum_(i, j, k = 1)^n a_(i j) b_(j k) c_(k i) . $$\n\n更一般地，设 $A_1 , ..., A_m in RR^(n times n)$，则\n\n$$ op(\"tr\")(A_1 dots.c A_m) = sum_(i_1 , ..., i_m = 1)^n (A_1)_(i_1 i_2) (A_2)_(i_2 i_3) dots.c (A_m)_(i_m i_1) . $$"
+ },
+ "trace_formula/p0": {
+  "src": "$$ op(\"tr\")(A(B C)) = sum_(i = 1)^n (A(B C))_(i i) = sum_(i = 1)^n sum_(j = 1)^n A_(i j) (B C)_(j i) = sum_(i = 1)^n sum_(j = 1)^n A_(i j) sum_(k = 1)^n B_(j k) C_(k i) = sum_(i, j, k = 1)^n A_(i j) B_(j k) C_(k i) . $$\n\n一般情形用数学归纳法：$(A_1 dots.c A_m)_(i_1 j) = sum_(i_2 , ..., i_m) (A_1)_(i_1 i_2) dots.c (A_m)_(i_m j)$（对 $m$ 归纳，每次用矩阵乘法的定义展开一层），再令 $j = i_1$ 并对 $i_1$ 求和（补全）。"
+ },
+ "det_def/body": {
+  "src": "若 $A = (a) in RR^(1 times 1)$，定义 $det (A) = a$。\n\n若 $A = mat(a, b; c, d) in RR^(2 times 2)$，定义 $det (A) = a d - b c$。\n\n设 $A = mat(a, b, c; d, e, f; g, h, i)$，定义\n\n$$ det (A) &= a det mat(e, f; h, i) - b det mat(d, f; g, i) + c det mat(d, e; g, h) \\ &= a(e i - f h) - b(d i - f g) + c(d h - e g) = a e i - a f h - b d i + b f g + c d h - c e g . $$\n\n一般地，设 $A = (a_(i j)) in RR^(n times n)$（$n >= 2$），定义\n\n$$ det (A) = a_11 det mat(a_22, dots.c, a_(2 n); dots.v, , dots.v; a_(n 2), dots.c, a_(n n)) - a_12 det mat(a_21, a_23, dots.c, a_(2 n); dots.v, , , dots.v; a_(n 1), a_(n 3), dots.c, a_(n n)) + dots.c + (- 1)^(n + 1) a_(1 n) det mat(a_21, dots.c, a_(2(n - 1)); dots.v, , dots.v; a_(n 1), dots.c, a_(n(n - 1))), $$\n\n第 $j$ 项是 $(- 1)^(1 + j) a_(1 j)$ 乘以去掉第 $1$ 行、第 $j$ 列后剩下的 $(n - 1) times (n - 1)$ 矩阵的行列式。\n\n**例.** $n = 2$ 时，$det (A) = a det ((d)) - b det ((c)) = a d - b c$，与上面一致。\n\n**注.** $det (A)$ 可以记为 $| A |$。"
+ },
+ "det2_mult/body": {
+  "src": "若 $A, B in RR^(2 times 2)$，则 $det (A B) = det (A) det (B)$。"
+ },
+ "det2_mult/p0": {
+  "src": "设 $A = mat(a, b; c, d)$，$B = mat(e, f; g, h)$，则 $det (A) = a d - b c$，$det (B) = e h - f g$，$A B = mat(a e + b g, a f + b h; c e + d g, c f + d h)$。\n\n$$ det (A B) &= (a e + b g)(c f + d h) -(a f + b h)(c e + d g) \\ &= underbrace(a e c f, \"消\") + a e d h + b g c f + underbrace(b g d h, \"消\") - underbrace(a f c e, \"消\") - a f d g - b h c e - underbrace(b h d g, \"消\") \\ &= a d e h - a d f g - b c e h + b c f g, \\ det (A) det (B) &= (a d - b c)(e h - f g) = a d e h - a d f g - b c e h + b c f g . $$"
+ },
+ "ex_det4/body": {
+  "src": "设 $A = mat(1, 0, 2, -1; 0, -1, 2, 0; 3, 1, 0, -1; 4, -2, 1, 0)$，求 $det (A)$。"
+ },
+ "ex_det4/p0": {
+  "src": "第一行的第 $2$ 个元素是 $0$，只剩三项：\n\n$$ det (A) &= det mat(-1, 2, 0; 1, 0, -1; -2, 1, 0) + 2 det mat(0, -1, 0; 3, 1, -1; 4, -2, 0) + det mat(0, -1, 2; 3, 1, 0; 4, -2, 1) \\ &= (4 - 1) + 2 dot.op 4 + (- 12 - 8 -(- 3)) = 3 + 8 - 17 = - 6 . $$\n\n（第四项的系数是 $(- 1)^(1 + 4) dot.op (- 1) = + 1$。）"
+ },
+ "ex_det4/p1": {
+  "src": "也可以选含 $0$ 多的行或列展开（按其他行、列展开的结果相同，本课不证）：\n\n$$ det (A) = - det mat(1, 2, -1; 3, 0, -1; 4, 1, 0) - 2 det mat(1, 0, -1; 3, 1, -1; 4, -2, 0) = dots.c = - 6 . $$\n\n（笔记只写了结果；这里展开的是第 $2$ 列：$-(- 1) dot.op$ 余子式 $...$ 两种写法最后都是 $-6$。）"
+ },
+ "det_mult/body": {
+  "src": "设 $A, B in RR^(n times n)$，则\n\n$$ det (A B) = det (A) det (B) . $$\n\n$n = 2$ 的情形见 [[det2\\_mult]]。一般情形的证明需要行列式的完整理论（多重线性与交错性），本课不证。"
+ },
+ "det_rowops/body": {
+  "src": "探究行列式更快的求法：\n\n- $det mat(1, 2; 3, 4) = 1 dot.op 4 - 2 dot.op 3 = - 2$，而 $det mat(3, 4; 1, 2) = 3 dot.op 2 - 4 dot.op 1 = 2$。**规律：如果两行互换，则行列式变为相反数。**（笔记这里算成了 $-2$，应为 $2$，正好体现了这条规律。）\n- $mat(1, 2; 3, 4) limits(-->)^(R_2 -> R_2 - 5 R_1) mat(1, 2; -2, -6)$，$det = (- 6) -(- 4) = - 2$。**规律：如果 $R_i -> R_i + c R_j$（$j != i$），则行列式不变。**\n- $mat(1, 2; 3, 4) limits(-->)^(R_1 -> 7 R_1) mat(7, 14; 3, 4)$，$det = 28 - 42 = - 14$。**规律：如果 $R_i -> c R_i$（$c != 0$），则行列式也扩大 $c$ 倍。**\n\n另外，上三角矩阵的行列式等于对角线元素的乘积（按第一列反复展开即得）。这三条规律对一般 $n$ 都成立，证明需要行列式的完整理论，本课不证（$n = 2$ 时可以直接验证）。"
+ },
+ "ex_det3/body": {
+  "src": "求 $det mat(1, 2, 3; 0, -1, 2; 2, 1, 3)$。"
+ },
+ "ex_det3/p0": {
+  "src": "$$ det mat(1, 2, 3; 0, -1, 2; 2, 1, 3) & limits(= = =)^(R_3 -> R_3 - 2 R_1) det mat(1, 2, 3; 0, -1, 2; 0, -3, -3) limits(= = =)^(R_2 -> - R_2) - det mat(1, 2, 3; 0, 1, -2; 0, -3, -3) \\ & limits(= = =)^(R_3 -> (- 1/3) R_3) -(- 3) det mat(1, 2, 3; 0, 1, -2; 0, 1, 1) limits(= = =)^(R_3 -> R_3 - R_2) 3 det mat(1, 2, 3; 0, 1, -2; 0, 0, 3) = 3 dot.op 1 dot.op 1 dot.op 3 = 9 . $$"
+ },
+ "det_kA/body": {
+  "src": "设 $A in RR^(n times n)$，$k in RR$，则 $det (k A) = k^n det (A)$。"
+ },
+ "det_kA/p0": {
+  "src": "设 $A = mat(v_1; dots.v; v_n)$（按行），则 $k A = mat(k v_1; dots.v; k v_n)$。每把一行乘以 $k$，行列式就乘以 $k$（$k = 0$ 时两边都是 $0$：有一行全是 $0$ 的矩阵行列式为 $0$，按这一行展开即可），一共 $n$ 行，因此 $det (k A) = k^n det (A)$。"
+ },
+ "elem_mat/body": {
+  "src": "设 $A = mat(v_1; dots.v; v_m) in RR^(m times n)$。三种初等行变换都可以写成左乘一个矩阵：\n\n+ ① 把单位矩阵第 $i$ 个对角元换成 $c$：左乘它，第 $i$ 行变为 $c v_i$。例：$mat(1, , ; , 2, ; , , 1) mat(1, 2, 3; 4, 5, 6; 7, 8, 9) = mat(1, 2, 3; 8, 10, 12; 7, 8, 9)$。\n+ ② 把单位矩阵的第 $i, j$ 行互换：左乘它，$v_i , v_j$ 互换。例：$mat(1, , ; , , 1; , 1, ) mat(1, 2, 3; 4, 5, 6; 7, 8, 9) = mat(1, 2, 3; 7, 8, 9; 4, 5, 6)$。\n+ ③ 在单位矩阵的 $(i, j)$ 位置放 $c$：左乘它，第 $i$ 行变为 $v_i + c v_j$。例（$R_2 -> R_2 - 2 R_1$）：$mat(1, , ; -2, 1, ; , , 1) mat(1, 2, 3; 4, 5, 6; 7, 8, 9) = mat(1, 2, 3; 2, 1, 0; 7, 8, 9)$。\n\n（空白处为 $0$。）一般用 $E_1 , ..., E_k$ 表示初等行变换对应的矩阵。"
+ },
+ "elem_mat/p0": {
+  "src": "左乘矩阵 $E$ 后，结果的第 $i$ 行 $= sum_j E_(i j) v_j$。三种 $E$ 的第 $i$ 行分别只有 $c$ 在第 $i$ 位、$1$ 在第 $j$ 位、$1$ 在第 $i$ 位与 $c$ 在第 $j$ 位，其余行与单位矩阵相同，代入即得。"
+ },
+ "rref_product/body": {
+  "src": "$$ A ~> op(\"REF\")(A) ~> op(\"RREF\")(A), $$\n$$ op(\"REF\")(A) = E_k dots.c E_1 A, wide op(\"RREF\")(A) = E_l dots.c E_k dots.c E_1 A . $$\n\nREF、RREF 的定义见第 7 章 [[rref\\_def]]。"
+ },
+ "vecspace_note/body": {
+  "src": "设 $V$ 是个**线性空间**（向量空间）：可以理解为 $RR^n$，或 $RR^n$ 的线性子空间，或 $RR^(m times n)$，或 ${$所有从 $RR^n$ 到 $RR^m$ 的线性映射$}$——总之是可以做加法和标量乘法、并且满足通常运算律的集合。\n\n设 $U subset V$ 是 $V$ 的**线性子空间**：包含 $0$，对加法和标量乘法封闭。基、维数的概念与 $RR^n$ 中相同。\n\n为举例方便，取 $V = RR^2$，$U$ 是 $RR^2$ 中过原点的一条直线。和 $U$ 平行的直线形如 $mat(a; 0) + U$，这样的直线叫**仿射空间**；它的表示方法不唯一，例如 $mat(a; 0) + U = mat(b; c) + U$，只要 $mat(b; c)$ 也在这条直线上。"
+ },
+ "affine_def/body": {
+  "src": "设 $V$ 是线性空间，$U subset V$ 是线性子空间，设 $v in V$，则定义仿射空间\n\n$$ v + U = {v + u : med u in U} . $$"
+ },
+ "coset_eq/body": {
+  "src": "设 $V$ 是线性空间，$U subset V$ 是线性子空间，设 $v, v' in V$，则\n\n$$ v + U = v' + U <==> v - v' in U . $$"
+ },
+ "coset_eq/p0": {
+  "src": "「$=>$」设 $v + U = v' + U$，则 $v = v + 0 in v + U = v' + U = {v' + u : u in U}$。因此存在 $u in U$，$v = v' + u$，故 $v - v' = u in U$。\n\n「$arrow.l.double$」设 $u_0 = v - v' in U$。\n\n① 证 $v + U subset v' + U$：设 $u in U$，则 $v + u = v' + (v - v') + u = v' + underbrace((u_0 + u), in U) in v' + U$。\n\n② 证 $v' + U subset v + U$：由对称性，只需证明 $v' - v in U$：$v' - v = -(v - v') = - u_0 in U$。"
+ },
+ "quotient_def/body": {
+  "src": "设 $V$ 是线性空间，$U subset V$ 是线性子空间，则定义 $V$ 对 $U$ 的商空间\n\n$$ V \\/ U = {v + U : med v in V}, $$\n\n它的元素是一个个仿射空间（在 $V = RR^2$、$U$ 是直线的例子里，就是所有与 $U$ 平行的直线）。"
+ },
+ "quotient_ops/body": {
+  "src": "探究如何计算仿射空间的加法和标量乘法：希望定义\n\n$$ cases((v + U) + (w + U) = (v + w) + U & ①, a(v + U) = a v + U & ②) wide (v, w in V, med a in RR) . $$\n\n由于同一个仿射空间有不同的写法，需要验证结果不依赖于写法（良定义性）。验证之后，$V \\/ U$ 就成为一个线性空间，零元是 $0 + U = U$。"
+ },
+ "quotient_ops/p0": {
+  "src": "① 设 $v + U = v' + U$，$w + U = w' + U$，需要验证 $(v + w) + U = (v' + w') + U$。由判别法则 $v - v' in U$，$w - w' in U$，故\n\n$$ (v - v') + (w - w') = (v + w) -(v' + w') in U . $$\n\n② 设 $v + U = v' + U$，需要验证 $a v + U = a v' + U$。$v - v' in U$，故 $a(v - v') = a v - a v' in U$。"
+ },
+ "ex_quotient/body": {
+  "src": "(1) $V = RR^2$，$U subset V$ 是过原点的一条直线；(2) $V = RR^3$，$U$ 是过原点的平面；(3) $V = RR^3$，$U$ 是过原点的一条直线。$V \\/ U$ 各是几维的？"
+ },
+ "ex_quotient/p0": {
+  "src": "(1) $V$ 是 2 维的，$U$ 是 1 维的，$V \\/ U$ 是 1 维的：设 $U$ 不是 $x$ 轴，则每条与 $U$ 平行的直线都和 $x$ 轴交于唯一一点 $(a, 0)$，$mat(a; 0) + U = a(mat(1; 0) + U)$，所以 $mat(1; 0) + U$ 构成了 $V \\/ U$ 的一组基。\n\n(2) $V$ 是 3 维的，$U$ 是 2 维的，$V \\/ U$ 是 1 维的：$V \\/ U$ 的元素是与 $U$ 平行的平面 $v + U$。\n\n(3) $V$ 是 3 维的，$U$ 是 1 维的，$V \\/ U$ 是 2 维的。"
+ },
+ "quotient_dim/body": {
+  "src": "设 $V$ 是 $n$ 维线性空间，$U subset V$ 是 $m$ 维线性子空间，则\n\n$$ dim (V \\/ U) = dim V - dim U . $$"
+ },
+ "quotient_dim/p0": {
+  "src": "**证明概要（笔记）.** 设 $v_1 , ..., v_m$ 是 $U$ 的一组基，找到 $v_(m + 1) , ..., v_n in V$（笔记写成 $in U$，应为 $in V$），使得 $v_1 , ..., v_m , ..., v_n$ 是 $V$ 的一组基。于是 $v_1 + U, ..., v_m + U$ 都等于 $U$（即 $V \\/ U$ 的零元），而 $v_(m + 1) + U, ..., v_n + U$ 是 $V \\/ U$ 的一组基。\n\n**补全.** 张成：任取 $v + U$，写 $v = a_1 v_1 + dots.c + a_n v_n$，则 $v + U = a_(m + 1) (v_(m + 1) + U) + dots.c + a_n (v_n + U)$（前 $m$ 项落在 $U$ 里）。线性无关：若 $a_(m + 1) (v_(m + 1) + U) + dots.c + a_n (v_n + U) = 0 + U$，则由判别法则 $a_(m + 1) v_(m + 1) + dots.c + a_n v_n in U = op(\"span\")(v_1 , ..., v_m)$，写成 $b_1 v_1 + dots.c + b_m v_m$ 后移项，由 $v_1 , ..., v_n$ 线性无关得 $a_(m + 1) = dots.c = a_n = 0$。所以 $dim (V \\/ U) = n - m$。\n\n（「扩充成 $V$ 的基」这一步：只要 $op(\"span\")(v_1 , ..., v_k) != V$，就取一个不在其中的向量添进去，由 [[indep\\_test]] 仍线性无关；由 [[basis\\_props]]，至多 $n$ 步就张成 $V$。）"
+ },
+ "ker_im_def/body": {
+  "src": "设 $f : V -> W$ 是线性映射。定义\n\n$$ ker (f) = {v in V : med f(v) = 0} = f^(-1) ({0}) subset V, wide im (f) = {f(v) : med v in V} subset W . $$\n\n$ker (f)$ 叫做 $f$ 的**核**（kernel，也叫零空间 null），$im (f)$ 叫做 $f$ 的**像**（image，也叫像空间 range）。由 [[img\\_preimg\\_sub]]（${0}$ 和 $V$ 都是子空间），它们分别是 $V$ 和 $W$ 的线性子空间。"
+ },
+ "fund_thm/body": {
+  "src": "设 $f : V -> W$ 是线性映射，则 $V \\/ ker (f)$ 与 $im (f)$ 之间存在一一对应（并且保持加法和标量乘法）：\n\n$$ tilde(f) : med V \\/ ker (f) med limits(-->)^(med ~ med) med im (f), wide v + ker (f) arrow.r.long.bar f(v) . $$\n\n因此 $dim V - dim (ker f) = dim (im f)$，即\n\n$$ dim (ker f) + dim (im f) = dim V . $$"
+ },
+ "fund_thm/p0": {
+  "src": "设 $tilde(f) : V \\/ ker (f) -> im (f)$，若 $v in V$，定义 $tilde(f) (v + ker (f)) = f(v)$。\n\n**良定义性.** 设 $v + ker (f) = v' + ker (f)$，则 $v - v' in ker (f)$，即 $f(v - v') = f(v) - f(v') = 0$，故 $f(v) = f(v')$。\n\n**满射.** 设 $y in im (f)$，则存在 $x in V$，使得 $y = f(x)$，则 $tilde(f) (x + ker (f)) = f(x) = y$。\n\n**单射.** 设 $v, v' in V$，使得 $tilde(f) (v + ker (f)) = tilde(f) (v' + ker (f))$，即 $f(v) = f(v')$。要证明 $v + ker (f) = v' + ker (f)$：$f(v - v') = f(v) - f(v') = 0$，$v - v' in ker (f)$，因此 $v + ker (f) = v' + ker (f)$。\n\n**线性（补全）.** $tilde(f) ((v + ker f) + (w + ker f)) = tilde(f) ((v + w) + ker f) = f(v + w) = f(v) + f(w)$，数乘同理。一个保持运算的双射把一组基送到一组基，所以两边维数相同：$dim (V \\/ ker f) = dim (im f)$。再由 $dim (V \\/ ker f) = dim V - dim (ker f)$ 即得。"
+ },
+ "ex_fund_proj/body": {
+  "src": "设 $f : RR^2 -> RR^2$ 是一个把所有向量投影到某条过原点的直线 $l$ 的映射。检验 $dim (RR^2) = dim (ker f) + dim (im f)$。"
+ },
+ "ex_fund_proj/p0": {
+  "src": "① $dim (RR^2) = 2$。② $ker f$ 是过原点、与 $l$ 垂直的直线，$dim (ker f) = 1$。③ $im f = l$，$dim (im f) = 1$。$2 = 1 + 1$。"
+ },
+ "ex_sys2/body": {
+  "src": "解 $cases(x + y = 4 & ①, x - y = 2 & ②)$"
+ },
+ "ex_sys2/p0": {
+  "src": "**消元.** ② $-$ ①：$-2 y = - 2$ ③；③ $div (- 2)$：$y = 1$ ④；① $-$ ④：$x = 3$ ⑤。所以 $x = 3$，$y = 1$。\n\n**矩阵写法.** $mat(1, 1; 1, -1) mat(x; y) = mat(4; 2)$。对增广矩阵做同样的操作：\n\n$$ (mat(delim: #none, augment: #2, align: #center, 1, 1, 4; 1, -1, 2)) limits(-->)^(R_2 -> R_2 - R_1) (mat(delim: #none, augment: #2, align: #center, 1, 1, 4; 0, -2, -2)) limits(-->)^(R_2 -> (- 1/2) R_2) (mat(delim: #none, augment: #2, align: #center, 1, 1, 4; 0, 1, 1)) limits(-->)^(R_1 -> R_1 - R_2) (mat(delim: #none, augment: #2, align: #center, 1, 0, 3; 0, 1, 1)), $$\n\n$x = 3$，$y = 1$。"
+ },
+ "rref_def/body": {
+  "src": "用初等行变换把矩阵化成「阶梯」：每一行第一个非零元（**主元**）都在上一行主元的右边，全零行在最下面——这叫**行阶梯形**（REF）。再把每个主元化成 $1$，并把主元所在列的其余元素都消成 $0$——这叫**简化行阶梯形**（行最简形，RREF）。\n\n解方程组时，主元所在列对应的变量叫**主变量**，其余的叫**自由变量**。"
+ },
+ "ex_sys_rref/body": {
+  "src": "解 $cases(2 x - y + z = 2, 4 x + 2 y - z = 5)$"
+ },
+ "ex_sys_rref/p0": {
+  "src": "$$ (mat(delim: #none, augment: #3, align: #center, 2, -1, 1, 2; 4, 2, -1, 5)) limits(-->)^(R_2 -> R_2 - 2 R_1) (mat(delim: #none, augment: #3, align: #center, 2, -1, 1, 2; 0, 4, -3, 1)) limits(-->)^(R_1 -> 1/2 R_1)_(R_2 -> 1/4 R_2) (mat(delim: #none, augment: #3, align: #center, 1, -1/2, 1/2, 1; 0, 1, -3/4, 1/4)) limits(-->)^(R_1 -> R_1 + 1/2 R_2) (mat(delim: #none, augment: #3, align: #center, 1, 0, 1/8, 9/8; 0, 1, -3/4, 1/4)) . $$\n\n第二个矩阵是行阶梯形（REF），主元 $2, 4$ 对应 $x, y$（主变量），$z$ 是自由变量；最后一个是行最简形（RREF）。\n\n设 $z = t in RR$：$cases(x + 1/8 t = 9/8, y - 3/4 t = 1/4)$，即 $cases(x = 9/8 - 1/8 t, y = 1/4 + 3/4 t, z = t)$\n\n$$ mat(x; y; z) = mat(9/8 - 1/8 t; 1/4 + 3/4 t; t) = mat(9/8; 1/4; 0) + t mat(-1/8; 3/4; 1), wide t in RR . $$\n\n**注.** 该方程组的解空间是一个仿射空间（一条不过原点的直线）。"
+ },
+ "axb_cols/body": {
+  "src": "探究解方程组的原理。方程组\n\n$$ cases(a_11 x_1 + dots.c + a_(1 n) x_n = b_1, quad dots.v, a_(m 1) x_1 + dots.c + a_(m n) x_n = b_m) $$\n\n（笔记最后一行写成 $b_n$，应为 $b_m$）。定义 $A = (a_(i j)) in RR^(m times n)$，$x = mat(x_1; dots.v; x_n)$，$b = mat(b_1; dots.v; b_m)$，即求 $A x = b$。设 $A$ 的列为 $v_1 , ..., v_n$，则\n\n$$ A x = (v_1 med dots.c med v_n) mat(x_1; dots.v; x_n) = x_1 v_1 + dots.c + x_n v_n = b . $$\n\n所以解 $A x = b$ 就是问：$b$ 能不能写成 $v_1 , ..., v_n$ 的线性组合，系数是什么。"
+ },
+ "axb_cols/p0": {
+  "src": "$A x$ 的第 $i$ 个坐标是 $a_(i 1) x_1 + dots.c + a_(i n) x_n$，正是 $x_1 v_1 + dots.c + x_n v_n$ 的第 $i$ 个坐标（补全）。"
+ },
+ "colrow_def/body": {
+  "src": "**列空间.** 设 $A = (v_1 med dots.c med v_n) in RR^(m times n)$，定义\n\n$$ op(\"col\")(A) = op(\"span\")(v_1 , ..., v_n) = {x_1 v_1 + dots.c + x_n v_n : med x_1 , ..., x_n in RR} . $$\n\n**注.** 由 [[axb\\_cols]]，$op(\"col\")(A)$ 就是使 $A x = b$ 有解的 $b$ 的全体。（笔记写成「$A x = b$ 的解空间」，不准确。）\n\n**行空间.** 设 $A = mat(w_1; dots.v; w_m) in RR^(m times n)$，定义\n\n$$ op(\"row\")(A) = op(\"span\")(w_1 , ..., w_m) = {x_1 w_1 + dots.c + x_m w_m : med x_1 , ..., x_m in RR} . $$"
+ },
+ "ex_colrow/body": {
+  "src": "设 $A = mat(2, -1, 1; 4, 2, -1) in RR^(2 times 3)$（笔记写成 $RR^(3 times 2)$）。分别求出 $op(\"row\")(A)$ 以及 $op(\"col\")(A)$ 的一组基。"
+ },
+ "ex_colrow/p0": {
+  "src": "$$ mat(2, -1, 1; 4, 2, -1) ~ mat(2, -1, 1; 0, 4, -3) ~ mat(1, 0, 1/8; 0, 1, -3/4) . $$\n\n行变换不改变行空间（每一步得到的行都是原来行的线性组合，反之亦然），所以\n\n$$ op(\"span\")((2 med - 1 med 1), (4 med 2 med - 1)) = op(\"span\")((1 med 0 med 1/8), (0 med 1 med - 3/4)), $$\n\n因此 $(1 med 0 med 1/8)$，$(0 med 1 med - 3/4)$ 构成 $op(\"row\")(A)$ 的一组基。\n\n因为主元出现在第 1、2 列，所以 $A$ 的第 1、2 列 $mat(2; 4)$，$mat(-1; 2)$ 构成 $op(\"col\")(A)$ 的一组基。（注意取的是**原矩阵**的列；行变换会改变列空间，但不改变列之间的线性关系。）"
+ },
+ "ex_dependent/body": {
+  "src": "求证 $mat(1; 0; -1; 4), med mat(0; 2; 1; 1), med mat(2; -2; -3; 7)$ 是线性相关的。"
+ },
+ "ex_dependent/p0": {
+  "src": "$$ mat(1, 0, 2; 0, 2, -2; -1, 1, -3; 4, 1, 7) limits(-->)^(R_3 -> R_3 + R_1 , med R_4 -> R_4 - 4 R_1)_(R_2 -> 1/2 R_2) mat(1, 0, 2; 0, 1, -1; 0, 1, -1; 0, 1, -1) limits(-->)^(R_3 -> R_3 - R_2 , med R_4 -> R_4 - R_2) mat(1, 0, 2; 0, 1, -1; 0, 0, 0; 0, 0, 0) . $$\n\n只有两个主元，第 3 列没有主元，所以 $A x = 0$ 有非零解（取 $x_3 = 1$ 得 $x_1 = - 2$，$x_2 = 1$）：第三个向量 $= 2 times$ 第一个 $-$ 第二个。因此三个向量线性相关。（补全最后一步。）"
+ },
+ "rank_def/body": {
+  "src": "设 $A in RR^(m times n)$，定义 $op(\"rank\")(A)$ 为 $A$ 的行阶梯形或行最简形中的主元个数，称为 $A$ 的**秩**。\n\n**注.** $dim (op(\"col\")(A)) = op(\"rank\")(A)$：主元所在的列构成 $op(\"col\")(A)$ 的一组基（见 [[ex\\_colrow]] 的做法）。"
+ },
+ "null_def/body": {
+  "src": "设 $A in RR^(m times n)$，定义\n\n$$ op(\"null\")(A) = {x in RR^n : med A x = 0} $$\n\n（笔记写成 ${A x = 0 : x in RR^n}$），称为 $A$ 的**零空间**；定义 $op(\"nullity\")(A) = dim (op(\"null\")(A))$，称为 $A$ 的**零化度**。"
+ },
+ "ex_null/body": {
+  "src": "设 $A = mat(1, 0, 2; 0, 2, -2; -1, 1, -3; 4, 1, 7)$，求 $op(\"null\")(A)$ 的一组基。"
+ },
+ "ex_null/p0": {
+  "src": "$$ mat(1, 0, 2; 0, 2, -2; -1, 1, -3; 4, 1, 7) limits(-->)^(\"RREF\") mat(1, 0, 2; 0, 1, -1; 0, 0, 0; 0, 0, 0) . $$\n\n求所有 $mat(x; y; z)$ 使得上式乘它等于 $0$。设 $z = t in RR$：$cases(x + 2 t = 0, y - t = 0)$，$cases(x = - 2 t, y = t, z = t)$\n\n$$ mat(x; y; z) = mat(-2 t; t; t) = t mat(-2; 1; 1), wide t in RR . $$\n\n故 $mat(-2; 1; 1)$ 构成 $op(\"null\")(A)$ 的一组基。"
+ },
+ "null_dim/body": {
+  "src": "$$ dim (op(\"null\")(A)) = \"自由变量的个数\" = A med \"的列数\" - op(\"rank\")(A) . $$"
+ },
+ "null_dim/p0": {
+  "src": "行变换不改变 $A x = 0$ 的解集。在 RREF 中，每个主变量都能用自由变量表示，所以解由自由变量的取值唯一决定。令第 $k$ 个自由变量为 $1$、其余为 $0$，得到一个解 $s_k$；全体解就是 $s_k$ 的线性组合，并且 $s_k$ 在第 $k$ 个自由变量的位置为 $1$、在其他自由变量的位置为 $0$，所以线性无关。因此基向量个数 $=$ 自由变量个数 $=$ 列数 $-$ 主元个数。"
+ },
+ "rank_nullity/body": {
+  "src": "设 $A in RR^(m times n)$，则\n\n$$ op(\"rank\")(A) + op(\"nullity\")(A) = n . $$"
+ },
+ "rank_nullity/p0": {
+  "src": "$op(\"nullity\")(A) = dim (op(\"null\")(A)) = n - op(\"rank\")(A)$。"
+ },
+ "fund_matrix/body": {
+  "src": "线性代数基本定理：若 $f : V -> W$ 是线性映射，则 $dim (ker f) + dim (im f) = dim V$。\n\n特别地，若 $V = RR^n$，$W = RR^m$，设矩阵 $A in RR^(m times n)$ 是与 $f$ 对应的矩阵，则\n\n$$ ker (f) &= {x in RR^n : med f(x) = 0} = {x in RR^n : med A x = 0} = op(\"null\")(A), \\ im (f) &= {f(x) : med x in RR^n} = {A x : med x in RR^n} = op(\"col\")(A), \\ dim (V) &= n = A med \"的列数\" . $$\n\n于是基本定理就是 $op(\"nullity\")(A) + op(\"rank\")(A) = n$。"
+ },
+ "basis_props_pf/body": {
+  "src": "回到第 1 章的 [[basis\\_props]]：设 $x_1 , ..., x_m in RR^n$，排成 $n times m$ 矩阵 $A = (x_1 med dots.c med x_m)$。\n\n+ (3) 线性无关 $=> m <= n$；\n+ (2) 张成 $RR^n => m >= n$；\n+ (1) 是基 $=> m = n$。"
+ },
+ "basis_props_pf/p0": {
+  "src": "主元个数 $op(\"rank\")(A)$ 既不超过行数 $n$（每行至多一个主元），也不超过列数 $m$（每列至多一个主元）。\n\n(3) 线性无关 $<==> A x = 0$ 只有零解 $<==>$ 没有自由变量 $<==> op(\"rank\")(A) = m$。于是 $m = op(\"rank\")(A) <= n$。\n\n(2) 设 $x_1 , ..., x_m$ 张成 $RR^n$，即对任意 $b in RR^n$，$A x = b$ 都有解。假设 $op(\"rank\")(A) < n$，则 $A$ 的 RREF $R$ 的最后一行全是 $0$。考虑增广矩阵 $(R | e_n)$：最后一行是 $(0 med dots.c med 0 | 1)$，即方程 $0 = 1$，无解。初等行变换都可以反过来做，把 $(R | e_n)$ 逆向变回 $(A | b)$，得到某个 $b$；方程组 $A x = b$ 与 $R x = e_n$ 同解，所以也无解，矛盾。因此 $n = op(\"rank\")(A) <= m$。\n\n(1) 由 (2)(3) 得 $m = n$。"
+ },
+ "complex_review/body": {
+  "src": "求特征值时需要解多项式方程，会出现复数根。这部分与「数学基础」的复数一章内容相同，这里只列要点，详细定义与证明点进去看：\n\n- $i = sqrt(-1)$，$i^2 = - 1$；$CC = {z = a + b i : med a, b in RR}$，$op(\"Re\")(z) = a$，$op(\"Im\")(z) = b$。[[shuxue-jichu:c\\_def]]\n- 乘法 $(a + b i)(c + d i) = (a c - b d) + (a d + b c) i$；平方和公式 $(a + b i)(a - b i) = a^2 + b^2$。[[shuxue-jichu:c\\_mul]]\n- 共轭 $overline(z) = a - b i$，$overline(z w) = overline(z) overline(w)$。[[shuxue-jichu:conj\\_def]]\n- 模长 $| z | = sqrt(a^2 + b^2)$，$z overline(z) = | z |^2$，$| z w | = | z | | w |$。[[shuxue-jichu:mod\\_def]]\n- 倒数与除法：$1/(a + b i) = (a - b i)/(a^2 + b^2)$，$(a + b i)/(c + d i) = ((a c + b d) + (b c - a d) i)/(c^2 + d^2)$。[[shuxue-jichu:c\\_div]]\n- 极坐标 $z = r(cos theta + i sin theta)$，相乘时长度相乘、角度相加。[[shuxue-jichu:polar\\_def]]\n- 欧拉公式 $e^(i theta) = cos theta + i sin theta$，$e^(i pi) + 1 = 0$。[[shuxue-jichu:euler]]\n- $z^n = 1$ 的解为 $z = e^((2 k pi i)/n)$（$0 <= k <= n - 1$）。[[shuxue-jichu:roots\\_unity]]\n- 实系数二次方程 $a z^2 + b z + c = 0$：$b^2 - 4 a c < 0$ 时 $z = - b/(2 a) plus.minus sqrt(4 a c - b^2)/(2 a) i$，两复根互为共轭。[[shuxue-jichu:quad\\_c]]"
+ },
+ "identity_def/body": {
+  "src": "$$ I = mat(1, , 0; , dots.down, ; 0, , 1) in RR^(n times n) . $$\n\n若 $A in RR^(n times n)$，则 $I A = A I = A$。"
+ },
+ "diag_mult/body": {
+  "src": "$$ mat(a_11, , 0; , dots.down, ; 0, , a_(n n)) mat(b_11, , 0; , dots.down, ; 0, , b_(n n)) = mat(a_11 b_11, , 0; , dots.down, ; 0, , a_(n n) b_(n n)), wide mat(a_11, , 0; , dots.down, ; 0, , a_(n n))^k = mat(a_11^k, , 0; , dots.down, ; 0, , a_(n n)^k) . $$"
+ },
+ "diag_mult/p0": {
+  "src": "$(A B)_(i j) = sum_k a_(i k) b_(k j)$，只有 $k = i = j$ 的项可能非零，所以乘积仍是对角矩阵，对角元为 $a_(i i) b_(i i)$。乘方对 $k$ 归纳。"
+ },
+ "eig_def/body": {
+  "src": "设 $A in RR^(n times n)$，$lambda in CC$。假设 $A v = lambda v$ 存在非平凡解，即存在 $v != 0$ 使得 $A v = lambda v$，那么我们就说 $lambda$ 是 $A$ 的一个**特征值**，而 $v$ 是与 $lambda$ 对应的一个**特征向量**。"
+ },
+ "char_poly/body": {
+  "src": "设 $A in RR^(n times n)$，则 $lambda$ 是 $A$ 的特征值 $<==> det (A - lambda I) = 0$。左边是关于 $lambda$ 的一个 $n$ 次多项式，叫做**特征多项式**。"
+ },
+ "char_poly/p0": {
+  "src": "探究 $A v = lambda v$：$A v = (lambda I) v$，希望 $(A - lambda I) v = 0$ 存在非平凡解，即 $A - lambda I$ 不可逆，即 $det (A - lambda I) = 0$（[[inv\\_det]]）。\n\n（补全：$(A - lambda I) v = 0$ 有非零解 $<==>$ 有自由变量 $<==> op(\"rank\") < n <==>$ 不可逆。）"
+ },
+ "ex_eig2/body": {
+  "src": "设 $A = mat(6, -1; 2, 3)$，求 $A$ 的特征值与特征向量。"
+ },
+ "ex_eig2/p0": {
+  "src": "求 $det (A - lambda I) = 0$ 的解集。\n\n$$ det (A - lambda I) = det mat(6 - lambda, -1; 2, 3 - lambda) = (lambda - 6)(lambda - 3) + 2 = lambda^2 - 9 lambda + 20 = (lambda - 4)(lambda - 5) . $$\n\n因此 $lambda_1 = 4$，$lambda_2 = 5$。\n\n① 当 $lambda_1 = 4$ 时，$A - lambda_1 I = mat(2, -1; 2, -1) ~ mat(2, -1; 0, 0)$。设 $v_1 = mat(1; 2)$，则 $A v_1 = lambda_1 v_1$，$v_1$ 是 $lambda_1$ 对应的一个特征向量。\n\n② 当 $lambda_2 = 5$ 时，$A - lambda_2 I = mat(1, -1; 2, -2) ~ mat(1, -1; 0, 0)$。设 $v_2 = mat(1; 1)$，则 $A v_2 = lambda_2 v_2$。\n\n**检验.** $A v_1 = mat(6, -1; 2, 3) mat(1; 2) = mat(4; 8) = 4 mat(1; 2)$，$A v_2 = mat(5; 5) = 5 mat(1; 1)$。"
+ },
+ "inverse_def/body": {
+  "src": "设 $A in RR^(n times n)$。若存在 $B in RR^(n times n)$，使得 $A B = B A = I$，则称 $B$ 是 $A$ 的逆，记作 $B = A^(-1)$；称 $A$ 是**可逆矩阵**。"
+ },
+ "inv_det/body": {
+  "src": "设 $A in RR^(n times n)$，则 $A$ 可逆 $<==> det (A) != 0$。\n\n「$=>$」可以直接看出：$1 = det (I) = det (A A^(-1)) = det (A) det (A^(-1))$，所以 $det (A) != 0$。「$arrow.l.double$」需要行列式的完整理论，本课不证；$2 times 2$ 的情形见 [[inv\\_2x2]]，那里直接写出了逆矩阵。"
+ },
+ "inv_2x2/body": {
+  "src": "设 $A = mat(a, b; c, d) in RR^(2 times 2)$，设 $det (A) = a d - b c != 0$，则\n\n$$ A^(-1) = 1/(a d - b c) mat(d, -b; -c, a) . $$"
+ },
+ "inv_2x2/p0": {
+  "src": "$$ mat(a, b; c, d) 1/(a d - b c) mat(d, -b; -c, a) = 1/(a d - b c) mat(a d - b c, 0; 0, a d - b c) = mat(1, 0; 0, 1), $$\n$$ 1/(a d - b c) mat(d, -b; -c, a) mat(a, b; c, d) = 1/(a d - b c) mat(a d - b c, 0; 0, a d - b c) = mat(1, 0; 0, 1) . $$"
+ },
+ "inv_method/body": {
+  "src": "把 $A$ 和 $I$ 并排写成 $(A | I)$，对它做初等行变换，把左半边化成 $I$，右半边就是 $A^(-1)$：\n\n$$ (A | I) ~(I | A^(-1)) . $$\n\n原因（补全）：若 $E_k dots.c E_1 A = I$，则 $E_k dots.c E_1 = A^(-1)$，而右半边正是 $E_k dots.c E_1 I = E_k dots.c E_1$。（严格说还要验证 $A(E_k dots.c E_1) = I$，本课略。）"
+ },
+ "ex_inv2/body": {
+  "src": "求 $mat(1, 2; 3, 4)^(-1)$。"
+ },
+ "ex_inv2/p0": {
+  "src": "$$ (mat(delim: #none, augment: #2, align: #center, 1, 2, 1, 0; 3, 4, 0, 1)) ~(mat(delim: #none, augment: #2, align: #center, 1, 2, 1, 0; 0, -2, -3, 1)) ~(mat(delim: #none, augment: #2, align: #center, 1, 2, 1, 0; 0, 1, 3/2, -1/2)) ~(mat(delim: #none, augment: #2, align: #center, 1, 0, -2, 1; 0, 1, 3/2, -1/2)) . $$\n\n因此 $mat(1, 2; 3, 4)^(-1) = mat(-2, 1; 3/2, -1/2)$。\n\n**检验.** $mat(1, 2; 3, 4)^(-1) = 1/(-2) mat(4, -2; -3, 1) = mat(-2, 1; 3/2, -1/2)$ ✓。"
+ },
+ "diagonalizable_def/body": {
+  "src": "设 $A in RR^(n times n)$。若存在对角矩阵 $D$ 与可逆矩阵 $P$，使得 $A = P D P^(-1)$，则称 $A$ 是**可对角化矩阵**。\n\n做法：若 $v_1 , ..., v_n$ 分别是特征值 $lambda_1 , ..., lambda_n$ 对应的特征向量，令 $P = (v_1 med dots.c med v_n)$，$D = mat(lambda_1, , ; , dots.down, ; , , lambda_n)$，则\n\n$$ A P = (A v_1 med dots.c med A v_n) = (lambda_1 v_1 med dots.c med lambda_n v_n), wide P D = (v_1 med dots.c med v_n) mat(lambda_1, , ; , dots.down, ; , , lambda_n) = (lambda_1 v_1 med dots.c med lambda_n v_n), $$\n\n因此 $A P = P D$。若 $P$ 可逆（即特征向量线性无关），两边右乘 $P^(-1)$ 得 $A = P D P^(-1)$。"
+ },
+ "diag_power/body": {
+  "src": "若 $A = P D P^(-1)$，$D$ 对角，$P$ 可逆，则 $A^k = P D^k P^(-1)$。"
+ },
+ "diag_power/p0": {
+  "src": "$$ A^2 = P D underbrace(P^(-1) P, = I) D P^(-1) = P D^2 P^(-1) , wide A^3 = A^2 A = P D^2 underbrace(P^(-1) P, = I) D P^(-1) = P D^3 P^(-1) , $$\n\n……由归纳法 $A^k = P D^k P^(-1) = P mat(lambda_1^k, , ; , dots.down, ; , , lambda_n^k) P^(-1)$。"
+ },
+ "ex_power100/body": {
+  "src": "求 $mat(6, -1; 2, 3)^100$。"
+ },
+ "ex_power100/p0": {
+  "src": "由前面的例子，$lambda_1 = 4$，$lambda_2 = 5$，$v_1 = mat(1; 2)$，$v_2 = mat(1; 1)$。设 $P = (v_1 med v_2) = mat(1, 1; 2, 1)$，$D = mat(4, 0; 0, 5)$，则 $A P = P D$。\n\n$P^(-1) = 1/(-1) mat(1, -1; -2, 1) = mat(-1, 1; 2, -1)$。于是 $A = P D P^(-1)$，$A^100 = P D^100 P^(-1)$，因此\n\n$$ mat(6, -1; 2, 3)^100 = mat(1, 1; 2, 1) mat(4^100, 0; 0, 5^100) mat(-1, 1; 2, -1) = mat(2 dot.op 5^100 - 4^100, 4^100 - 5^100; 2 dot.op 5^100 - 2 dot.op 4^100, 2 dot.op 4^100 - 5^100) . $$\n\n（最后一步乘开是补全的。）"
+ },
+ "ex_diag3/body": {
+  "src": "设 $A = mat(1, 2, 0; 2, 1, 0; 0, 0, -3)$，对角化 $A$。"
+ },
+ "ex_diag3/p0": {
+  "src": "$$ det (A - lambda I) = det mat(1 - lambda, 2, 0; 2, 1 - lambda, 0; 0, 0, -3 - lambda) = (- 3 - lambda) det mat(1 - lambda, 2; 2, 1 - lambda) = -(lambda + 3)((lambda - 1)^2 - 4) = 0, $$\n\n即 $(lambda + 3)(lambda^2 - 2 lambda - 3) = 0$，$lambda_1 = - 3$，$lambda_2 = 3$，$lambda_3 = - 1$。\n\n① $A - lambda_1 I = mat(4, 2, 0; 2, 4, 0; 0, 0, 0) ~ mat(1, 0, 0; 0, 1, 0; 0, 0, 0)$，设 $v_1 = mat(0; 0; 1)$，则 $A v_1 = lambda_1 v_1$。\n\n② $A - lambda_2 I = mat(-2, 2, 0; 2, -2, 0; 0, 0, -6) ~ mat(1, -1, 0; 0, 0, 1; 0, 0, 0)$，设 $v_2 = mat(1; 1; 0)$，则 $A v_2 = lambda_2 v_2$。\n\n③ $A - lambda_3 I = mat(2, 2, 0; 2, 2, 0; 0, 0, -2) ~ mat(1, 1, 0; 0, 0, 1; 0, 0, 0)$，设 $v_3 = mat(1; -1; 0)$，则 $A v_3 = lambda_3 v_3$。\n\n设 $P = (v_1 med v_2 med v_3) = mat(0, 1, 1; 0, 1, -1; 1, 0, 0)$，$D = mat(-3, 0, 0; 0, 3, 0; 0, 0, -1)$，于是 $A = P D P^(-1)$。下面求出 $P^(-1)$：\n\n$$ (P | I) = (mat(delim: #none, augment: #3, align: #center, 0, 1, 1, 1, 0, 0; 0, 1, -1, 0, 1, 0; 1, 0, 0, 0, 0, 1)) ~(mat(delim: #none, augment: #3, align: #center, 1, 0, 0, 0, 0, 1; 0, 1, -1, 0, 1, 0; 0, 1, 1, 1, 0, 0)) ~(mat(delim: #none, augment: #3, align: #center, 1, 0, 0, 0, 0, 1; 0, 1, -1, 0, 1, 0; 0, 0, 2, 1, -1, 0)) $$\n$$ ~(mat(delim: #none, augment: #3, align: #center, 1, 0, 0, 0, 0, 1; 0, 1, -1, 0, 1, 0; 0, 0, 1, 1/2, -1/2, 0)) ~(mat(delim: #none, augment: #3, align: #center, 1, 0, 0, 0, 0, 1; 0, 1, 0, 1/2, 1/2, 0; 0, 0, 1, 1/2, -1/2, 0)) . $$\n\n因此 $P^(-1) = mat(0, 0, 1; 1/2, 1/2, 0; 1/2, -1/2, 0)$。"
+ }
+}

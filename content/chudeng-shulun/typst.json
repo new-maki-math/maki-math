@@ -1,0 +1,494 @@
+{
+ "nt_n/body": {
+  "src": "本课约定 $NN = {1, 2, 3, ...}$。\n\n**数学归纳法.** 对一族命题 ${P(n) : n in NN}$，\n\n$$ forall n in NN, med P(n) <==> cases(P(1) comma, forall n in NN comma med P(n) => P(n + 1) .) $$\n\n**良序公理.** 设 $nothing != A subset NN$，则 $A$ 必有最小元素 $m$，即\n\n$$ cases(m in A comma, forall a in A comma med m <= a .) $$\n\n数学归纳法 $<==>$ 良序公理，证明见「数学基础」：[[shuxue-jichu:induction]]、[[shuxue-jichu:wellorder]]。整门课里「取最小的那个」都靠良序公理。"
+ },
+ "divalg/body": {
+  "src": "设 $a in ZZ$，$b in NN$。则存在**唯一**的 $q, r in ZZ$，满足\n\n$$ cases(a = q b + r comma, 0 <= r <= b - 1 .) $$"
+ },
+ "divalg/p0": {
+  "src": "**存在性.** 考虑 $S = {a - q b : med q in ZZ} inter ZZ_(>= 0)$，即所有形如 $a - q b$ 的非负整数。$S != nothing$：取 $q = - | a |$，则 $a - q b = a + | a | b >= a + | a | >= 0$。\n\n由良序公理（$S$ 中若有 $0$ 则 $0$ 就是最小元；否则 $S subset NN$），设 $r_0 = min S$，则存在 $q_0 in ZZ$ 使得 $a - q_0 b = r_0$，$r_0 >= 0$。\n\n目标：证明 $r_0 <= b - 1$。用反证法，假设 $r_0 >= b$，则\n\n$$ 0 <= r_0 - b = a - q_0 b - b = a -(q_0 + 1) b in S, $$\n\n而 $r_0 - b < r_0$，这和 $r_0 = min S$ 矛盾。\n\n**唯一性.** 设 $a = q_1 b + r_1 = q_2 b + r_2$，其中 $q_1 , q_2 , r_1 , r_2 in ZZ$，$0 <= r_1 , r_2 <= b - 1$。则\n\n$$ (q_1 - q_2) b = r_2 - r_1 in [-(b - 1), b - 1] . $$\n\n左边是 $b$ 的倍数，而区间 $[-(b - 1), b - 1]$ 里 $b$ 的倍数只有 $0$。因此 $q_1 = q_2$，$r_1 = r_2$。"
+ },
+ "div_def/body": {
+  "src": "设 $a, b in ZZ$，$b != 0$。若存在 $q in ZZ$ 使得 $a = q b$（当 $b > 0$ 时，就是带余除法 $a = q b + r$ 中余数 $r = 0$），则称\n\n- $a$ 是 $b$ 的**倍数**，$b$ 是 $a$ 的**因数**；\n- $b$ **整除** $a$，记作 $b divides a$；也说 $a$ 能被 $b$ 整除。\n\n否则记 $b divides.not a$。例：$2 divides 6$。"
+ },
+ "div_basic/body": {
+  "src": "设 $n in NN$，则 $1 divides n$，$n divides n$。"
+ },
+ "div_basic/p0": {
+  "src": "$n = n dot.op 1 = 1 dot.op n$。"
+ },
+ "div_lin/body": {
+  "src": "设 $a, b, c in ZZ$，$a != 0$，且 $a divides b$，$a divides c$。则 $a divides (b + c)$；更一般地，对任意 $k, l in ZZ$，\n\n$$ a divides (k b + l c) . $$\n\n$k b + l c$ 叫做 $b$ 和 $c$ 的一个**线性组合**。"
+ },
+ "div_lin/p0": {
+  "src": "设 $b = a d$，$c = a e$（$d, e in ZZ$），则\n\n$$ k b + l c = k a d + l a e = a(k d + l e), $$\n\n因此 $a divides (k b + l c)$。取 $k = l = 1$ 即得 $a divides (b + c)$。"
+ },
+ "div_trans/body": {
+  "src": "设 $a, b, c in ZZ$，$a, b != 0$。若 $a divides b$，$b divides c$，则 $a divides c$。"
+ },
+ "div_trans/p0": {
+  "src": "设 $b = a d$，$c = b e$（$d, e in ZZ$），则 $c = b e = a d e$，故 $a divides c$。"
+ },
+ "div_pm/body": {
+  "src": "若 $a, b in ZZ$，$a, b != 0$，且 $a divides b$，$b divides a$，则 $a = plus.minus b$。特别地，两个互相整除的正整数相等。"
+ },
+ "div_pm/p0": {
+  "src": "设 $b = a d$，$a = b e$（$d, e in ZZ$），则 $a = b e = a d e$。因为 $a != 0$，约去得 $d e = 1$；$d, e$ 是整数，所以 $e = plus.minus 1$。故 $a = plus.minus b$。"
+ },
+ "gcd_def/body": {
+  "src": "设 $a, b in NN$。定义\n\n- $gcd (a, b)$：$a$ 和 $b$ 最大的公因数（greatest common divisor），也记作 $(a, b)$；\n- $op(\"lcm\")(a, b)$：$a$ 和 $b$ 最小的（正的）公倍数（least common multiple），也记作 $[a, b]$。\n\n公因数都不超过 $a$，且 $1$ 是公因数，所以最大公因数存在；$a b$ 是公倍数，由良序公理最小公倍数存在。\n\n**例.** $gcd (10, 12) = 2$，$op(\"lcm\")(10, 12) = 60$。注意到 $10 dot.op 12 = 120 = 2 dot.op 60$——这不是巧合，见 [[gcd\\_lcm]]。"
+ },
+ "coprime_def/body": {
+  "src": "若 $a, b in NN$ 且 $gcd (a, b) = 1$，则称 $a, b$ **互素**，记作 $a bot b$。"
+ },
+ "euclid_alg/body": {
+  "src": "求 $gcd (a, b)$：对 $(a, b)$ 做带余除法 $a = q b + r$，换成 $(b, r)$ 继续，直到余数为 $0$；最后一个非零余数就是 $gcd (a, b)$。\n\n**例.** 求 $gcd (18, 48)$。从 $(48, 18)$ 开始：\n\n$$ 48 &= 2 dot.op 18 + 12 & & (48, 18) \\ 18 &= 1 dot.op 12 + 6 & & (18, 12) \\ 12 &= 2 dot.op 6 & & (12, 6) $$\n\n因此 $gcd (18, 48) = 6$。"
+ },
+ "euclid_alg/p0": {
+  "src": "若 $a = q b + r$，则 $a, b$ 的公因数和 $b, r$ 的公因数完全相同：$e divides a, med e divides b => e divides a - q b = r$；反之 $e divides b, med e divides r => e divides q b + r = a$。所以 $gcd (a, b) = gcd (b, r)$。余数严格变小，有限步后为 $0$；而 $gcd (d, 0)$ 按约定为 $d$（$d divides d$，$d divides 0$）。"
+ },
+ "bezout/body": {
+  "src": "设 $a, b in NN$，则存在 $k, l in ZZ$，使得\n\n$$ gcd (a, b) = k a + l b . $$"
+ },
+ "bezout/p0": {
+  "src": "笔记里只给了结论和例子，这里补上证明。\n\n令 $S = {k a + l b : med k, l in ZZ} inter NN$。$a = 1 dot.op a + 0 dot.op b in S$，故 $S != nothing$。由良序公理设 $d_0 = min S = k_0 a + l_0 b$。\n\n**$d_0 divides a$.** 做带余除法 $a = q d_0 + r$，$0 <= r <= d_0 - 1$。则 $r = a - q(k_0 a + l_0 b) = (1 - q k_0) a + (- q l_0) b$ 也是 $a, b$ 的线性组合。若 $r > 0$，则 $r in S$ 且 $r < d_0$，与 $d_0$ 的最小性矛盾。故 $r = 0$，$d_0 divides a$。同理 $d_0 divides b$。\n\n**$d_0$ 是最大的.** 设 $e$ 是 $a, b$ 的任一正公因数，则 $e divides k_0 a + l_0 b = d_0$，所以 $e <= d_0$。\n\n因此 $d_0 = gcd (a, b)$，即 $gcd (a, b) = k_0 a + l_0 b$。"
+ },
+ "ex_bezout/body": {
+  "src": "求 $k, l in ZZ$，使得 $18 k + 48 l = 6 = gcd (18, 48)$。"
+ },
+ "ex_bezout/p0": {
+  "src": "由辗转相除法：$48 = 2 dot.op 18 + 12$，$18 = 1 dot.op 12 + 6$，$12 = 2 dot.op 6$。\n\n思路：先把 $6$ 写成 $18, 12$ 的线性组合，再写成 $48, 18$ 的线性组合……\n\n$$ 6 &= 1 dot.op 18 - 1 dot.op 12 \\ &= 1 dot.op 18 - 1 dot.op (1 dot.op 48 - 2 dot.op 18) \\ &= 3 dot.op 18 - 1 dot.op 48 . $$\n\n所以 $k = 3$，$l = - 1$。"
+ },
+ "az_def/body": {
+  "src": "设 $a in NN$，定义\n\n$$ a ZZ = {a k : med k in ZZ} = {..., - 2 a, - a, 0, a, 2 a, ...}, $$\n\n即 $a$ 的全体倍数。"
+ },
+ "lincomb/body": {
+  "src": "若 $a, b in NN$，则\n\n$$ {k a + l b : med k, l in ZZ} = gcd (a, b) ZZ . $$\n\n也就是说，$a, b$ 能凑出的数恰好是 $gcd (a, b)$ 的全体倍数。"
+ },
+ "lincomb/p0": {
+  "src": "设 $S = {k a + l b : med k, l in ZZ}$，$d = gcd (a, b)$。\n\n**$d ZZ subset S$.** 由 Bézout 定理 $d = k_0 a + l_0 b$。对任意 $m in ZZ$，$d m = (k_0 m) a + (l_0 m) b in S$，即 ${..., - 2 d, - d, 0, d, 2 d, ...} subset S$。\n\n**$S subset d ZZ$.** 设 $c = k a + l b$。设 $a = d a'$，$b = d b'$，则 $c = k a' d + l b' d = (k a' + l b') d in d ZZ$。"
+ },
+ "cd_gcd/body": {
+  "src": "设 $a, b, e in NN$。若 $e divides a$，$e divides b$，则 $e divides gcd (a, b)$。"
+ },
+ "cd_gcd/p0": {
+  "src": "由 Bézout 定理，存在 $k, l in ZZ$ 使 $gcd (a, b) = k a + l b$。由 $e divides a$，$e divides b$ 可知 $e divides k a + l b = gcd (a, b)$。"
+ },
+ "gcd_scale/body": {
+  "src": "设 $a, b, k in NN$，则\n\n$$ gcd (k a, k b) = k gcd (a, b) . $$"
+ },
+ "gcd_scale/p0": {
+  "src": "设 $S = {m(k a) + n(k b) : med m, n in ZZ}$。一方面由 [[lincomb]]，$S = gcd (k a, k b) ZZ$。另一方面\n\n$$ S = {(m k) a + (n k) b} = {k(m a + n b) : med m, n in ZZ} = k gcd (a, b) ZZ, $$\n\n因为 ${m a + n b} = gcd (a, b) ZZ$。两个正整数生成同一个倍数集，它们互相整除，故相等：$gcd (k a, k b) = k gcd (a, b)$。"
+ },
+ "gcd_scale/p1": {
+  "src": "要证 $gcd (k a, k b) = k gcd (a, b)$，证两边互相整除。\n\n**1°** $k gcd (a, b) divides k a$，$k gcd (a, b) divides k b$，因此 $k gcd (a, b) divides gcd (k a, k b)$。\n\n**2°** 要证 $(gcd (k a, k b))/k divides gcd (a, b)$。由于 $k divides k a$，$k divides k b$，因此 $k divides gcd (k a, k b)$，上式左边是整数。$gcd (k a, k b) divides k a$，设 $k a = gcd (k a, k b) c$，则 $(gcd (k a, k b))/k c = a$，因此 $(gcd (k a, k b))/k divides a$。同理 $(gcd (k a, k b))/k divides b$。综上 $(gcd (k a, k b))/k divides gcd (a, b)$，故 $gcd (k a, k b) divides k gcd (a, b)$。\n\n两者都是正整数且互相整除，所以相等。"
+ },
+ "gcd_reduce/body": {
+  "src": "设 $a, b in NN$，$d = gcd (a, b)$，$a = d a'$，$b = d b'$（$a' , b' in ZZ$）。则 $gcd (a' , b') = 1$。\n\n**例.** $gcd (10, 12) = 2$，$10 = 2 dot.op 5$，$12 = 2 dot.op 6$，则 $gcd (5, 6) = 1$。"
+ },
+ "gcd_reduce/p0": {
+  "src": "$d divides a$，$d divides b$，所以 $a' , b' in NN$。\n\n$$ d = gcd (a, b) = gcd (d a' , d b') = d gcd (a' , b'), $$\n\n因此 $gcd (a' , b') = 1$。"
+ },
+ "euclid_lemma/body": {
+  "src": "设 $a, b in NN$，$c in ZZ$。若 $a divides b c$ 且 $gcd (a, b) = 1$，则 $a divides c$。"
+ },
+ "euclid_lemma/p0": {
+  "src": "由 Bézout 定理，设 $k a + l b = 1$（$k, l in ZZ$）。由 $a divides b c$，设 $b c = a d$。目标：证明 $a divides c$。\n\n两边同乘 $c$：$k a c + l b c = c$，即 $k a c + l a d = c$。于是 $a divides (k a c + l a d) = c$。"
+ },
+ "euclid_cor/body": {
+  "src": "设 $a, b in NN$，$c in ZZ$。若 $a divides b c$，则\n\n$$ a/(gcd (a, b)) med | med c . $$"
+ },
+ "euclid_cor/p0": {
+  "src": "$gcd (a, b)$ 同时整除 $a$ 和 $b$。由 $a divides b c$ 可知\n\n$$ a/(gcd (a, b)) med | med b/(gcd (a, b)) c . $$\n\n前面证明了 $a/(gcd (a, b))$ 与 $b/(gcd (a, b))$ 互素，由上一条性质可知 $a/(gcd (a, b)) divides c$。"
+ },
+ "ex_10_12c/body": {
+  "src": "设 $10 divides 12 c$，求证 $5 divides c$。"
+ },
+ "ex_10_12c/p0": {
+  "src": "$gcd (10, 12) = 2$，所以 $5 divides 6 c$；$gcd (5, 6) = 1$，即 $5 divides c$。"
+ },
+ "lcm_coprime/body": {
+  "src": "设 $a, b in NN$，$gcd (a, b) = 1$，则 $op(\"lcm\")(a, b) = a b$。更强地：$a, b$ 的每个公倍数都是 $a b$ 的倍数。"
+ },
+ "lcm_coprime/p0": {
+  "src": "首先，$a b$ 显然是 $a$ 和 $b$ 的公倍数。设 $m$ 是 $a$ 和 $b$ 的公倍数：$a divides m$，$b divides m$。\n\n由 $a divides m$，设 $m = a k$（$k in ZZ$）。由 $b divides m$ 可知 $b divides a k$。由 $gcd (a, b) = 1$ 可知 $b divides k$。两边同乘 $a$：$a b divides a k = m$。\n\n故 $m$ 一定是 $a b$ 的倍数，最小的正公倍数就是 $a b$。因此 $op(\"lcm\")(a, b) = a b$。"
+ },
+ "lcm_ideal/body": {
+  "src": "设 $a, b in NN$，则\n\n$$ a ZZ inter b ZZ = op(\"lcm\")(a, b) ZZ, wide op(\"lcm\")(a, b) = (a b)/(gcd (a, b)) . $$"
+ },
+ "lcm_ideal/p0": {
+  "src": "**① 假设 $gcd (a, b) = 1$.** 设 $m in a ZZ inter b ZZ$，即 $a divides m$，$b divides m$，则由上一条性质的证明可知 $a b divides m$，即 $m in a b ZZ$。反过来，设 $n in a b ZZ$，则 $a b divides n$，于是 $a divides n$，$b divides n$，故 $n in a ZZ inter b ZZ$。因此若 $gcd (a, b) = 1$，则 $a ZZ inter b ZZ = a b ZZ$。\n\n**② 一般情形.** 设 $d = gcd (a, b)$，$a = d a'$，$b = d b'$，则 $gcd (a' , b') = 1$，故 $a' ZZ inter b' ZZ = a' b' ZZ$。目标：证明 $a ZZ inter b ZZ = d a' b' ZZ$（笔记说「可以通过两边互相包含来证明」，补全如下）。\n\n「$supset$」：$d a' b' = a dot.op b' = b dot.op a'$ 同时是 $a$ 和 $b$ 的倍数，所以它的倍数都在 $a ZZ inter b ZZ$ 里。\n\n「$subset$」：设 $m in a ZZ inter b ZZ$。由 $d divides a divides m$ 设 $m = d m'$。由 $d a' divides d m'$ 得 $a' divides m'$，同理 $b' divides m'$，所以 $m' in a' ZZ inter b' ZZ = a' b' ZZ$，于是 $m = d m' in d a' b' ZZ$。\n\n$a ZZ inter b ZZ$ 中最小的正数就是最小公倍数，所以\n\n$$ op(\"lcm\")(a, b) = d a' b' = d dot.op a/d dot.op b/d = (a b)/d = (a b)/(gcd (a, b)) , $$\n\n并且 $a ZZ inter b ZZ = op(\"lcm\")(a, b) ZZ$。"
+ },
+ "lcm_div/body": {
+  "src": "设 $a, b in NN$，$n in ZZ$。若 $a divides n$，$b divides n$，则 $op(\"lcm\")(a, b) divides n$。\n\n（回顾对偶的结论：$e divides a, med e divides b => e divides gcd (a, b)$，见 [[cd\\_gcd]]。）"
+ },
+ "lcm_div/p0": {
+  "src": "$a ZZ inter b ZZ = op(\"lcm\")(a, b) ZZ$。由 $a divides n$，$b divides n$ 可知 $n in a ZZ inter b ZZ = op(\"lcm\")(a, b) ZZ$，故 $op(\"lcm\")(a, b) divides n$。"
+ },
+ "gcd_lcm/body": {
+  "src": "若 $a, b in NN$，则\n\n$$ gcd (a, b) op(\"lcm\")(a, b) = a b . $$"
+ },
+ "gcd_lcm/p0": {
+  "src": "由 $op(\"lcm\")(a, b) = (a b)/(gcd (a, b))$ 易知。"
+ },
+ "gcd_lcm/p1": {
+  "src": "**① 「右边 | 左边」.** 要证 $(a b)/(op(\"lcm\")(a, b)) divides gcd (a, b)$，只需证 $(a b)/(op(\"lcm\")(a, b)) divides a$（同理 $divides b$，再用 [[cd\\_gcd]]）。由 $a divides a b$，$b divides a b$ 可知 $op(\"lcm\")(a, b) divides a b$，所以左边是整数；又\n\n$$ a \\/ (a b)/(op(\"lcm\")(a, b)) = (op(\"lcm\")(a, b))/b in ZZ, $$\n\n由于 $b divides op(\"lcm\")(a, b)$。\n\n**② 「左边 | 右边」.** 要证 $op(\"lcm\")(a, b) divides (a b)/(gcd (a, b)) in ZZ$，只需证 $a divides (a b)/(gcd (a, b))$（同理 $b divides$，再用 [[lcm\\_div]]）：\n\n$$ (a b)/(gcd (a, b)) \\/ a = b/(gcd (a, b)) in ZZ, $$\n\n由于 $gcd (a, b) divides b$。\n\n综上所述，$gcd (a, b) op(\"lcm\")(a, b) = a b$。"
+ },
+ "gcd_lcm/p2": {
+  "src": "对实数 $a, b$ 有 $min (a, b) + max (a, b) = a + b$。所以\n\n$$ gcd (m, n) op(\"lcm\")(m, n) &= product_p p^(min (v_p (m), v_p (n)) + max (v_p (m), v_p (n))) = product_p p^(v_p (m) + v_p (n)) \\ &= product_p (p^(v_p (m)) p^(v_p (n))) = (product_p p^(v_p (m)))(product_p p^(v_p (n))) = m n . $$"
+ },
+ "lcm_scale/body": {
+  "src": "设 $a, b, k in NN$，则 $op(\"lcm\")(k a, k b) = k op(\"lcm\")(a, b)$。"
+ },
+ "lcm_scale/p0": {
+  "src": "$$ op(\"lcm\")(k a, k b) = (k a dot.op k b)/(gcd (k a, k b)) = (k^2 a b)/(k gcd (a, b)) = k dot.op (a b)/(gcd (a, b)) = k op(\"lcm\")(a, b) . $$"
+ },
+ "ex_3x2y/body": {
+  "src": "求方程 $3 x + 2 y = 1$ 的全部整数解。"
+ },
+ "ex_3x2y/p0": {
+  "src": "$(x_0 , y_0) = (1, - 1)$ 是一组解。于是 $3 x + 2 y = 1 = 3 x_0 + 2 y_0$，\n\n$$ 3(x - x_0) = 2(y_0 - y) . wide \"①\" $$\n\n$3 divides 3(x - x_0) = 2(y_0 - y)$，即 $3 divides 2(y_0 - y)$。由 $gcd (3, 2) = 1$ 可知 $3 divides (y_0 - y)$。设 $y_0 - y = 3 k$（$k in ZZ$），代入 ① 式得 $x - x_0 = 2 k$。所以\n\n$$ cases(x = x_0 + 2 k = 1 + 2 k comma, y = y_0 - 3 k = - 1 - 3 k comma) wide (x, y) = (1 + 2 k, - 1 - 3 k) med (k in ZZ) . $$"
+ },
+ "lin_dioph/body": {
+  "src": "设 $a, b in NN$，$c in ZZ$，考虑 $a x + b y = c$（$x, y in ZZ$）。\n\n+ ① 若 $gcd (a, b) divides.not c$，则原方程无解。\n+ ② 若 $gcd (a, b) divides c$，则有解；取一组解 $(x_0 , y_0)$，全部解为\n  $$ (x, y) = (x_0 + m b/(gcd (a, b)) , med y_0 - m a/(gcd (a, b))) wide (m in ZZ) . $$"
+ },
+ "lin_dioph/p0": {
+  "src": "注意到 ${a x + b y : med x, y in ZZ} = gcd (a, b) ZZ$。\n\n**①** 若 $gcd (a, b) divides.not c$，则 $c in.not gcd (a, b) ZZ$，原方程无解。\n\n**②** 若 $gcd (a, b) divides c$，设 $c = gcd (a, b) e$。由 Bézout 定理设 $gcd (a, b) = k a + l b$，两边同乘 $e$：$c = k e a + l e b$。设 $x_0 = k e$，$y_0 = l e$，则 $(x_0 , y_0)$ 是一组解。\n\n对任一解：$a x + b y = c = a x_0 + b y_0$，所以 $a(x - x_0) = b(y_0 - y)$，两边除以 $gcd (a, b)$：\n\n$$ a/(gcd (a, b)) (x - x_0) = b/(gcd (a, b)) (y_0 - y) . $$\n\n两个系数互素，于是 $a/(gcd (a, b)) divides (y_0 - y)$。设 $y_0 - y = m a/(gcd (a, b))$（$m in ZZ$），则 $x - x_0 = m b/(gcd (a, b))$。故\n\n$$ cases(x = x_0 + m b/(gcd (a comma b)) comma, y = y_0 - m a/(gcd (a comma b))) quad (m in ZZ) . $$\n\n反过来，直接代入可验证这些都是解。"
+ },
+ "prime_def/body": {
+  "src": "设 $n in NN$，$n >= 2$。若 $n$ 唯二的（正）因数是 $1$ 和 $n$，则称 $n$ 是一个**素数**；否则称 $n$ 是**合数**。\n\n正整数分成三类：\n\n$$ \"正整数\" cases(1, \"素数\" & 2 comma 3 comma 5 comma 7 comma 11 comma ..., \"合数\" & 4 comma 6 comma 8 comma 9 comma 10 comma ...) $$"
+ },
+ "min_div_prime/body": {
+  "src": "若 $a in NN$，$a >= 2$，则除了 $1$ 以外，$a$ 最小的正因数一定是素数。特别地，每个 $a >= 2$ 都有素因数。"
+ },
+ "min_div_prime/p0": {
+  "src": "$a$ 的大于 $1$ 的正因数构成非空集合（$a$ 本身在内），由良序公理有最小元，设这个数为 $p != 1$，所以 $p >= 2$。\n\n用反证法，假设 $p$ 不是素数，则 $p = b c$（$b, c in NN$，$b, c >= 2$）。$b divides p divides a$，所以 $b divides a$。因此 $b$ 是比 $p$ 更小的、至少为 $2$ 的 $a$ 的正因数，这和 $p$ 的最小性矛盾。"
+ },
+ "inf_primes/body": {
+  "src": "素数有无穷多个。"
+ },
+ "inf_primes/p0": {
+  "src": "用反证法。设只有 $k$ 个素数：$p_1 < ... < p_k$。令\n\n$$ N = p_1 dots.c p_k + 1 . $$\n\n因为 $N > p_i$（$1 <= i <= k$），所以 $N$ 不是素数；显然 $N >= 2$，故 $N$ 是一个合数。\n\n设 $p$ 是 $N$ 的最小的至少为 $2$ 的正因数，由 [[min\\_div\\_prime]]，$p$ 一定是素数，设 $p = p_i$。则 $p_i divides N = p_1 dots.c p_i dots.c p_k + 1$；又因为 $p_i divides p_1 dots.c p_i dots.c p_k$，所以 $p_i divides 1$，不可能，矛盾。"
+ },
+ "prime_div/body": {
+  "src": "设 $p$ 是素数，$a, b in ZZ$。若 $p divides a b$，则 $p divides a$ 或 $p divides b$。\n\n**注.** $6 divides 2 dot.op 3$，但 $6 divides.not 2$ 且 $6 divides.not 3$。所以这个性质只对素数成立。\n\n由归纳法，若 $p divides a_1 a_2 dots.c a_r$，则 $p$ 整除某个 $a_i$。"
+ },
+ "prime_div/p0": {
+  "src": "设 $p divides a b$，$p divides.not a$，只需证明 $p divides b$。\n\n$gcd (a, p) divides p$，故 $gcd (a, p) = 1$ 或 $p$。由 $p divides.not a$ 可知 $gcd (a, p) != p$，所以 $gcd (a, p) = 1$。由 $p divides a b$，$gcd (p, a) = 1$ 可知 $p divides b$。"
+ },
+ "fta/body": {
+  "src": "设 $n in NN$，$n >= 2$，则 $n$ 存在唯一的素因数分解\n\n$$ n = p_1^(alpha_1) dots.c p_k^(alpha_k) , wide cases(p_1 < ... < p_k med \"是素数\" comma, alpha_1 comma ... comma alpha_k med \"是正整数\" .) $$\n\n**例.** $12 = 2^2 dot.op 3$，$180 = 2^2 dot.op 3^2 dot.op 5$。"
+ },
+ "fta/p0": {
+  "src": "**存在性.**\n\n① 当 $n = 2$ 时，$2 = 2^1$。\n\n② 假设算术基本定理对 $2, ..., n - 1$ 都成立（$n >= 3$），下面证明对 $n$ 成立。\n\n1° 若 $n$ 是素数，$n = n^1$。\n\n2° 若 $n$ 是合数，设 $n$ 除了 $1$ 以外最小的因数为 $p$，则由 [[min\\_div\\_prime]] 可知 $p$ 是素数。设 $n = p m$，$p >= 2$，故 $2 <= m < n$。由归纳假设设 $m = p_1^(alpha_1) dots.c p_k^(alpha_k)$，把 $p$ 并进去（若 $p$ 是某个 $p_i$ 就把 $alpha_i$ 加 $1$，否则添一个因子 $p^1$）即得 $n$ 的分解。\n\n**唯一性.** 设\n\n$$ n = p_1^(alpha_1) dots.c p_k^(alpha_k) = q_1^(beta_1) dots.c q_l^(beta_l) , $$\n\n其中 $p_1 < ... < p_k$，$q_1 < ... < q_l$ 是素数，$alpha_i , beta_j , k, l in NN$。\n\n$p_1 divides q_1^(beta_1) dots.c q_l^(beta_l)$。由素数的性质，存在 $q_j$（$1 <= j <= l$）使 $p_1 divides q_j$，于是 $p_1 = q_j$。\n\n目标：证明 $j = 1$。用反证法，假设 $j >= 2$，则 $q_1 divides n$，$q_1 < q_j = p_1$。同理 $q_1 divides p_1^(alpha_1) dots.c p_k^(alpha_k)$，存在 $p_i$ 使 $q_1 = p_i >= p_1$。但是 $q_1 < p_1$，矛盾。因此 $p_1 = q_1$。\n\n（补全）再证 $alpha_1 = beta_1$：若 $alpha_1 < beta_1$，两边约去 $p_1^(alpha_1)$ 后，右边仍含因子 $p_1$，而左边 $p_2^(alpha_2) dots.c p_k^(alpha_k)$ 的素因子都大于 $p_1$，由素数的性质 $p_1$ 不整除左边，矛盾；同理 $alpha_1 > beta_1$ 也不行。\n\n约去 $p_1^(alpha_1)$ 后得到更小的数 $n \\/ p_1^(alpha_1)$ 的两个分解，不断重复此操作（对 $n$ 归纳）：\n\n$$ cases(p_1 = q_1 comma & alpha_1 = beta_1 comma, p_2 = q_2 comma & alpha_2 = beta_2 comma, quad dots.v, p_k = q_k comma & alpha_k = beta_k comma, k = l .) $$"
+ },
+ "vp_def/body": {
+  "src": "**$v_p$ 记号.** 设 $p$ 是素数，$n in NN$，$n >= 2$。\n\n- 若 $p divides.not n$，定义 $v_p (n) = 0$；\n- 若 $p divides n$，设 $n = p^alpha p_1^(alpha_1) dots.c p_k^(alpha_k)$（$p, p_1 , ..., p_k$ 是互异的素数，$alpha, alpha_1 , ..., alpha_k in NN$），定义 $v_p (n) = alpha$。\n\n（约定 $v_p (1) = 0$。）\n\n**例.** $n = 12 = 2^2 dot.op 3$：$v_2 (12) = 2$，$v_3 (12) = 1$，$v_5 (12) = 0$。\n\n**恰好整除.** 设 $p$ 是素数，$n, a in NN$。若 $p^n divides a$ 且 $p^(n + 1) divides.not a$，则记 $p^n parallel a$，称 $p^n$ **恰好整除** $a$。"
+ },
+ "vp_exact/body": {
+  "src": "若 $p divides m$，则 $p^(v_p (m)) parallel m$。"
+ },
+ "vp_exact/p0": {
+  "src": "设 $m = p^alpha p_1^(alpha_1) dots.c p_k^(alpha_k)$，$alpha = v_p (m)$。显然 $p^alpha divides m$。若 $p^(alpha + 1) divides m$，则 $p divides p_1^(alpha_1) dots.c p_k^(alpha_k)$，由素数的性质 $p$ 等于某个 $p_i$，与互异矛盾。"
+ },
+ "vp_prod/body": {
+  "src": "若 $n in NN$，$n >= 2$，则\n\n$$ n = product_(p med \"素数\") p^(v_p (n)) , $$\n\n这是一个有限乘积（只有 $p divides n$ 的项不等于 $1$）。"
+ },
+ "vp_prod/p0": {
+  "src": "就是把算术基本定理的分解 $n = p_1^(alpha_1) dots.c p_k^(alpha_k)$ 用 $v_(p_i) (n) = alpha_i$ 重写；其余素数的指数为 $0$。"
+ },
+ "vp_gcd_lcm/body": {
+  "src": "设 $m, n in NN$，$p$ 是素数，则\n\n$$ cases(v_p (gcd (m comma n)) = min (v_p (m) comma v_p (n)) comma, v_p (op(\"lcm\")(m comma n)) = max (v_p (m) comma v_p (n)) comma) $$\n\n即\n\n$$ gcd (m, n) = product_p p^(min (v_p (m), v_p (n))) , wide op(\"lcm\")(m, n) = product_p p^(max (v_p (m), v_p (n))) . $$"
+ },
+ "vp_gcd_lcm/p0": {
+  "src": "笔记直接给出了结论，这里补上理由。关键事实：对正整数 $d, m$，\n\n$$ d divides m <==> \"对每个素数 \" p, med v_p (d) <= v_p (m) . $$\n\n「$arrow.l.double$」：$m \\/ d = product_p p^(v_p (m) - v_p (d))$ 是整数。「$=>$」：若 $m = d e$，由唯一分解，$m$ 的分解就是 $d$ 与 $e$ 的分解合并，所以 $v_p (m) = v_p (d) + v_p (e) >= v_p (d)$。\n\n于是 $d$ 是 $m, n$ 的公因数 $<==>$ 对每个 $p$，$v_p (d) <= min (v_p (m), v_p (n))$。在这些 $d$ 中最大的就是每个指数都取到上限的 $product_p p^(min (v_p (m), v_p (n)))$。lcm 同理：公倍数 $<==>$ 每个 $v_p >= max$，最小的取等号。"
+ },
+ "cong_def/body": {
+  "src": "设 $n in NN$，$n >= 2$，$a, b in ZZ$。若 $n divides (a - b)$，则记\n\n$$ a equiv b (mod n) , $$\n\n读作 $a$ 与 $b$ 模 $n$ **同余**；$n$ 叫做**模**。\n\n**例.** $-18 equiv - 8 equiv 2 equiv 12 equiv 22 (mod 10)$。"
+ },
+ "cong_eqv/body": {
+  "src": "设 $n in NN$，$n >= 2$，$a, b, c in ZZ$。\n\n+ (1) $a equiv a (mod n)$；\n+ (2) 若 $a equiv b (mod n)$，则 $b equiv a (mod n)$；\n+ (3) 若 $a equiv b (mod n)$，$b equiv c (mod n)$，则 $a equiv c (mod n)$。"
+ },
+ "cong_eqv/p0": {
+  "src": "(1) $n divides 0$。(2) $n divides (a - b) => n divides (b - a)$。\n\n(3) $n divides (a - b)$，$n divides (b - c)$，故 $n divides (a - b) + (b - c) = a - c$，因此 $a equiv c (mod n)$。"
+ },
+ "cong_arith/body": {
+  "src": "设 $n in NN$，$n >= 2$，$a, b, c, d in ZZ$，$k in NN$。\n\n+ (4) 若 $a equiv b (mod n)$，$c equiv d (mod n)$，则 $a + c equiv b + d (mod n)$，$a c equiv b d (mod n)$；\n+ (5) 若 $a equiv b (mod n)$，则 $a^k equiv b^k (mod n)$。"
+ },
+ "cong_arith/p0": {
+  "src": "(4) $n divides (a - b)$，$n divides (c - d)$，所以 $n divides (a + c) -(b + d)$，故 $a + c equiv b + d (mod n)$。\n\n设 $a - b = k n$，$c - d = l n$，则\n\n$$ a c = (b + k n)(d + l n) = b d + underbrace(b l n + k d n + k l n^2, n \" 的倍数\") equiv b d (mod n) . $$\n\n(5) 由 $a equiv b$，$a equiv b$ 有 $a^2 equiv b^2 (mod n)$，……由归纳法，$a^k equiv b^k (mod n)$。"
+ },
+ "nt_z10/body": {
+  "src": "当 $n = 10$ 时：\n\n$$ mat(delim: #none, align: #left, dots.c equiv - 10 equiv 0 equiv 10 equiv 20 equiv dots.c, overline(0) = {... comma 0 comma 10 comma ...}; dots.c equiv - 9 equiv 1 equiv 11 equiv dots.c, overline(1) = {... comma 1 comma 11 comma ...}; dots.c equiv 2 equiv 12 equiv dots.c, quad dots.v; dots.c equiv - 1 equiv 9 equiv 19 equiv dots.c, overline(9) = {... comma 9 comma 19 comma ...}) $$\n\n$ZZ \\/ 10 ZZ = {overline(0) , overline(1) , ..., overline(9)}$。$ZZ \\/ 10 ZZ$ 上面可以做加、乘运算。"
+ },
+ "class_def/body": {
+  "src": "设 $n in NN$，$n >= 2$，$a in ZZ$。定义\n\n$$ overline(a) = {b in ZZ : med b equiv a (mod n)}, $$\n\n称为 $a$ 的模 $n$ **同余类**。"
+ },
+ "class_props/body": {
+  "src": "若 $n in NN$，$n >= 2$，$a, b in ZZ$：\n\n+ ① 若 $a equiv b (mod n)$，则 $overline(a) = overline(b)$；\n+ ② 若 $a equiv.not b (mod n)$，则 $overline(a) inter overline(b) = nothing$。\n\n并且\n\n$$ overline(a) = {..., a - n, a, a + n, a + 2 n, ...} = a + {..., - n, 0, n, 2 n, ...} = a + n ZZ, $$\n\n即把 $n ZZ$ 的每个元素都加上 $a$。"
+ },
+ "class_props/p0": {
+  "src": "① 设 $a equiv b$。若 $c in overline(a)$，即 $c equiv a$，由传递性 $c equiv b$，$c in overline(b)$；反之亦然。\n\n② 若 $c in overline(a) inter overline(b)$，则 $c equiv a$，$c equiv b$，由对称、传递得 $a equiv b$，矛盾。\n\n最后，$b equiv a <==> n divides b - a <==> b - a in n ZZ <==> b in a + n ZZ$。"
+ },
+ "zn_def/body": {
+  "src": "设 $n in NN$，$n >= 2$。定义\n\n$$ ZZ \\/ n ZZ = {overline(a) : med 0 <= a <= n - 1} = {a + n ZZ : med 0 <= a <= n - 1} . $$\n\n由带余除法，每个整数恰好落在其中一类里。定义 $overline(a) + overline(b) = overline(a + b)$，$overline(a) dot.op overline(b) = overline(a b)$；由 [[cong\\_arith]]，结果与代表元的选取无关。\n\n**例.** $n = 10$：$overline(3) + overline(8) = overline(11) = overline(1)$，$overline(3) dot.op overline(8) = overline(24) = overline(4)$。\n\n**例.** $n = 7$：$overline(4) + overline(5) = overline(9) = overline(2)$，$overline(4) dot.op overline(5) = overline(20) = overline(-1) = overline(6)$。"
+ },
+ "inverse/body": {
+  "src": "若 $a in ZZ$，$a != 0$，$n in NN$，$n >= 2$，则同余方程 $a x equiv 1 (mod n)$：\n\n$$ cases(\"无解\" comma & gcd (a comma n) != 1 comma, \"存在唯一解\" med (upright(\"mod\") med n) comma & gcd (a comma n) = 1 .) $$\n\n$gcd (a, n) = 1$ 时这个解称为 $a$ 的（模 $n$）**乘法逆元**，记作 $a^(-1) (mod n)$。\n\n（探究：$x + b equiv c (mod n)$ 很简单，$x equiv c - b$；乘法就要问能不能「除以 $a$」。）"
+ },
+ "inverse/p0": {
+  "src": "$a x equiv 1 (mod n)$ 有解 $<==>$ 存在 $x in ZZ$，存在 $k in ZZ$：$a x - 1 = k n$，即 $x a + k n = 1$——这是 $a$ 与 $n$ 的线性组合。\n\n**1°** 若 $gcd (a, n) != 1$，则 $x a + k n$ 总是 $gcd (a, n)$ 的倍数，不可能等于 $1$，显然这样的 $x, k$ 不存在，$a x equiv 1 (mod n)$ 无解。\n\n**2°** 若 $gcd (a, n) = 1$，则存在 $x, k in ZZ$ 使得 $a x + k n = 1$，故 $a x equiv 1 (mod n)$ 有解。\n\n进一步，设 $x_1 , x_2$ 都是解，则 $a x_1 equiv a x_2 (mod n)$，$n divides a(x_1 - x_2)$。由 $gcd (n, a) = 1$ 可知 $n divides (x_1 - x_2)$，即 $x_1 equiv x_2 (mod n)$。"
+ },
+ "lin_cong/body": {
+  "src": "若 $a in ZZ$，$a != 0$，$n in NN$，$n >= 2$，$b in ZZ$，则 $a x equiv b (mod n)$：\n\n$$ cases(\"无解\" comma & gcd (a comma n) divides.not b comma, \"有 \" gcd (a comma n) \" 个不同的模 \" n \" 的解\" comma & gcd (a comma n) divides b comma) $$\n\n后一种情形的解为 $x equiv x_0 + k n/(gcd (a, n)) (mod n)$（$0 <= k <= gcd (a, n) - 1$），$x_0$ 是任一特解。"
+ },
+ "lin_cong/p0": {
+  "src": "希望存在 $x in ZZ$，$k in ZZ$：$a x - b = k n$，即 $x a + k n = b$。\n\n**1°** 若 $gcd (a, n) divides.not b$，$b in.not gcd (a, n) ZZ$，无解。\n\n**2°** 若 $gcd (a, n) divides b$，设 $x_0 a + k_0 n = b$（$k_0 , x_0 in ZZ$），则 $a x_0 equiv b (mod n)$，原方程有解。\n\n假设 $a x equiv b (mod n)$，则 $a x equiv a x_0 (mod n)$，$n divides a(x - x_0)$，于是 $n/(gcd (a, n)) divides (x - x_0)$，\n\n$$ x = x_0 + k n/(gcd (a, n)) (mod n) wide (0 <= k <= gcd (a, n) - 1) . $$\n\n反过来这些都是解；并且它们两两不同余：两个的差是 $(k - k') n/(gcd (a, n))$，$0 < | k - k' | < gcd (a, n)$，绝对值小于 $n$ 且不为 $0$（补全）。所以原方程有 $gcd (a, n)$ 个模 $n$ 下的解。"
+ },
+ "ex_2x3/body": {
+  "src": "解同余方程 $2 x equiv 3 (mod 5)$。"
+ },
+ "ex_2x3/p0": {
+  "src": "先找 $2^(-1) (mod 5)$：$underbrace(2 dot.op 3, 6) equiv 1 (mod 5)$，所以 $2^(-1) equiv 3 (mod 5)$。\n\n$$ x equiv 2^(-1) dot.op 2 x equiv 2^(-1) dot.op 3 equiv 3 dot.op 3 = 9 equiv 4 (mod 5) . $$\n\n$x equiv 4 (mod 5)$。检验：$2 dot.op 4 = 8 equiv 3 (mod 5)$。"
+ },
+ "cong_div/body": {
+  "src": "设 $a, b in ZZ$，$m, n in NN$，$m, n >= 2$。若 $a equiv b (mod n)$ 且 $m divides n$，则 $a equiv b (mod m)$。\n\n**例.** 若 $a equiv b (mod 12)$，则 $a equiv b (mod 4)$。"
+ },
+ "cong_div/p0": {
+  "src": "$m divides n divides (a - b)$，故 $a equiv b (mod m)$。"
+ },
+ "cong_prime/body": {
+  "src": "设 $p$ 是素数，$a, b in ZZ$。若 $a b equiv 0 (mod p)$，则 $a equiv 0 (mod p)$ 或 $b equiv 0 (mod p)$。"
+ },
+ "cong_prime/p0": {
+  "src": "$p divides a b$，则 $p divides a$ 或 $p divides b$。"
+ },
+ "cong_cancel/body": {
+  "src": "设 $a, b in ZZ$，$n, k in NN$，$n >= 2$。若 $k a equiv k b (mod n)$ 且 $gcd (k, n) = 1$，则 $a equiv b (mod n)$。"
+ },
+ "cong_cancel/p0": {
+  "src": "$n divides k(a - b)$。因为 $gcd (n, k) = 1$，所以 $n divides (a - b)$，即 $a equiv b (mod n)$。"
+ },
+ "cong_cancel/p1": {
+  "src": "因为 $gcd (k, n) = 1$，所以 $k^(-1) (mod n)$ 存在。两边同乘 $k^(-1)$：$k^(-1) k a equiv k^(-1) k b (mod n)$，即 $a equiv b (mod n)$。"
+ },
+ "cong_cancel2/body": {
+  "src": "若 $k a equiv k b (mod n)$，则\n\n$$ a equiv b med (upright(\"mod\") med n/(gcd (k, n))) . $$"
+ },
+ "cong_cancel2/p0": {
+  "src": "$n divides k(a - b)$，于是 $n/(gcd (k, n)) divides (a - b)$，即 $a equiv b med (upright(\"mod\") med n/(gcd (k, n)))$。"
+ },
+ "coprime_mult/body": {
+  "src": "若 $n in NN$，$n >= 2$，$a, b in ZZ$，$a, b != 0$，且 $(a, n) = 1$，$(b, n) = 1$，则 $(a b, n) = 1$。"
+ },
+ "coprime_mult/p0": {
+  "src": "由算术基本定理，$a$ 和 $b$ 都没有 $n$ 的素因数作为它们的素因数，因此 $(a b, n) = 1$。\n\n（展开写：若 $(a b, n) > 1$，取它的一个素因数 $p$，则 $p divides n$，$p divides a b$，于是 $p divides a$ 或 $p divides b$，与 $(a, n) = (b, n) = 1$ 矛盾。）"
+ },
+ "units_def/body": {
+  "src": "设 $n in NN$，$n >= 2$。定义\n\n$$ (ZZ \\/ n ZZ)^times = {overline(a) : med gcd (a, n) = 1}, $$\n\n称为 $ZZ \\/ n ZZ$ 的**乘法群**。（$gcd (a + k n, n) = gcd (a, n)$，所以条件与代表元无关。）\n\n**例.** $n = 10$：$gcd (k, 10) = 1$，$1 <= k <= 9 <==> k = 1, 3, 7, 9$，所以 $(ZZ \\/ 10 ZZ)^times = {overline(1) , overline(3) , overline(7) , overline(9)}$。"
+ },
+ "units_group/body": {
+  "src": "设 $n in NN$，$n >= 2$，$overline(a) in (ZZ \\/ n ZZ)^times$。\n\n+ (0) 若 $overline(a) , overline(b) in (ZZ \\/ n ZZ)^times$，则 $overline(a) dot.op overline(b) in (ZZ \\/ n ZZ)^times$；\n+ (1) $overline(1) dot.op overline(a) = overline(a) dot.op overline(1) = overline(a)$（$overline(1) in (ZZ \\/ n ZZ)^times$）；\n+ (2) $overline(a) dot.op overline(a^(-1)) = overline(a^(-1)) dot.op overline(a) = overline(1)$。"
+ },
+ "units_group/p0": {
+  "src": "(0) 由 [[coprime\\_mult]]。(1) 显然。(2) $gcd (a, n) = 1$，由 [[inverse]] $a^(-1) (mod n)$ 存在；而 $a dot.op a^(-1) equiv 1$ 说明 $gcd (a^(-1) , n) = 1$，故 $overline(a^(-1)) in (ZZ \\/ n ZZ)^times$。"
+ },
+ "ex_units10/body": {
+  "src": "写出 $(ZZ \\/ 10 ZZ)^times = {overline(1) , overline(3) , overline(7) , overline(9)}$ 的乘法表。"
+ },
+ "ex_units10/p0": {
+  "src": "$$ mat(delim: #none, augment: #(hline: 1, vline: 1), align: #center, times med (upright(\"mod\") med 10), 1, 3, 7, 9; 1, 1, 3, 7, 9; 3, 3, 9, 1, 7; 7, 7, 1, 9, 3; 9, 9, 7, 3, 1) $$\n\n每行每列都恰好是 $1, 3, 7, 9$ 的一个排列；每个元素都有逆元：$3 dot.op 7 equiv 1$，$9 dot.op 9 equiv 1$。"
+ },
+ "phi_def/body": {
+  "src": "设 $n in NN$，$n >= 2$，定义\n\n$$ phi (n) = \\# {1 <= k <= n : med gcd (k, n) = 1}, $$\n\n$\\#$ 表示元素个数。显然 $phi (n) = \\#((ZZ \\/ n ZZ)^times)$。（约定 $phi (1) = 1$。）"
+ },
+ "phi_pp/body": {
+  "src": "设 $p$ 是素数，$l in NN$，则\n\n$$ phi (p) = p - 1, wide phi (p^l) = p^l - p^(l - 1) = p^(l - 1) (p - 1) = p^l (1 - 1/p) . $$"
+ },
+ "phi_pp/p0": {
+  "src": "**(1)** 设 $S = {1 <= k <= p : med gcd (k, p) = 1}$。当 $1 <= k <= p - 1$ 时 $gcd (k, p) = 1$；当 $k = p$ 时 $gcd (k, p) = p != 1$。故 $phi (p) = \\# S = p - 1$，即 $\\#((ZZ \\/ p ZZ)^times) = p - 1$。\n\n**(2)** 设 $S = {1 <= k <= p^l : med gcd (k, p^l) = 1} = {1 <= k <= p^l : med p divides.not k}$，则\n\n$$ \\# S = p^l - \\# {1 <= k <= p^l : med p divides k} = p^l - p^(l - 1) . $$"
+ },
+ "crt/body": {
+  "src": "设 $m, n in NN$，$m, n >= 2$，$a, b in ZZ$，$gcd (m, n) = 1$。则\n\n$$ cases(x equiv a (mod m) comma, x equiv b (mod n)) $$\n\n存在模 $m n$ 下的唯一解。"
+ },
+ "crt/p0": {
+  "src": "设 $x = a + l m$（$l in ZZ$），这样第一个方程自动成立。希望 $a + l m equiv b (mod n)$，即 $l m equiv b - a (mod n)$。\n\n由 $gcd (m, n) = 1$ 可知 $tilde(m) = m^(-1) (mod n)$ 存在，于是 $l equiv tilde(m) (b - a) (mod n)$，并且在模 $n$ 下唯一。则 $l = tilde(m) (b - a) + k n$（$k in ZZ$），故\n\n$$ x = a + tilde(m) m(b - a) + k n m quad (k in ZZ), $$\n\n即 $x equiv a + tilde(m) m(b - a) (mod m n)$。\n\n（补全唯一性：若 $x, x'$ 都是解，则 $m divides x - x'$，$n divides x - x'$，由 [[lcm\\_coprime]] 得 $m n divides x - x'$。）"
+ },
+ "crt_map/body": {
+  "src": "若 $m, n in NN$，$m, n >= 2$，$gcd (m, n) = 1$，则\n\n$$ ZZ \\/ m n ZZ med limits(-->)^(med ~ med) med (ZZ \\/ m ZZ) times (ZZ \\/ n ZZ), wide c med (upright(\"mod\") med m n) arrow.r.long.bar(c med (upright(\"mod\") med m), med c med (upright(\"mod\") med n)) $$\n\n是双射，并且保持加法和乘法（逐个分量运算：$(a, b) dot.op (c, d) = (a c, b d)$）。左边 $m n$ 种选法，右边 $m$ 种 $times$ $n$ 种选法。\n\n注意：$gcd (c, m n) = 1 <==> gcd (c, m) = gcd (c, n) = 1$。所以它限制成\n\n$$ (ZZ \\/ m n ZZ)^times med limits(-->)^(med ~ med) med (ZZ \\/ m ZZ)^times times (ZZ \\/ n ZZ)^times . $$"
+ },
+ "crt_map/p0": {
+  "src": "映射与代表元无关（$m n$ 的倍数也是 $m$、$n$ 的倍数）。中国剩余定理说：对每个 $(a med upright(\"mod\") med m, med b med upright(\"mod\") med n)$ 恰有一个 $c med (upright(\"mod\") med m n)$ 与之对应，即双射。运算保持由 [[cong\\_arith]]。\n\n$gcd (c, m n) = 1 =>$ $c$ 与 $m n$ 的因数 $m, n$ 都互素；反之由 [[coprime\\_mult]]（对 $m, n$ 的对称版本：$(c, m) = (c, n) = 1 =>(c, m n) = 1$）。"
+ },
+ "phi_mult/body": {
+  "src": "设 $m, n in NN$，$m, n >= 2$。若 $gcd (m, n) = 1$，则 $phi (m n) = phi (m) phi (n)$。"
+ },
+ "phi_mult/p0": {
+  "src": "由于 $(ZZ \\/ m n ZZ)^times tilde.eq(ZZ \\/ m ZZ)^times times (ZZ \\/ n ZZ)^times$（双射），两边元素个数相等，因此 $phi (m n) = phi (m) dot.op phi (n)$。"
+ },
+ "phi_formula/body": {
+  "src": "若 $n = p_1^(alpha_1) dots.c p_k^(alpha_k)$，则\n\n$$ phi (n) = p_1^(alpha_1) (1 - 1/(p_1)) dots.c p_k^(alpha_k) (1 - 1/(p_k)) = n product_(p divides n) (1 - 1/p) . $$"
+ },
+ "phi_formula/p0": {
+  "src": "$$ phi (n) &= phi (p_1^(alpha_1)) phi (p_2^(alpha_2) dots.c p_k^(alpha_k)) wide (gcd (p_1^(alpha_1) , p_2^(alpha_2) dots.c p_k^(alpha_k)) = 1) \\ &= dots.c = phi (p_1^(alpha_1)) dots.c phi (p_k^(alpha_k)) \\ &= (p_1^(alpha_1) - p_1^(alpha_1 - 1)) dots.c (p_k^(alpha_k) - p_k^(alpha_k - 1)) \\ &= p_1^(alpha_1) (1 - 1/(p_1)) dots.c p_k^(alpha_k) (1 - 1/(p_k)) . $$"
+ },
+ "ex_phi120/body": {
+  "src": "$\\# {1 <= k <= 120 : med gcd (k, 120) = 1} = med ?$"
+ },
+ "ex_phi120/p0": {
+  "src": "$$ phi (120) &= 120 product_(p divides 120) (1 - 1/p) = 120(1 - 1/2)(1 - 1/3)(1 - 1/5) \\ &= 120 dot.op 1/2 dot.op 2/3 dot.op 4/5 = 40 dot.op 4/5 = 32 . $$"
+ },
+ "euler/body": {
+  "src": "设 $n in NN$，$n >= 2$，$a in ZZ$，$gcd (a, n) = 1$。则\n\n$$ a^(phi (n)) equiv 1 (mod n) . $$"
+ },
+ "euler/p0": {
+  "src": "注意 $(ZZ \\/ n ZZ)^times$。$gcd (a, n) = 1$，则 $overline(a) in (ZZ \\/ n ZZ)^times$。考虑\n\n$$ L_overline(a) :(ZZ \\/ n ZZ)^times -> (ZZ \\/ n ZZ)^times , wide L_overline(a) (overline(x)) = overline(a) dot.op overline(x) = overline(a x) . $$\n\n同理我们有 $L_overline(a^(-1)) (overline(y)) = overline(a^(-1)) dot.op overline(y) = overline(a^(-1) y)$。「乘 $overline(a)$」与「乘 $overline(a^(-1))$」互为逆映射，因此 $L_overline(a)$ 是一个双射。\n\n设 $(ZZ \\/ n ZZ)^times = {overline(x_1) , ..., overline(x_(phi (n)))}$，则\n\n$$ {overline(a x_1) , ..., overline(a x_(phi (n)))} = {overline(x_1) , ..., overline(x_(phi (n)))} . $$\n\n把两边的元素全部乘起来：$overline(a^(phi (n)) x_1 dots.c x_(phi (n))) = overline(x_1 dots.c x_(phi (n)))$，即\n\n$$ a^(phi (n)) x_1 dots.c x_(phi (n)) equiv x_1 dots.c x_(phi (n)) (mod n) . $$\n\n每个 $x_i$ 都与 $n$ 互素，可以约去，得 $a^(phi (n)) equiv 1 (mod n)$。"
+ },
+ "ex_euler10/body": {
+  "src": "取 $n = 10$，验证 Euler 定理。"
+ },
+ "ex_euler10/p0": {
+  "src": "$phi (10) = phi (2) phi (5) = 1 dot.op 4 = 4$，$(ZZ \\/ 10 ZZ)^times = {overline(1) , overline(3) , overline(7) , overline(9)}$。\n\n$$ 7^4 equiv 1, wide 3^4 equiv 1, wide 9^4 equiv 1 (mod 10) . $$"
+ },
+ "fermat/body": {
+  "src": "设 $p$ 是素数，$a in ZZ$，$p divides.not a$，则\n\n$$ a^(p - 1) equiv 1 (mod p) . $$"
+ },
+ "fermat/p0": {
+  "src": "由 $p divides.not a$ 知 $gcd (a, p) = 1$。由 Euler 定理，$a^(phi (p)) equiv 1 (mod p)$；$phi (p) = p - 1$，故 $a^(p - 1) equiv 1 (mod p)$。"
+ },
+ "ex_fermat13/body": {
+  "src": "$p = 13$ 是素数，$13 divides.not 9$。"
+ },
+ "ex_fermat13/p0": {
+  "src": "$9^12 equiv 1 (mod 13)$。事实上 $1^12 equiv 2^12 equiv dots.c equiv 12^12 equiv 1 (mod 13)$。"
+ },
+ "lagrange/body": {
+  "src": "设 $f(x) = a_n x^n + dots.c + a_1 x + a_0$（$a_i in ZZ$），$p$ 是素数，$p divides.not a_n$。则同余方程\n\n$$ f(x) equiv 0 (mod p) $$\n\n至多有 $n$ 个根（模 $p$ 互不同余）。\n\n**注.** 如果模一个合数，根的个数完全可以超过 $n$。例如 $x^2 equiv 1 (mod 8)$ 有 $1, 3, 5, 7$ 四个根。"
+ },
+ "lagrange/p0": {
+  "src": "设 $x_0$ 是它的一个根，即 $f(x_0) equiv 0 (mod p)$。考虑在模 $p$ 下做多项式除法（多项式长除法得到）：\n\n$$ f(x) equiv g(x)(x - x_0) + r (mod p) , $$\n\n其中 $g$ 的次数为 $n - 1$，首项系数仍是 $a_n$。代入 $x_0$：$0 equiv f(x_0) equiv r (mod p)$。因此 $f(x) equiv g(x)(x - x_0) (mod p)$。\n\n（笔记的思路是：若 $f$ 有 $n$ 个根 $x_1 , ..., x_n$，则 $f(x) equiv a_n (x - x_1) dots.c (x - x_n) (mod p)$，$a_n equiv.not 0$，所以不能再有别的根。下面把它写成归纳法。）\n\n对次数 $n$ 归纳。$n = 0$ 时 $f equiv a_0 equiv.not 0$，没有根。设结论对 $n - 1$ 次成立。若 $f$ 没有根，结论成立；否则取一个根 $x_0$，$f(x) equiv g(x)(x - x_0)$。若 $x_1$ 是 $f$ 的另一个根，$x_1 equiv.not x_0$，则 $g(x_1)(x_1 - x_0) equiv 0$，由模素数没有零因子得 $g(x_1) equiv 0$。所以 $f$ 的根 $subset {x_0} union {g \" 的根\"}$，至多 $1 + (n - 1) = n$ 个。"
+ },
+ "ex_lagrange3/body": {
+  "src": "$2^3 + 2 + 2 equiv 0 (mod 3)$。设 $f(x) = x^3 + x + 2$，$f(2) equiv 0 (mod 3)$。在模 $3$ 下把 $f(x)$ 除以 $x - 2 equiv x + 1$。"
+ },
+ "ex_lagrange3/p0": {
+  "src": "模 $3$ 下做长除法（$x^3 + 0 dot.op x^2 + x + 2$ 除以 $x + 1$）：\n\n$$ mat(delim: #none, align: #center, x^3 + 0 x^2 + x + 2, -med x^2 (x + 1) =, 2 x^2 + x + 2; 2 x^2 + x + 2, -med 2 x(x + 1) =, 2 x + 2 med med (\"因为 \" x - 2 x = - x equiv 2 x); 2 x + 2, -med 2(x + 1) =, 0) $$\n\n商为 $x^2 + 2 x + 2$，余数为 $0$：\n\n$$ x^3 + x + 2 equiv (x + 1)(x^2 + 2 x + 2) (mod 3) . $$"
+ },
+ "sq_one/body": {
+  "src": "设 $p >= 3$ 是奇素数，则 $x^2 equiv 1 (mod p)$ 的解恰为 $x equiv plus.minus 1 (mod p)$。"
+ },
+ "sq_one/p0": {
+  "src": "显然 $plus.minus 1$ 都是解，且 $1 equiv.not - 1 (mod p)$（$p >= 3$）。由 Lagrange 定理，二次方程至多 $2$ 个根，所以 $x equiv plus.minus 1 (mod p)$。"
+ },
+ "sq_one/p1": {
+  "src": "$p divides (x^2 - 1) = (x + 1)(x - 1)$，即 $p divides (x + 1)$ 或 $p divides (x - 1)$，所以 $x equiv plus.minus 1 (mod p)$。"
+ },
+ "wilson/body": {
+  "src": "设 $p$ 是奇素数，则\n\n$$ (p - 1)! equiv - 1 (mod p) . $$"
+ },
+ "wilson/p0": {
+  "src": "探究 $(ZZ \\/ p ZZ)^times$，$p$ 奇素数。$p - 1$ 是偶数，$(p - 1)/2 in NN$；$\\#((ZZ \\/ p ZZ)^times) = p - 1$ 是偶数。\n\n研究取逆 $dot.op^(-1) :(ZZ \\/ p ZZ)^times -> (ZZ \\/ p ZZ)^times$。易知若 $p divides.not a$，则 $(a^(-1))^(-1) equiv a (mod p)$，所以 $dot.op^(-1)$ 自己就是自己的逆映射，也是一个双射。\n\n1° 若 $a^(-1) equiv.not a (mod p)$，则 $a$ 与 $a^(-1)$ 形成了配对。\n\n2° 若 $a^(-1) equiv a (mod p)$，即 $a^2 equiv 1 (mod p)$，即 $a equiv 1$ 或 $p - 1 (mod p)$。\n\n因此 $1, ..., p - 1$ 中只有 $1$ 和 $p - 1$ 的乘法逆元是自己，剩余 $p - 3$ 个元素两两配对、互为逆元，每一对的乘积 $equiv 1$。于是\n\n$$ (p - 1)! = 1 dot.op underbrace(2 dot.op dots.c dot.op (p - 2), \"两两配对，乘积\" equiv 1) dot.op (p - 1) equiv 1 dot.op (p - 1) equiv - 1 (mod p) . $$"
+ },
+ "nt_quad/body": {
+  "src": "考虑二次同余方程 $a x^2 + b x + c equiv 0 (mod p)$，$p$ 是奇素数，其中 $a equiv.not 0 (mod p)$，即 $p divides.not a$。\n\n两边乘 $4 a$（$4 a$ 与 $p$ 互素，可逆，不改变解集）：\n\n$$ 4 a^2 x^2 + 4 a b x equiv - 4 a c (mod p) , wide (2 a x + b)^2 equiv b^2 - 4 a c (mod p) . $$\n\n所以关键问题是：**$x^2 equiv d (mod p)$ 什么时候有解？** 这就是 Legendre 记号要回答的。"
+ },
+ "legendre_def/body": {
+  "src": "设 $p$ 是奇素数，$a in ZZ$。定义\n\n$$ (a/p) = cases(0 comma & a equiv 0 (mod p) comma, 1 comma & p divides.not a med \"且\" med x^2 equiv a (mod p) med \"有根\" comma, -1 comma & p divides.not a med \"且\" med x^2 equiv a (mod p) med \"无根\" .) $$\n\n若 $(a/p) = 1$，则称 $a$ 是**平方剩余**（QR）；若 $(a/p) = - 1$，则称 $a$ 不是平方剩余（NR）。"
+ },
+ "qr_count/body": {
+  "src": "设 $p$ 是奇素数，则在 $1, ..., p - 1$ 中\n\n$$ \\# Q R = \\# N R = (p - 1)/2 , $$\n\n并且 QR 恰是 $1^2 , 2^2 , ..., ((p - 1)/2)^2 (mod p)$，这些数两两不同余。"
+ },
+ "qr_count/p0": {
+  "src": "QR 就是 $1^2 , 2^2 , ..., ((p - 1)/2)^2 , ((p + 1)/2)^2 , ..., (p - 1)^2 (mod p)$。而\n\n$$ (p - a)^2 equiv (- a)^2 equiv a^2 (mod p) , $$\n\n所以 $1^2 equiv (p - 1)^2$，……，$((p - 1)/2)^2 equiv ((p + 1)/2)^2$，后一半与前一半重复。\n\n设 $i^2 equiv j^2 (mod p)$，$1 <= i, j <= (p - 1)/2$，则 $p divides (i - j)(i + j)$，$i equiv plus.minus j (mod p)$。假如 $i equiv - j (mod p)$，则 $p divides (i + j)$，而 $2 <= i + j <= p - 1$，矛盾。所以 $i = j$。\n\n因此 QR 是互异的 $i^2 (mod p)$，其中 $1 <= i <= (p - 1)/2$，共 $(p - 1)/2$ 个；其余 $(p - 1)/2$ 个是 NR。"
+ },
+ "qr_mult/body": {
+  "src": "设 $p$ 是奇素数，在模 $p$ 下：\n\n+ (1) QR $dot.op$ QR $=$ QR；\n+ (2) QR $dot.op$ NR $=$ NR；\n+ (3) NR $dot.op$ NR $=$ QR。"
+ },
+ "qr_mult/p0": {
+  "src": "(1) $a^2 dot.op b^2 = (a b)^2 (mod p)$。\n\n(2) 设 $Q$ 是一个 QR。考虑 $Q$ 乘上所有的 ${1, ..., p - 1}$，得到的仍是 ${1, ..., p - 1}$（模 $p$，乘以可逆元是双射）。由 (1)，$Q dot.op \"QR\" subset \"QR\"$，这已经占满了 $(p - 1)/2$ 个 QR；剩下的 $Q dot.op \"NR\"$ 只能是那 $(p - 1)/2$ 个 NR。\n\n(3) 设 $N$ 是一个 NR。$N$ 乘上 ${1, ..., p - 1}$ 仍是 ${1, ..., p - 1}$。由 (2)，$N dot.op \"QR\" = \"NR\"$（$(p - 1)/2$ 个 NR），所以 $N dot.op \"NR\" = \"QR\"$（剩下 $(p - 1)/2$ 个 QR）。"
+ },
+ "legendre_mult/body": {
+  "src": "设 $p$ 是奇素数，$a, b in ZZ$，则\n\n$$ ((a b)/p) = (a/p)(b/p) . $$"
+ },
+ "legendre_mult/p0": {
+  "src": "① $((a b)/p) = 0 <==> a b equiv 0 (mod p) <==> a equiv 0$ 或 $b equiv 0 (mod p) <==>(a/p) = 0$ 或 $(b/p) = 0$。\n\n② 若 $((a b)/p) != 0$，此时 $a, b equiv.not 0 (mod p)$。由 QR$dot.op$QR$=$QR，QR$dot.op$NR$=$NR，NR$dot.op$NR$=$QR，即 $1 dot.op 1 = 1$，$1 dot.op (- 1) = - 1$，$(- 1)(- 1) = 1$，得 $((a b)/p) = (a/p)(b/p)$。"
+ },
+ "euler_crit/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$，则\n\n$$ (a/p) equiv a^((p - 1)/2) (mod p) . $$"
+ },
+ "euler_crit/p0": {
+  "src": "$(a^((p - 1)/2))^2 = a^(p - 1) equiv 1 (mod p)$，因此 $a^((p - 1)/2) equiv plus.minus 1 (mod p)$。\n\n① 设 $a equiv b^2 (mod p)$，即 $(a/p) = 1$。则 $a^((p - 1)/2) equiv (b^2)^((p - 1)/2) = b^(p - 1) equiv 1 (mod p)$。\n\n② 观察 $x^((p - 1)/2) equiv 1 (mod p)$：由 ①，它有 $(p - 1)/2$ 个根（所有的 QR）。由 Lagrange 定理，这就是全部的根。设 $a$ 是 NR，即 $(a/p) = - 1$，此时 $a^((p - 1)/2) equiv.not 1 (mod p)$，所以 $a^((p - 1)/2) equiv - 1 (mod p)$。"
+ },
+ "minus_one/body": {
+  "src": "设 $p$ 是奇素数，则\n\n$$ ((-1)/p) = (- 1)^((p - 1)/2) = cases(1 comma & p equiv 1 (mod 4) comma, -1 comma & p equiv 3 (mod 4) .) $$"
+ },
+ "minus_one/p0": {
+  "src": "由 Euler 判别法，$((-1)/p) equiv (- 1)^((p - 1)/2) (mod p)$，两边都是 $plus.minus 1$ 且 $1 equiv.not - 1$，所以相等。$(p - 1)/2 in ZZ$。\n\n1° 若 $(p - 1)/2 = 2 k$（$k in ZZ$），即 $p equiv 1 (mod 4)$，则 $((-1)/p) = 1$。\n\n2° 若 $(p - 1)/2 = 2 k + 1$（$k in ZZ$），即 $p equiv 3 (mod 4)$，则 $((-1)/p) = - 1$。"
+ },
+ "sqrt_minus_one/body": {
+  "src": "设 $p equiv 1 (mod 4)$ 是素数，则 $x^2 equiv - 1 (mod p)$ 的根是\n\n$$ x equiv plus.minus ((p - 1)/2)! (mod p) . $$"
+ },
+ "sqrt_minus_one/p0": {
+  "src": "由 Wilson 定理，$(p - 1)! equiv - 1 (mod p)$。把后一半 $(p + 1)/2 , ..., p - 1$ 写成 $-(p - 1)/2 , ..., - 1$：\n\n$$ -1 & equiv 1 dot.op dots.c dot.op (p - 1)/2 dot.op (p + 1)/2 dot.op dots.c dot.op (p - 1) \\ & equiv 1 dot.op dots.c dot.op (p - 1)/2 dot.op (- (p - 1)/2) dot.op dots.c dot.op (- 1) \\ & equiv (((p - 1)/2)!)^2 (- 1)^((p - 1)/2) (mod p) . $$\n\n$p equiv 1 (mod 4)$ 时 $(- 1)^((p - 1)/2) = 1$，因此 $x equiv plus.minus ((p - 1)/2)!$ 是根；由 Lagrange 定理（或 [[sq\\_one]] 的同样论证）只有这两个根。"
+ },
+ "gauss_lemma/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$。令\n\n$$ n = \\# {1 <= i <= (p - 1)/2 : med a i med (upright(\"mod\") med p) > (p - 1)/2}, $$\n\n这里 $a i med (upright(\"mod\") med p)$ 指 $a i$ 模 $p$ 的最小非负余数。则 $(a/p) = (- 1)^n$。"
+ },
+ "gauss_lemma/p0": {
+  "src": "笔记先对 $a = 2$ 做了推导（见 [[two\\_over\\_p]]），一般的 $a$ 一字不改即可（补全）。\n\n设 $S = {1, 2, ..., (p - 1)/2}$，考虑 $a S = {a, 2 a, ..., (p - 1)/2 a}$。\n\n**Gauss 的观察：**$forall i != j in S$，$a i equiv.not plus.minus a j (mod p)$。证：若 $a i equiv a j$，约去 $a$ 得 $i equiv j$，不可能；若 $a i equiv - a j$，则 $p divides a(i + j)$，$p divides (i + j)$，而 $2 <= i + j <= p - 1$，矛盾。\n\n因此 $a S$ 模 $p$ 恰好是 ${plus.minus 1, plus.minus 2, ..., plus.minus (p - 1)/2}$——每个绝对值 $1, ..., (p - 1)/2$ 恰好出现一次，取负号的次数就是 $n$（余数 $> (p - 1)/2$ 的那些写成负数）。把 $a S$ 中的元素全部相乘：\n\n$$ a dot.op 1 dot.op a dot.op 2 dots.c a dot.op (p - 1)/2 equiv (- 1)^n ((p - 1)/2)! (mod p) , $$\n$$ (a/p) equiv a^((p - 1)/2) ((p - 1)/2)! \\/ ((p - 1)/2)! equiv (- 1)^n (mod p) . $$\n\n两边都是 $plus.minus 1$，因此 $(a/p) = (- 1)^n$。"
+ },
+ "two_over_p/body": {
+  "src": "设 $p$ 是奇素数，则\n\n$$ (2/p) = cases(1 comma & p equiv plus.minus 1 (mod 8) comma, -1 comma & p equiv plus.minus 3 (mod 8) .) $$"
+ },
+ "two_over_p/p0": {
+  "src": "由 Euler 判别法 $(2/p) equiv 2^((p - 1)/2) (mod p)$；Gauss 引理（$a = 2$ 的版本）把它化成计数：$S = {1, ..., (p - 1)/2}$，$2 S = {2, 4, ..., p - 1} = {plus.minus 1, plus.minus 2, ..., plus.minus (p - 1)/2}$，\n\n$$ n = \\# {1 <= i <= (p - 1)/2 : med 2 i med (upright(\"mod\") med p) > (p - 1)/2}, wide (2/p) = (- 1)^n . $$\n\n设 $1 <= i <= (p - 1)/2$，此时 $2 i <= p - 1$ 就是自己的余数，条件即 $2 i > (p - 1)/2$，$i > (p - 1)/4$。\n\n① 设 $(p - 1)/4 in ZZ$，则 $p equiv 1 (mod 4)$，\n\n$$ n = \\# {1 <= i <= (p - 1)/2 : med i > (p - 1)/4} = (p - 1)/2 - (p - 1)/4 = (p - 1)/4 , $$\n$$ (2/p) = (- 1)^((p - 1)/4) = cases(1 comma & p equiv 1 (mod 8) comma, -1 comma & p equiv 5 (mod 8) .) $$\n\n② 设 $(p - 1)/4 in.not ZZ$，则 $p equiv 3 (mod 4)$，$(p - 3)/4 in ZZ$，$(p - 1)/4 = (p - 3)/4 + 1/2$。对整数 $i$，$i > (p - 1)/4 <==> i > (p - 3)/4$。\n\n$$ n = \\# {1 <= i <= (p - 1)/2 : med i > (p - 3)/4} = (p - 1)/2 - (p - 3)/4 = (2 p - 2)/4 - (p - 3)/4 = (p + 1)/4 , $$\n$$ (2/p) = (- 1)^((p + 1)/4) = cases(-1 comma & p equiv 3 (mod 8) comma, 1 comma & p equiv 7 (mod 8) .) $$\n\n综上即得。"
+ },
+ "qr_law/body": {
+  "src": "设 $p, q$ 是两个不相等的奇素数，则\n\n$$ (p/q)(q/p) = (- 1)^(((p - 1)(q - 1))/4) = (- 1)^((p - 1)/2 dot.op (q - 1)/2) . $$\n\n即：若 $p equiv 1$ 或 $q equiv 1 (mod 4)$，则 $(p/q) = (q/p)$；若 $p, q equiv 3 (mod 4)$，则 $(p/q) = -(q/p)$。"
+ },
+ "qr_law/p0": {
+  "src": "$gcd (p, q) = 1$，因此（中国剩余定理）存在双射 $f :(ZZ \\/ p ZZ)^times times (ZZ \\/ q ZZ)^times -> (ZZ \\/ p q ZZ)^times$，$f^(-1) (overline(c)) = (overline(c) , overline(c))$，保持乘法 $(a, b) dot.op (c, d) = (a c, b d)$，且 $f(- a, - b) = - f(a, b)$。\n\n**思路.** 在两边各取「一半」：每对 ${x, - x}$ 恰取一个。左边取 $H_1 = {(a, b) : 1 <= a <= p - 1, med 1 <= b <= (q - 1)/2}$（矩形的下半）；右边取 $S = {1 <= k <= (p q - 1)/2 : med p divides.not k, med q divides.not k}$（前半），把它搬到左边看成 $f^(-1) (S)$。两个「半边」逐对只差符号，所以两边乘积只差一个整体符号 $plus.minus$。\n\n**① 左边的乘积.**\n\n$$ & (1, 1)(1, 2) dots.c (1, (q - 1)/2) dots.c (p - 1, 1) dots.c (p - 1, (q - 1)/2) \\ &= (1^((q - 1)/2) dots.c (p - 1)^((q - 1)/2) , med 1^(p - 1) dots.c ((q - 1)/2)^(p - 1)) = (((p - 1)!)^((q - 1)/2) , med (((q - 1)/2)!)^(p - 1)) \\ &= ((- 1)^((q - 1)/2) , med ((((q - 1)/2)!)^2)^((p - 1)/2)) = ((- 1)^((q - 1)/2) , med (-(- 1)^((q - 1)/2))^((p - 1)/2)) \\ &= ((- 1)^((q - 1)/2) , med (- 1)^((p - 1)/2) (- 1)^(((p - 1)(q - 1))/4)) . $$\n\n这里用了 Wilson 定理，以及（同 [[sqrt\\_minus\\_one]] 的配对）$(((q - 1)/2)!)^2 (- 1)^((q - 1)/2) equiv (q - 1)! equiv - 1 (mod q)$。\n\n**② 右边的乘积.** $op(\"lcm\")(p, q) = p q$。计算 $product_(s in S) s (mod p)$：\n\n$$ (p q - 1)/2 = (q - 1)/2 p + (p - 1)/2 , $$\n\n$1, ..., (p q - 1)/2$ 中去掉 $p$ 的倍数后，是 $(q - 1)/2$ 段完整的 $1, ..., p - 1$（模 $p$），再加上 $(q - 1)/2 p + 1, ..., (q - 1)/2 p + (p - 1)/2$（模 $p$ 是 $1, ..., (p - 1)/2$）。还要再去掉 $q, 2 q, ..., (p - 1)/2 q$（它们 $<= (p q - 1)/2$ 且不被 $p$ 整除）。于是\n\n$$ product_(s in S) s equiv (((p - 1)!)^((q - 1)/2) dot.op ((p - 1)/2)!)/(q^((p - 1)/2) dot.op ((p - 1)/2)!) equiv (- 1)^((q - 1)/2) (q/p) (mod p) , $$\n\n（Wilson 定理和 Euler 判别法 $q^((p - 1)/2) equiv (q/p) = (q/p)^(-1)$）。对称地计算模 $q$：\n\n$$ (product_(s in S) s med (upright(\"mod\") med p), med product_(s in S) s med (upright(\"mod\") med q)) = ((- 1)^((q - 1)/2) (q/p), med (- 1)^((p - 1)/2) (p/q)) . $$\n\n**③ 比较.** 所以\n\n$$ ((- 1)^((q - 1)/2) , med (- 1)^((p - 1)/2) (- 1)^(((p - 1)(q - 1))/4)) = plus.minus ((- 1)^((q - 1)/2) (q/p), med (- 1)^((p - 1)/2) (p/q)), $$\n\n两个分量用的是同一个符号。由第一分量，这个符号就是 $(q/p)$；代入第二分量得 $(- 1)^(((p - 1)(q - 1))/4) = (q/p)(p/q)$。因此\n\n$$ (p/q)(q/p) = (- 1)^(((p - 1)(q - 1))/4) . $$"
+ },
+ "ord_def/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$。定义最小的使得 $a^k equiv 1 (mod p)$ 的正整数 $k$ 为 $a$ 的（模 $p$）**阶**，记为 $op(\"ord\")_p (a)$ 或 $op(\"ord\")(a)$。\n\n（由 Fermat 小定理 $a^(p - 1) equiv 1$，这样的 $k$ 存在。）"
+ },
+ "ord_div/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$，$k in NN$。若 $a^k equiv 1 (mod p)$，则 $op(\"ord\")(a) divides k$。"
+ },
+ "ord_div/p0": {
+  "src": "设 $k = q op(\"ord\")(a) + r$，$0 <= r <= op(\"ord\")(a) - 1$。\n\n$$ 1 equiv a^k = a^(q op(\"ord\")(a)) dot.op a^r = (a^(op(\"ord\")(a)))^q dot.op a^r equiv a^r (mod p) . $$\n\n由 $op(\"ord\")(a)$ 的最小性可知 $r = 0$。因此 $op(\"ord\")(a) divides k$。"
+ },
+ "ord_distinct/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$，$m = op(\"ord\")(a)$。则 $1 = a^0 , a^1 , ..., a^(m - 1) (mod p)$ 两两不同余。"
+ },
+ "ord_distinct/p0": {
+  "src": "设 $a^i equiv a^j (mod p)$（$0 <= i <= j <= m - 1$）。$a^j equiv a^i a^(j - i)$，约去 $a^i$ 得 $a^(j - i) equiv 1 (mod p)$，$0 <= j - i <= m - 1$。由 $op(\"ord\")(a)$ 的最小性可知 $j - i = 0$，即 $i = j$。"
+ },
+ "ord_power/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$，$op(\"ord\")(a) = d$，$k in ZZ_(>= 0)$。则\n\n$$ op(\"ord\")(a^k) = d/(gcd (d, k)) . $$\n\n特别地，$op(\"ord\")(a^k) = d <==> gcd (k, d) = 1$。"
+ },
+ "ord_power/p0": {
+  "src": "求出最小的正整数 $l$，使得 $(a^k)^l = a^(k l) equiv 1 (mod p)$：\n\n$$ a^(k l) equiv 1 <==> d divides k l <==> d/(gcd (d, k)) med | med l . $$\n\n（第一个 $<==>$：$=>$ 由 [[ord\\_div]]，$arrow.l.double$ 显然。第二个：$=>$ 由 [[euclid\\_cor]]；$arrow.l.double$：$k l = k/(gcd (d, k)) dot.op gcd (d, k) l$，而 $d/(gcd (d, k)) dot.op gcd (d, k) = d$。）\n\n所以 $op(\"ord\")(a^k) = d/(gcd (d, k))$。"
+ },
+ "primroot_def/body": {
+  "src": "设 $p$ 是奇素数，$p divides.not a$。若 $op(\"ord\")(a) = p - 1$，则称 $a$ 是模 $p$ 的一个**原根**。\n\n这意味着 $underbrace(1 = a^0 comma a^1 comma ... comma a^(p - 2), p - 1 \" 个数\") (mod p)$ 两两不同余，取遍了 $(ZZ \\/ p ZZ)^times$。"
+ },
+ "phi_sum/body": {
+  "src": "设 $n in NN$，$n >= 2$，则\n\n$$ sum_(d divides n) phi (d) = n . $$"
+ },
+ "phi_sum/p0": {
+  "src": "$$ n &= sum_(1 <= k <= n) 1 = sum_(d divides n) med sum_(1 <= k <= n \\ gcd (k, n) = d) 1 med limits(=)^(k = l d) med sum_(d divides n) med sum_(1 <= l <= n \\/ d \\ gcd (l, n \\/ d) = 1) 1 \\ &= sum_(d divides n) phi (n/d) = sum_(d divides n) phi (d) . $$\n\n第二个等号：$gcd (k, n) = d$ 时 $d divides k$，写 $k = l d$，由 [[gcd\\_scale]]，$gcd (l d, n/d d) = d gcd (l, n/d)$，所以 $gcd (k, n) = d <==> gcd (l, n/d) = 1$。最后一步：$d |-> n/d$ 是 ${d : d divides n}$ 到自身的双射（逆映射还是它自己）。"
+ },
+ "primroot_exist/body": {
+  "src": "设 $p$ 是奇素数，则存在 $a in NN$，$p divides.not a$，使得 $a$ 是模 $p$ 的原根，即 $op(\"ord\")(a) = p - 1$。"
+ },
+ "primroot_exist/p0": {
+  "src": "设 $overline(a) in (ZZ \\/ p ZZ)^times$，$p divides.not a$。由 Fermat 小定理可知 $a^(p - 1) equiv 1 (mod p)$，因此 $op(\"ord\")(a) divides (p - 1)$。对于 $d divides (p - 1)$，定义\n\n$$ psi (d) = \\# {1 <= a <= p - 1 : med op(\"ord\")(a) = d} . $$\n\n每个 $a$ 的阶都是 $p - 1$ 的某个因数，因此 $sum_(d divides (p - 1)) psi (d) = p - 1$。注意到 $sum_(d divides (p - 1)) phi (d) = p - 1$。只需证：对任意 $d divides (p - 1)$，都有 $psi (d) <= phi (d)$。\n\n任取 $d divides (p - 1)$。\n\n1° 设不存在阶为 $d$ 的元素，则 $psi (d) = 0 <= phi (d)$。\n\n2° 设存在阶为 $d$ 的元素 $a$，$p divides.not a$，$op(\"ord\")(a) = d$，$a^d equiv 1 (mod p)$。考察 $x^d equiv 1 (mod p)$：$a^0 , a^1 , ..., a^(d - 1)$ 都是根（$(a^k)^d = (a^d)^k equiv 1$），共 $d$ 个且两两不同余；由 Lagrange 定理，这就是全部的根。阶为 $d$ 的元素都满足 $x^d equiv 1$，所以一定形如 $b = a^k$，$0 <= k <= d - 1$。\n\n希望 $op(\"ord\")(b) = d$。由 [[ord\\_power]]，$op(\"ord\")(a^k) = d/(gcd (d, k))$，因此 $op(\"ord\")(a^k) = d <==> gcd (k, d) = 1$。于是\n\n$$ psi (d) = \\# {0 <= k <= d - 1 : med gcd (k, d) = 1} = phi (d) . $$\n\n因此总有 $psi (d) <= phi (d)$。可是 $sum_(d divides (p - 1)) psi (d) = sum_(d divides (p - 1)) phi (d) = p - 1$，所以对任意 $d divides (p - 1)$，都有 $psi (d) = phi (d)$。因此 $psi (p - 1) = phi (p - 1) >= 1$。"
+ },
+ "primroot_count/body": {
+  "src": "若 $p$ 是奇素数，则模 $p$ 的原根（在 $1, ..., p - 1$ 中）个数就是 $phi (p - 1)$。"
+ },
+ "primroot_count/p0": {
+  "src": "上面的证明其实得到了 $psi (d) = phi (d)$ 对每个 $d divides (p - 1)$ 成立，取 $d = p - 1$ 即得。\n\n也可以直接看：取一个原根 $g$，$(ZZ \\/ p ZZ)^times = {g^0 , ..., g^(p - 2)}$，而 $op(\"ord\")(g^k) = p - 1 <==> gcd (k, p - 1) = 1$，这样的 $k$ 恰有 $phi (p - 1)$ 个。"
+ }
+}

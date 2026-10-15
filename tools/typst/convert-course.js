@@ -1,7 +1,7 @@
 /* 把一门课的内容文件（旧写法）转成新写法，并整体编译检查。
    用法：node tools/typst/convert-course.js shuxue-jichu  → 输出 content/<课>/typst.json（源文 + 编译结果）和错误列表 */
 const fs = require('fs'), path = require('path'), vm = require('vm');
-const { toNew } = require('../../server/convert');
+const { toNew, texToTypst } = require('../../server/convert');
 const { renderMany } = require('../../server/render');
 const slug = process.argv[2];
 const seed = fs.readFileSync(path.join(__dirname, '../../server/seed.js'), 'utf8');
@@ -24,6 +24,8 @@ for (const [id, n] of Object.entries(r.N)) {
   const res = {};
   jobs.forEach(([id, w], k) => { res[`${id}/${w}`] = { src: srcs[k] }; out[k].errors.forEach(e => errs.push({ key: `${id}/${w}`, ...e })); });
   fs.writeFileSync(path.join(dir, 'typst.json'), JSON.stringify(res, null, 1));
+  if (process.env.HTML_OUT) fs.writeFileSync(process.env.HTML_OUT, JSON.stringify(Object.fromEntries(jobs.map(([id, w], k) => [`${id}/${w}`, out[k].html]))));
+  texToTypst.failed.forEach(([f, m]) => errs.unshift({ key: '(转换)', formula: f, msg: m }));
   fs.writeFileSync(path.join(__dirname, `errors-${slug}.json`), JSON.stringify(errs, null, 1));
   console.log(`${jobs.length} 段，${Date.now() - t0}ms，错误 ${errs.length}`);
 })();

@@ -4,9 +4,9 @@ const crypto = require('node:crypto');
 const { one, all, run, insert, tx, now, log } = require('./db');
 const course = require('./course');
 const render = require('./render');
-const { toNew } = require('./convert');
+const { toNew, titleText } = require('./convert');
 /* 旧写法的节点 → 新写法（只换正文，结构不变） */
-const convertNode = n => { const c = JSON.parse(JSON.stringify(n)); const f = x => { x.src = toNew(x.body); }; f(c); (c.variants || []).forEach(f); course.proofsOf(c).forEach(f); return c; };
+const convertNode = n => { const c = JSON.parse(JSON.stringify(n)); const f = x => { x.src = toNew(x.body); }; f(c); c.title = titleText(c.title); if (Array.isArray(c.alias)) c.alias = c.alias.map(a => titleText(String(a))); (c.variants || []).forEach(f); course.proofsOf(c).forEach(f); return c; };
 const { httpError, canEdit, canReview } = require('./auth');
 
 /* ---------- 内容清洗：只保留白名单标签 ---------- */
@@ -62,6 +62,7 @@ async function cleanNode(d, typst) {
   const n = { type: d.type, imp, title: str(d.title, 60, '标题').trim(), alias: (Array.isArray(d.alias) ? d.alias : []).map(a => str(String(a), 30, '别名')).slice(0, 20),
     deps: ids(d.deps), body: body(d, '正文') };
   if (!n.title) throw httpError(400, '标题不能为空');
+  if (typst && n.title.includes('$')) throw httpError(400, '标题里不能写公式，请直接用文字和 Unicode 符号（如 ε、≤、→、x²）');
   /* 等价说法（变体）：同一个概念的其他等价定义或叙述 */
   const vs = Array.isArray(d.variants) ? d.variants.slice(0, 6) : [];
   const variants = vs.filter(v => String(v.src != null ? v.src : v.body || '').trim()).map(v => ({ name: str(v.name || '等价说法', 30, '说法名称').trim() || '等价说法', body: body(v, '说法正文') }));

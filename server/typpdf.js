@@ -5,8 +5,10 @@ const course = require('./course');
 const { httpError } = require('./auth');
 const { latexProblem } = require('./render');
 
+const cjk = require('markdown-it-cjk-friendly');   // 中文标点紧挨 ** 时也能加粗
 const md = new MarkdownIt('default', { html: false, linkify: false, typographer: false })
-  .disable(['link', 'image', 'autolink', 'heading', 'lheading', 'code', 'fence', 'reference', 'html_block', 'html_inline', 'hr']);
+  .disable(['link', 'autolink', 'heading', 'lheading', 'code', 'fence', 'reference', 'html_block', 'html_inline', 'hr'])
+  .use(cjk.default || cjk);
 const CJK = (process.env.TYPST_CJK_FONT || 'Noto Serif CJK SC, Source Han Serif SC, FandolSong').split(',').map(s => s.trim());
 const CJK_SANS = (process.env.TYPST_CJK_SANS || 'Noto Sans CJK SC, Source Han Sans SC, FandolHei').split(',').map(s => s.trim());
 
@@ -27,10 +29,8 @@ function srcToTyp(src, refFn) {
   s = s.replace(/\$\$([\s\S]+?)\$\$/g, (m, f) => put(f, true)).replace(/\$([^$\n]+?)\$/g, (m, f) => put(f, false)).replace(/\u0001/g, '\\$');
   s = s.replace(/^-# (.*)$/gm, '\u0004$1');
   const toks = md.parse(s, {});
-  const text = t => {
-    let out = escT(t).replace(/\u0002(\d+)\u0003/g, (m, i) => math[+i]).replace(/\u0001/g, '\\$');
-    return out.replace(/\[\[((?:[a-z0-9-]+:)?\w+)\]\]/g, (m, id) => refFn(id)).replace(/\\\[\\\[((?:[a-z0-9-]+:)?\w+)\\\]\\\]/g, (m, id) => refFn(id));
-  };
+  const text = t => String(t).split(/(\[\[(?:[a-z0-9-]+:)?\w+\]\])/).map((part, k) => k % 2 ? refFn(part.slice(2, -2))
+    : escT(part).replace(/\u0002(\d+)\u0003/g, (m, i) => math[+i]).replace(/\u0001/g, '\\$')).join('');
   /* 块级：递归下降 */
   let i = 0;
   const inline = tok => {
@@ -44,6 +44,7 @@ function srcToTyp(src, refFn) {
       else if (c.type === 'softbreak') out += ' ';
       else if (c.type === 'hardbreak') out += ' \\\n';
       else if (c.type === 'code_inline') out += '#raw(' + str(c.content) + ')';
+      else if (c.type === 'image') { const m = /^\/(fig\/[\w\/-]+\.(?:svg|png|jpg))$/.exec(c.attrGet('src') || ''); if (m) out += `#align(center, image(${str(m[1])}, width: 50%))`; }
     }
     return out;
   };
@@ -60,7 +61,7 @@ function srcToTyp(src, refFn) {
         const items = [];
         while (toks[i].type !== close) { if (toks[i].type === 'list_item_open') { i++; items.push(`[${blocks('list_item_close').join('\n\n')}]`); } i++; }
         i++;
-        out.push(`#${fn}(${items.join(', ')})`);
+        out.push(`#${fn}(${t.markup === '+' ? 'marker: [], ' : ''}${items.join(', ')})`);
       } else if (t.type === 'blockquote_open') {
         i++; const inner = blocks('blockquote_close'); i++;
         out.push(`#block(fill: luma(244), inset: (x: 10pt, y: 7pt), radius: 4pt, width: 100%, stroke: (left: 2pt + rgb("#2350C6")))[${inner.join('\n\n')}]`);

@@ -443,7 +443,7 @@ const SRC = {};
 const TYP_HELP = `<div class="muted" style="margin:6px 0 14px">正文用 <strong>Markdown</strong>，公式用 <strong>Typst</strong>（不能用 LaTeX）。边写边在下面显示效果，提交后由审核者放行。
 <details class="fb" style="margin-top:6px"><summary>写法速查</summary><div class="tt-wrap"><table class="tt cheat"><thead><tr><th>想要</th><th>这样写</th></tr></thead><tbody>
 <tr><td>分段</td><td><code>空一行</code></td></tr><tr><td>加粗、斜体</td><td><code>**重点**</code>　<code>*强调*</code></td></tr>
-<tr><td>列表、编号</td><td><code>- 第一条</code>　<code>1. 第一步</code></td></tr><tr><td>提示框</td><td><code>&gt; **思路** ……</code></td></tr>
+<tr><td>列表、编号</td><td><code>- 第一条</code>　<code>1. 第一步</code></td></tr><tr><td>不带圆点的列表（选择题选项）</td><td><code>+ (A) ……</code></td></tr><tr><td>提示框</td><td><code>&gt; **思路** ……</code></td></tr>
 <tr><td>表格（真值表的 T/F 会自动上色）</td><td><code>| $p$ | $q$ |</code> 换行 <code>| --- | --- |</code> 换行 <code>| T | F |</code></td></tr>
 <tr><td>小字注释</td><td><code>-# 这一条留作练习</code></td></tr><tr><td>引用别的节点</td><td><code>[[节点编号]]</code></td></tr>
 <tr><td>行内公式 / 独立公式</td><td><code>$x^2 + 1$</code>　<code>$$ sum_(k=1)^n k = (n(n+1))/2 $$</code></td></tr>
@@ -454,10 +454,10 @@ const TYP_HELP = `<div class="muted" style="margin:6px 0 14px">正文用 <strong
 <tr><td>关系、箭头</td><td><code>&lt;= &gt;= != approx equiv</code>　<code>-&gt; |-&gt; =&gt;</code></td></tr>
 <tr><td>求和、极限、积分</td><td><code>sum_(i=1)^n</code>　<code>lim_(x -&gt; 0)</code>　<code>integral_0^1 f(x) dif x</code></td></tr>
 <tr><td>绝对值、取整、组合数</td><td><code>abs(x)</code>　<code>floor(x)</code>　<code>binom(n, k)</code></td></tr>
-<tr><td>分段函数、矩阵</td><td><code>cases(1 &amp; x &gt; 0, 0 &amp; "其他")</code>　<code>mat(1, 2; 3, 4)</code></td></tr>
+<tr><td>分段函数、矩阵</td><td><code>cases(1 &amp; x &gt; 0, 0 &amp; "其他")</code>　<code>mat(1, 2; 3, 4)</code>　增广矩阵 <code>mat(augment: #2, 1, 2, 3; 4, 5, 6)</code></td></tr>
 <tr><td>多行对齐</td><td><code>$$ a &amp;= b \\ &amp;= c $$</code>（<code>\\</code> 换行，<code>&amp;</code> 对齐）</td></tr>
 <tr><td>公式里的文字</td><td><code>"当且仅当"</code>（加双引号）</td></tr>
-</tbody></table></div><p class="small" style="margin:6px 0 0">注意：几个字母连写会被当成一个名字，变量之间要加空格，比如 <code>a b</code>、<code>2 x y</code>。</p></details></div>`;
+</tbody></table></div><p class="small" style="margin:6px 0 0">注意：几个字母连写会被当成一个名字，变量之间要加空格，比如 <code>a b</code>、<code>2 x y</code>。标题里不能写公式，直接用 ε、≤、→、x² 这类符号。</p></details></div>`;
 const srcErrorsHTML = errs => `<div class="flag"><strong>有 ${errs.length} 个公式没有通过编译：</strong><ul>${errs.map(e => `<li><code>${esc(e.formula)}</code>：${esc(e.msg)}</li>`).join('')}</ul></div>`;
 const LIVE_T = {};
 function livePreview(ta) {

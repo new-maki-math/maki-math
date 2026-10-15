@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const { run, one, all, tx, now, migrate, close } = require('./db');
 const { check, fixNode, proofsOf } = require('./course');
 const { renderMany } = require('./render');
-const { toNew } = require('./convert');
+const { toNew, titleText } = require('./convert');
 
 const COURSES = [
   { slug: 'shuxue-jichu', title: '数学基础', category: '逻辑与基础', live: 1, pos: 1,
@@ -15,15 +15,15 @@ const COURSES = [
     files: ['data.js', 'ch1b.js', 'ch2.js', 'ch3.js', 'ch4.js', 'ch5.js', 'ch67.js', 'ch89.js', 'data_extra.js'], settings: { format: 'typst' } },
   { slug: 'xiandai-feishuxue', title: '非数学系线性代数', category: '代数', live: 1, pos: 2,
     descr: '只在 ℝ 和 ℂ 上讨论：向量、点乘、线性映射与矩阵、行列式、线性方程组、特征值与对角化。以「数学基础」为前置课。',
-    files: ['data.js', 'data2.js'], prereqs: ['shuxue-jichu'], contentVersion: 2, settings: { proofOptional: true, hidden: true } },
+    files: ['data.js', 'data2.js'], prereqs: ['shuxue-jichu'], contentVersion: 2, settings: { proofOptional: true, format: 'typst' } },
   { slug: 'xiandai-shuxue', title: '数学系线性代数', category: '代数', live: 0, pos: 3,
-    descr: '一般域 F 上的线性代数，可以引用非数学系版的节点。', files: null, prereqs: ['shuxue-jichu', 'xiandai-feishuxue'], settings: { hidden: true } },
+    descr: '一般域 F 上的线性代数，可以引用非数学系版的节点。', files: null, prereqs: ['shuxue-jichu', 'xiandai-feishuxue'], settings: { format: 'typst' } },
   { slug: 'chudeng-shulun', title: '初等数论', category: '数论', live: 1, pos: 4,
     descr: '整除、最大公因数、算术基本定理、同余、中国剩余定理、Euler/Fermat/Wilson、二次互反律与原根。以「数学基础」为前置课。',
-    files: ['data.js'], prereqs: ['shuxue-jichu'], settings: { hidden: true } },
+    files: ['data.js'], prereqs: ['shuxue-jichu'], settings: { format: 'typst' } },
   { slug: 'kaoyan', title: '考研数学', category: '考研', live: 1, pos: 10,
     descr: '数一、数二、数三全覆盖：8 编 66 讲，2010–2026 年 843 道真题逐题详解。自成体系，不需要前置课程。',
-    files: ['data.js'], contentVersion: 2, settings: { proofOptional: true, lazy: true, mathjax: ['mathtools', 'unicode'], hidden: true } }
+    files: ['data.js'], contentVersion: 2, settings: { proofOptional: true, lazy: true, format: 'typst' } }
 ];
 
 function evalCourse(dir, files) {
@@ -45,6 +45,10 @@ async function typstify(c, N, orig) {
   const f = path.join(__dirname, '..', 'content', c.slug, 'typst.json');
   const cur = fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : {};
   const slots = [];
+  for (const n of Object.values(N)) {   // 标题、别名是纯文字
+    if (n.title && n.title.includes('$')) n.title = titleText(n.title);
+    if (Array.isArray(n.alias)) n.alias = n.alias.map(a => String(a).includes('$') ? titleText(a) : a);
+  }
   for (const [id, n] of Object.entries(N)) for (const [w, x] of fieldsOf(n)) {
     if (x.src != null) continue;
     const o = orig && orig[id] && (fieldsOf(orig[id]).find(([k]) => k === w) || [])[1];
@@ -63,6 +67,9 @@ async function migrateTypst(c) {
   let orig = null;
   if (c.files) { orig = JSON.parse(JSON.stringify(evalCourse(path.join(__dirname, '..', 'content', c.slug), c.files).N)); for (const n of Object.values(orig)) fixNode(n); }
   await typstify(c, N, orig);
+  const crow = await one('SELECT tree_json FROM courses WHERE slug = ?', c.slug);
+  const tree = crow && crow.tree_json;
+  if (tree) for (const b of Object.values(tree)) if (b && b.title && b.title.includes('$')) b.title = titleText(b.title);
   const subs = await all("SELECT id, payload_json FROM submissions WHERE course = ? AND status = 'pending' AND kind = 'node'", c.slug);
   await tx(async () => {
     for (const r of rows) {
@@ -74,10 +81,11 @@ async function migrateTypst(c) {
     /* 还没审核的提交：把正文转成新写法，审核时再编译 */
     for (const sub of subs) {
       const p = sub.payload_json;
-      if (p && p.data) { for (const [, x] of fieldsOf(p.data)) if (x.src == null) x.src = toNew(x.body); }
+      if (p && p.data) { for (const [, x] of fieldsOf(p.data)) if (x.src == null) x.src = toNew(x.body); if (p.data.title) p.data.title = titleText(p.data.title); }
+      if (p && p.B) for (const b of Object.values(p.B)) if (b && b.title) b.title = titleText(b.title);
       await run('UPDATE submissions SET payload_json = ? WHERE id = ?', JSON.stringify(p), sub.id);
     }
-    await run('UPDATE courses SET updated_at = ? WHERE slug = ?', now(), c.slug);
+    await run('UPDATE courses SET updated_at = ?, tree_json = ? WHERE slug = ?', now(), JSON.stringify(tree), c.slug);
   });
 }
 
@@ -105,7 +113,7 @@ async function seedCourse(c, force) {
     for (const cs of c.prereqs || []) for (const r of await all('SELECT id FROM nodes WHERE course = ?', cs)) extIds.add(`${cs}:${r.id}`);
     const problems = check(B, N, d => extIds.has(d), c.settings || {});
     if (problems.length) { console.error(problems.slice(0, 20).join('\n')); throw new Error(`${c.title} 未通过顺序检查`); }
-    if ((c.settings || {}).format === 'typst') await typstify(c, N, null);
+    if ((c.settings || {}).format === 'typst') { await typstify(c, N, null); for (const b of Object.values(B)) if (b && b.title && b.title.includes('$')) b.title = titleText(b.title); }
   }
   await tx(async () => {
     if (exists) { await run('DELETE FROM versions WHERE course = ?', c.slug); await run('DELETE FROM nodes WHERE course = ?', c.slug); await run('DELETE FROM courses WHERE slug = ?', c.slug); }
@@ -124,7 +132,7 @@ async function seedCourse(c, force) {
 }
 
 /* 彻底删除的课程：启动时清掉数据库里与它有关的一切（课程、节点、版本、提交、反馈、进度、路线、权限、日志） */
-const PURGED = [];   // 要彻底删除的课程编号，例如 ['old-course']
+const PURGED = [];
 async function purge() {
   for (const slug of PURGED) {
     if (!await one('SELECT 1 AS x FROM courses WHERE slug = ?', slug)) continue;

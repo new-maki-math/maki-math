@@ -15,6 +15,15 @@ test('Markdown + Typst 渲染', async () => {
   assert.match(r.html, /<div class="tip">/);
   assert.match(r.html, /<p class="small">小字<\/p>/);
 });
+test('中文标点旁的加粗、增广矩阵的竖线、选项列表和图', async () => {
+  const r = await render('**读图．**沿 $x$\n\n$mat(augment: #2, 1, 2, 3; 4, 5, 6)$\n\n+ (A) 甲\n+ (B) 乙\n\n![](/fig/ky/2015-1-1.svg) ![](https://evil.example/x.png)');
+  assert.deepEqual(r.errors, []);
+  assert.match(r.html, /<strong>读图．<\/strong>沿/);
+  assert.match(r.html, /columnlines="none solid"/);
+  assert.match(r.html, /<ol class="plain">/);
+  assert.match(r.html, /<img src="\/fig\/ky\/2015-1-1.svg"/);
+  assert.doesNotMatch(r.html, /evil/);
+});
 test('LaTeX 命令和 # 代码被拒绝', async () => {
   const r = await render('$\\frac{1}{2}$ 和 $#read("/etc/passwd")$ 和 $ab$');
   assert.equal(r.errors.length, 3);
