@@ -7,4 +7,3 @@ bin/typst
 __pycache__/
 *.pyc
 /tmp/
-shots/
