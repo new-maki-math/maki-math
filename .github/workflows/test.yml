@@ -1,0 +1,33 @@
+name: 测试
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: maki
+          POSTGRES_PASSWORD: maki-dev
+          POSTGRES_DB: maki_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U maki" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: 安装 Typst 和中文字体
+        run: |
+          bash deploy/get-typst.sh
+          sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
+      - name: 运行测试（API 全流程 + 全部公式编译）
+        run: npm test
+        env:
+          TEST_DATABASE_URL: postgres://maki:maki-dev@127.0.0.1:5432/maki_test

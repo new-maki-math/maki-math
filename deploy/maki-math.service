@@ -1,0 +1,24 @@
+[Unit]
+Description=Maki 开源数学平台
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+User=mathweb
+Group=mathweb
+WorkingDirectory=/srv/maki-math/app
+EnvironmentFile=/etc/maki-math.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/node/bin/node --max-old-space-size=384 server/index.js
+Restart=always
+RestartSec=3
+# 内存上限：Node 加上 xelatex 编译时的峰值
+MemoryMax=900M
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/srv/maki-math
+
+[Install]
+WantedBy=multi-user.target

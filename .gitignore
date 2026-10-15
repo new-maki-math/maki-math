@@ -1,0 +1,10 @@
+node_modules/
+data/
+bin/typst
+*.log
+.env
+.DS_Store
+__pycache__/
+*.pyc
+/tmp/
+shots/

@@ -1,0 +1,1673 @@
+{
+ "notation/body": {
+  "src": "- $NN = NN_0 = {0, 1, 2, ...}$（本课约定自然数包含 $0$）\n- $ZZ = {0, plus.minus 1, plus.minus 2, ...}$\n- $QQ = {a/b : a, b in ZZ, med b != 0, med gcd(a, b) = 1}$\n- $RR$：全体实数\n- $CC = {a + b i : a, b in RR}$，其中 $i^2 = - 1$"
+ },
+ "symbols/body": {
+  "src": "| 符号 | 读作 | 含义 |\n| --- | --- | --- |\n| $forall$ | 全称量词 | 对于任意的 |\n| $exists$ | 存在量词 | 存在至少一个 |\n| $exists!$ | 存在唯一 | 存在唯一一个 |\n| $and$ | 与 | 两个同时成立 |\n| $or$ | 或 | 至少有一个成立 |\n| $not$ | 非 | 否定 |\n| $=>$ | 蕴含 | 如果……那么…… |\n| $<=>$ | 等价 | 真假性相同 |"
+ },
+ "prop/body": {
+  "src": "命题是有确定真假性的陈述句，常用 $p, q, r, ...$ 表示。命题为真记作 $upright(T)$，为假记作 $upright(F)$。"
+ },
+ "not/body": {
+  "src": "命题 $p$ 的否定记作 $not p$，它的真假与 $p$ 相反：\n\n| $p$ | $not p$ |\n| --- | --- |\n| T | F |\n| F | T |"
+ },
+ "and/body": {
+  "src": "$p and q$ 读作「$p$ 与 $q$」，当且仅当 $p, q$ 同时为真时为真：\n\n| $p$ | $q$ | $p and q$ |\n| --- | --- | --- |\n| T | T | T |\n| T | F | F |\n| F | T | F |\n| F | F | F |"
+ },
+ "or/body": {
+  "src": "$p or q$ 读作「$p$ 或 $q$」，当且仅当 $p, q$ 至少有一个为真时为真：\n\n| $p$ | $q$ | $p or q$ |\n| --- | --- | --- |\n| T | T | T |\n| T | F | T |\n| F | T | T |\n| F | F | F |"
+ },
+ "dneg/body": {
+  "src": "$$ not(not p) <=> p $$"
+ },
+ "dneg/p0": {
+  "src": "| $p$ | $not p$ | $not(not p)$ |\n| --- | --- | --- |\n| T | F | T |\n| F | T | F |\n\n第一列与第三列完全相同。"
+ },
+ "comm/body": {
+  "src": "$$ p and q <=> q and p, wide p or q <=> q or p $$"
+ },
+ "comm/p0": {
+  "src": "第一式：左边为真 $<=>$ $p, q$ 都为真 $<=>$ $q, p$ 都为真 $<=>$ 右边为真。\n\n第二式：左边为假 $<=>$ $p, q$ 都为假 $<=>$ $q, p$ 都为假 $<=>$ 右边为假。"
+ },
+ "comm/p1": {
+  "src": "以第一式为例。由对称性，只需证明「$=>$」。\n\n假设 $p and q$，要证 $q and p$。由 $p and q$ 可知 $p$ 与 $q$ 都成立，于是 $q and p$。第二式同理。"
+ },
+ "assoc/body": {
+  "src": "$$ p and(q and r) <=>(p and q) and r $$\n$$ p or(q or r) <=>(p or q) or r $$\n\n因此可以不加括号地写 $p and q and r$ 与 $p or q or r$。"
+ },
+ "assoc/p0": {
+  "src": "第一式：左边为真 $<=>$ $p$ 与 $q and r$ 都为真 $<=>$ $p, q, r$ 都为真 $<=>$ 右边为真。\n\n第二式：左边为假 $<=>$ $p$ 与 $q or r$ 都为假 $<=>$ $p, q, r$ 都为假 $<=>$ 右边为假。"
+ },
+ "demorgan/body": {
+  "src": "$$ not(p and q) <=>(not p) or(not q) $$\n$$ not(p or q) <=>(not p) and(not q) $$"
+ },
+ "demorgan/p0": {
+  "src": "第一式：左边为假 $<=>$ $p and q$ 为真 $<=>$ $p, q$ 都为真 $<=>$ $not p, not q$ 都为假 $<=>$ 右边为假。\n\n第二式：左边为真 $<=>$ $p or q$ 为假 $<=>$ $p, q$ 都为假 $<=>$ $not p, not q$ 都为真 $<=>$ 右边为真。"
+ },
+ "demorgan/p1": {
+  "src": "| $p$ | $q$ | $p and q$ | $not(p and q)$ | $not p$ | $not q$ | $(not p) or(not q)$ |\n| --- | --- | --- | --- | --- | --- | --- |\n| T | T | T | F | F | F | F |\n| T | F | F | T | F | T | T |\n| F | T | F | T | T | F | T |\n| F | F | F | T | T | T | T |\n\n第 4 列与第 7 列完全相同。"
+ },
+ "dist/body": {
+  "src": "①\n\n$$ p and(q or r) <=>(p and q) or(p and r) $$\n\n②\n\n$$ p or(q and r) <=>(p or q) and(p or r) $$"
+ },
+ "dist/p0": {
+  "src": "①：左边为真 $<=>$ $p$ 为真，且 $q, r$ 至少一个为真 $<=>$「$p, q$ 都为真」或「$p, r$ 都为真」$<=>$ 右边为真。\n\n②：左边为假 $<=>$ $p$ 为假，且 $q, r$ 至少一个为假 $<=>$「$p, q$ 都为假」或「$p, r$ 都为假」$<=>$ 右边为假。"
+ },
+ "dist/p1": {
+  "src": "假设 ① 已成立。\n\n$$ p or(q and r) & <=> not(not p) or(not(not q) and not(not r)) \\ & <=> not(not p) or not((not q) or(not r)) \\ & <=> not((not p) and((not q) or(not r))) \\ & <=> not(((not p) and(not q)) or((not p) and(not r))) \\ & <=> not((not p) and(not q)) and not((not p) and(not r)) \\ & <=>(p or q) and(p or r) $$\n\n依次用到 [[dneg]]、[[demorgan]]、[[demorgan]]、①、[[demorgan]]，最后一步再用 De Morgan 律与双重否定律。"
+ },
+ "dist/p2": {
+  "src": "「$=>$」假设 $p and(q or r)$，于是 $p$ 成立，且 $q or r$ 成立。要证 $(p and q) or(p and r)$。\n\n方法一（分类讨论）：若 $q$，则 $p and q$；若 $r$，则 $p and r$。两种情形下右边都成立。\n\n方法二：假设 $p and q$ 不成立。由于 $p$ 成立，所以 $q$ 不成立；又 $q or r$，因此 $r$ 成立，故 $p and r$。\n\n「$arrow.l.double$」假设 $(p and q) or(p and r)$。由对称性，不妨设 $p and q$，于是 $p$ 与 $q$ 都成立，从而 $q or r$，故 $p and(q or r)$。"
+ },
+ "lem/body": {
+  "src": "$$ p or(not p) <=> upright(T) $$"
+ },
+ "lem/p0": {
+  "src": "$p$ 与 $not p$ 恰有一个为真，所以 $p or(not p)$ 总为真。"
+ },
+ "contra/body": {
+  "src": "$$ p and(not p) <=> upright(F) $$"
+ },
+ "contra/p0": {
+  "src": "$p$ 与 $not p$ 恰有一个为假，所以 $p and(not p)$ 总为假。"
+ },
+ "idem/body": {
+  "src": "$$ p and p <=> p, wide p or p <=> p $$"
+ },
+ "idem/p0": {
+  "src": "$p and p$ 为真 $<=>$ $p$ 为真；$p or p$ 为真 $<=>$ $p$ 为真。"
+ },
+ "absorb/body": {
+  "src": "$$ p and(p or q) <=> p, wide p or(p and q) <=> p $$"
+ },
+ "absorb/p0": {
+  "src": "第一式：左边为真 $<=>$ $p$ 与 $p or q$ 都为真 $<=>$ $p$ 为真（$p$ 为真时 $p or q$ 自动为真）。\n\n第二式：左边为假 $<=>$ $p$ 与 $p and q$ 都为假 $<=>$ $p$ 为假（$p$ 为假时 $p and q$ 自动为假）。"
+ },
+ "absorb/p1": {
+  "src": "「$arrow.l.double$」若 $p$，则 $p or(p and q)$。\n\n「$=>$」假设 $p or(p and q)$，要证 $p$。分类讨论：若 $p$，则 $p$；若 $p and q$，则 $p$。"
+ },
+ "imp/body": {
+  "src": "「若 $p$，则 $q$」记作 $p => q$，意思是：当 $p$ 成立时，$q$ 必须成立。它只在 $p$ 真而 $q$ 假时为假：\n\n| $p$ | $q$ | $p => q$ |\n| --- | --- | --- |\n| T | T | T |\n| T | F | F |\n| F | T | T |\n| F | F | T |"
+ },
+ "vacuous/body": {
+  "src": "假命题蕴含任何命题：\n\n$$ (upright(F) => p) <=> upright(T) $$\n\n例如「$1 + 1 = 3 =>$ 哥德巴赫猜想成立」是真命题，尽管哥德巴赫猜想至今没有被证明。"
+ },
+ "vacuous/p0": {
+  "src": "[[imp]]的真值表中，前件为 $upright(F)$ 的两行（第 3、4 行）结果都是 $upright(T)$。"
+ },
+ "negimp/body": {
+  "src": "$$ not(p => q) <=> p and(not q) $$"
+ },
+ "negimp/p0": {
+  "src": "由真值表，$p => q$ 为假当且仅当 $p$ 真且 $q$ 假，也就是 $p and(not q)$ 为真。"
+ },
+ "implaw/body": {
+  "src": "$$ (p => q) <=>(not p) or q $$\n\n它把蕴含化成「非」与「或」，后面的等价变形大多从这里出发。"
+ },
+ "implaw/p0": {
+  "src": "右边为假 $<=>$ $not p$ 与 $q$ 都为假 $<=>$ $p$ 真且 $q$ 假 $<=>$ 左边为假。"
+ },
+ "orimp/body": {
+  "src": "$$ p or q <=>((not p) => q) <=>((not q) => p) $$"
+ },
+ "orimp/p0": {
+  "src": "$$ p or q & <=> not(not p) or q <=>((not p) => q) \\ p or q & <=> q or p <=>((not q) => p) $$\n\n用到 [[dneg]]、[[implaw]] 和 [[comm]]。"
+ },
+ "contrapos/body": {
+  "src": "$$ (p => q) <=>((not q) =>(not p)) $$"
+ },
+ "contrapos/p0": {
+  "src": "$$ (p => q) & <=>(not p) or q \\ & <=> q or(not p) \\ & <=> not(not q) or(not p) \\ & <=>((not q) =>(not p)) $$"
+ },
+ "contrapos/p1": {
+  "src": "左边为假 $<=>$ $p$ 真、$q$ 假 $<=>$ $not q$ 真、$not p$ 假 $<=>$ 右边为假。"
+ },
+ "equiv/body": {
+  "src": "$p <=> q$ 表示 $p$ 与 $q$ 的真假性相同。它与两个方向的蕴含同时成立是一回事：\n\n$$ (p <=> q) <=>((p => q) and(q => p)) $$"
+ },
+ "syllog/body": {
+  "src": "$$ (p and(p => q)) => q $$"
+ },
+ "syllog/p0": {
+  "src": "若左边为假，由 [[vacuous]]，整个蕴含为真。\n\n若左边为真，则 $p$ 为真且 $p => q$ 为真。查蕴含的真值表，前件为真且结果为真的只有第 1 行，所以 $q$ 为真。"
+ },
+ "m_imp/body": {
+  "src": "要证明 $p => q$：假设 $p$，去证明 $q$。"
+ },
+ "m_imp/p0": {
+  "src": "当 $p$ 为假时，$p => q$ 自动为真（[[vacuous]]），所以只需检查 $p$ 为真的情形。"
+ },
+ "ex_x2/body": {
+  "src": "设 $x in RR$，证明 $x > 2 => x^2 > 4$。"
+ },
+ "ex_x2/p0": {
+  "src": "假设 $x > 2$，只需证明 $x^2 > 4$。因为 $x > 2 > 0$，两个同向的正数不等式相乘，得 $x dot.op x > 2 dot.op 2$，即 $x^2 > 4$。"
+ },
+ "m_and/body": {
+  "src": "要证明 $p and q$：分别证明 $p$ 和 $q$。"
+ },
+ "m_or/body": {
+  "src": "要证明 $p or q$，两种方法任选其一：\n\n方法一：假设 $p$ 不成立，证明 $q$ 成立。\n\n方法二：假设 $q$ 不成立，证明 $p$ 成立。"
+ },
+ "m_or/p0": {
+  "src": "由 [[orimp]]，$p or q <=>((not p) => q) <=>((not q) => p)$，再用 [[m\\_imp]] 证明右边任意一个蕴含即可。"
+ },
+ "m_case/body": {
+  "src": "若 $q$ 成立时能推出 $p$，且 $q$ 不成立时也能推出 $p$，则 $p$ 成立：\n\n$$ ((q => p) and((not q) => p)) => p $$\n\n它的证明留作练习。"
+ },
+ "exr_case/body": {
+  "src": "证明 $((q => p) and((not q) => p)) => p$ 恒为真。"
+ },
+ "ex_or/body": {
+  "src": "设 $x in RR$，证明 $x < 1$ 或 $x^2 >= 1$。"
+ },
+ "ex_or/p0": {
+  "src": "假设 $x < 1$ 不成立，即 $x >= 1$。由 $x >= 1 > 0$，两式相乘得 $x^2 >= 1$。"
+ },
+ "ex_or/p1": {
+  "src": "若 $x < 1$，结论已成立。若 $x >= 1$，同上可得 $x^2 >= 1$。两种情形下结论都成立。"
+ },
+ "m_iff/body": {
+  "src": "分别证明两个方向：\n\n「$=>$」假设 $p$，证明 $q$；\n\n「$arrow.l.double$」假设 $q$，证明 $p$。"
+ },
+ "m_iff/p0": {
+  "src": "由 [[equiv]]，$p <=> q$ 与 $(p => q) and(q => p)$ 等价，再用 [[m\\_and]] 和 [[m\\_imp]]。"
+ },
+ "mix1/body": {
+  "src": "$$ ((p => q) or(p => r)) <=>(p =>(q or r)) $$"
+ },
+ "mix1/p0": {
+  "src": "$$ \"左边\" & <=>((not p) or q) or((not p) or r) \\ & <=>((not p) or(not p)) or(q or r) \\ & <=>(not p) or(q or r) <=> \"右边\" $$"
+ },
+ "mix1/p1": {
+  "src": "「$=>$」不妨设 $p => r$（另一种情形对称）。要证 $p =>(q or r)$：假设 $p$，由 [[syllog]] 得 $r$，于是 $q or r$。\n\n「$arrow.l.double$」假设 $p =>(q or r)$，要证 $(p => q) or(p => r)$。假设 $p => q$ 不成立，由 [[negimp]]，$p$ 成立而 $q$ 不成立。要证 $p => r$：假设 $p$，由 $p =>(q or r)$ 知 $q or r$，而 $q$ 不成立，因此 $r$。"
+ },
+ "mix2/body": {
+  "src": "$$ ((p => q) and(p => r)) <=>(p =>(q and r)) $$"
+ },
+ "mix2/p0": {
+  "src": "$$ \"左边\" & <=>((not p) or q) and((not p) or r) \\ & <=>(not p) or(q and r) <=> \"右边\" $$\n\n第二步用 [[dist]] ②。"
+ },
+ "mix2/p1": {
+  "src": "「$=>$」假设 $p => q$ 且 $p => r$。再假设 $p$，要证 $q and r$：由 [[syllog]] 得 $q$ 与 $r$，于是 $q and r$。\n\n「$arrow.l.double$」假设 $p =>(q and r)$。由对称性只需证明 $p => q$：假设 $p$，则 $q and r$，故 $q$。"
+ },
+ "mix3/body": {
+  "src": "$$ ((p => r) or(q => r)) <=>((p and q) => r) $$"
+ },
+ "mix3/p0": {
+  "src": "$$ \"左边\" & <=>((not p) or r) or((not q) or r) \\ & <=>(not p) or(not q) or r \\ & <=> not(p and q) or r <=> \"右边\" $$"
+ },
+ "mix3/p1": {
+  "src": "「$=>$」不妨设 $p => r$。再设 $p and q$，要证 $r$：由 $p$ 及 [[syllog]] 得 $r$。\n\n「$arrow.l.double$」假设 $(p and q) => r$。假设 $p => r$ 不成立，由 [[negimp]]，$p$ 成立而 $r$ 不成立。要证 $q => r$：假设 $q$，则 $p and q$，因此 $r$。"
+ },
+ "mix4/body": {
+  "src": "$$ ((p => r) and(q => r)) <=>((p or q) => r) $$"
+ },
+ "mix4/p0": {
+  "src": "$$ \"左边\" & <=>((not p) or r) and((not q) or r) \\ & <=>((not p) and(not q)) or r \\ & <=> not(p or q) or r <=> \"右边\" $$\n\n第二步用 [[dist]] ② 与 [[comm]]，第三步用 [[demorgan]]。"
+ },
+ "mix4/p1": {
+  "src": "「$=>$」假设 $p => r$ 且 $q => r$，再设 $p or q$，要证 $r$。不妨设 $p$（另一种情形对称），于是 $r$。\n\n「$arrow.l.double$」假设 $(p or q) => r$。由对称性只需证明 $p => r$：假设 $p$，则 $p or q$，于是 $r$。"
+ },
+ "mix5/body": {
+  "src": "$$ (p =>(q => r)) <=>((p and q) => r) $$"
+ },
+ "mix5/p0": {
+  "src": "$$ \"左边\" & <=>(not p) or((not q) or r) \\ & <=>((not p) or(not q)) or r \\ & <=> not(p and q) or r <=> \"右边\" $$"
+ },
+ "mix5/p1": {
+  "src": "「$=>$」假设 $p =>(q => r)$，再设 $p$ 与 $q$，要证 $r$：由 $p$ 得 $q => r$，再由 $q$ 得 $r$。\n\n「$arrow.l.double$」假设 $(p and q) => r$。要证 $p =>(q => r)$：设 $p$，再设 $q$，要证 $r$。此时 $p and q$ 成立，故 $r$。"
+ },
+ "forall/body": {
+  "src": "$$ forall x in A, med p(x) $$\n\n读作：对于任意的 $x in A$，都有 $p(x)$。"
+ },
+ "exists/body": {
+  "src": "$$ exists x in A, med p(x) $$\n\n读作：存在一个 $x in A$，使得 $p(x)$。$exists!$ 表示存在唯一一个。"
+ },
+ "m_forall/body": {
+  "src": "要证明 $forall x in A, med p(x)$：设 $x in A$（任意取定），证明 $p(x)$。"
+ },
+ "m_exists/body": {
+  "src": "要证明 $exists x in A, med p(x)$：直接找到一个 $x_0 in A$，验证它满足 $p(x_0)$。"
+ },
+ "ex_sq/body": {
+  "src": "证明 $forall x in RR, med x^2 >= 0$。"
+ },
+ "ex_sq/p0": {
+  "src": "设 $x in RR$，分类讨论：\n\n① 若 $x >= 0$，则 $x^2 = x dot.op x >= 0$；\n\n② 若 $x < 0$，则 $-x > 0$，于是 $x^2 = (- x)^2 > 0$。"
+ },
+ "ex_100/body": {
+  "src": "证明 $exists x in RR, med x^2 > 100$。"
+ },
+ "ex_100/p0": {
+  "src": "取 $x_0 = 10000$，则 $x_0^2 = 10^8 > 100$。"
+ },
+ "q_vs_conn/body": {
+  "src": "$forall$ 是「全都成立」，对应 $and$（两者都成立）；$exists$ 是「一堆东西里至少一个成立」，对应 $or$（两者至少一个成立）。下一条 De Morgan 律就是这个类比的体现。"
+ },
+ "qdemorgan/body": {
+  "src": "$$ not(forall x in A, med p(x)) <=> exists x in A, med not p(x) $$\n$$ not(exists x in A, med p(x)) <=> forall x in A, med not p(x) $$"
+ },
+ "qdemorgan/p0": {
+  "src": "第一式：「并非所有 $x$ 都满足 $p$」恰好是说「至少有一个 $x$ 不满足 $p$」。第二式：「不存在满足 $p$ 的 $x$」恰好是说「每个 $x$ 都不满足 $p$」。"
+ },
+ "ex_nat1/body": {
+  "src": "证明或证伪：$forall x in NN, med exists y in NN, med y > x$。"
+ },
+ "ex_nat1/p0": {
+  "src": "成立。设 $x in NN$，要证 $exists y in NN, med y > x$。令 $y_0 = x + 1 in NN$，则 $y_0 = x + 1 > x$。"
+ },
+ "ex_nat2/body": {
+  "src": "证明或证伪：$forall x in NN, med exists y in NN, med y < x$。"
+ },
+ "ex_nat2/p0": {
+  "src": "不成立。要证明原命题的否定，由 [[qdemorgan]]，只需证明 $exists x in NN, med forall y in NN, med y >= x$。\n\n令 $x_0 = 0 in NN$。设 $y in NN$，则 $y >= 0 = x_0$。"
+ },
+ "ex_dense/body": {
+  "src": "证明或证伪：\n\n$$ forall x, y in RR, med((x < y) =>(exists z in RR, med x < z < y)) $$"
+ },
+ "ex_dense/p0": {
+  "src": "成立。设 $x, y in RR$，假设 $x < y$。令 $z_0 = (x + y)/2 in RR$，则\n\n$$ x = (x + x)/2 < (x + y)/2 < (y + y)/2 = y . $$"
+ },
+ "m_contra/body": {
+  "src": "$$ ((not p) => upright(F)) => p $$\n\n目的：证明 $p$ 成立。方法：假设 $p$ 不成立，推出一个假命题。"
+ },
+ "m_contra/p0": {
+  "src": "假设 $(not p) => upright(F)$，要证 $p$。分类讨论：\n\n① 若 $p$ 成立，结论已成立；\n\n② 若 $p$ 不成立，则 $not p$，于是得到 $upright(F)$，这不可能。"
+ },
+ "m_contra/p1": {
+  "src": "$$ ((not p) => upright(F)) <=>(p or upright(F)) <=> p $$\n\n第一步用 [[orimp]]；第二步因为 $upright(F)$ 不为真，$p or upright(F)$ 的真假与 $p$ 相同。"
+ },
+ "ex_sqrt2/body": {
+  "src": "证明 $sqrt(2) in.not QQ$。"
+ },
+ "ex_sqrt2/p0": {
+  "src": "用反证法，假设 $sqrt(2) in QQ$。设 $sqrt(2) = a/b$，其中 $a, b in ZZ$，$b != 0$，且 $gcd(a, b) = 1$。\n\n于是 $2 = (a^2)/(b^2)$，即 $a^2 = 2 b^2$。这说明 $a^2$ 是偶数，故 $a$ 是偶数。设 $a = 2 c$，其中 $c in ZZ$，则 $(2 c)^2 = 2 b^2$，即 $b^2 = 2 c^2$。同理可知 $b$ 也是偶数。\n\n这与 $gcd(a, b) = 1$ 矛盾。因此 $sqrt(2) in.not QQ$。\n\n-# 这里用到「$a^2$ 是偶数 $=>$ $a$ 是偶数」，它的严格证明在 P9 数论。"
+ },
+ "qdist_and/body": {
+  "src": "$$ forall x in A, med(p(x) and q(x)) med <=> med(forall x in A, med p(x)) and(forall x in A, med q(x)) $$"
+ },
+ "qdist_and/p0": {
+  "src": "「$=>$」假设 $forall x in A, med(p(x) and q(x))$。由对称性，只需证明 $forall x in A, med p(x)$：设 $x in A$，于是 $p(x) and q(x)$，则 $p(x)$。\n\n「$arrow.l.double$」假设 $forall x in A, med p(x)$ 且 $forall x in A, med q(x)$。设 $x in A$，要证 $p(x) and q(x)$：由假设，$p(x)$ 与 $q(x)$ 都成立。"
+ },
+ "qdist_or/body": {
+  "src": "$$ exists x in A, med(p(x) or q(x)) med <=> med(exists x in A, med p(x)) or(exists x in A, med q(x)) $$"
+ },
+ "qdist_or/p0": {
+  "src": "「$=>$」设 $x_0 in A$ 满足 $p(x_0) or q(x_0)$。不妨设 $p(x_0)$，则 $exists x in A, med p(x)$，于是右边成立。\n\n「$arrow.l.double$」不妨设 $exists x in A, med p(x)$，取这样的 $x_0$，则 $p(x_0) or q(x_0)$，于是左边成立。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "qimp_r/body": {
+  "src": "$$ forall x in A, med(p => q(x)) med <=> med(p =>(forall x in A, med q(x))) $$\n\n其中 $p$ 不含 $x$。"
+ },
+ "qimp_r/p0": {
+  "src": "「$=>$」设 $p$，再设 $x in A$，要证 $q(x)$。由假设 $p => q(x)$，得 $q(x)$。\n\n「$arrow.l.double$」设 $x in A$，假设 $p$，要证 $q(x)$。由假设得 $forall x in A, med q(x)$，所以 $q(x)$。"
+ },
+ "qimp_l/body": {
+  "src": "$$ forall x in A, med(p(x) => q) med <=> med((exists x in A, med p(x)) => q) $$\n\n其中 $q$ 不含 $x$。"
+ },
+ "qimp_l/p0": {
+  "src": "「$=>$」设存在 $x_0 in A$ 满足 $p(x_0)$，要证 $q$。由假设有 $p(x_0) => q$，于是 $q$。\n\n「$arrow.l.double$」设 $x in A$，假设 $p(x)$，要证 $q$。此时 $exists x in A, med p(x)$ 成立，于是 $q$。"
+ },
+ "qimp_l/p1": {
+  "src": "$$ \"左边\" & <=> forall x in A, med((not q) =>(not p(x))) \\ & <=>(not q) =>(forall x in A, med not p(x)) \\ & <=>(not q) => not(exists x in A, med p(x)) <=> \"右边\" $$\n\n依次用 [[contrapos]]、[[qimp\\_r]]、[[qdemorgan]]，最后再用一次逆否命题律。"
+ },
+ "set_sub/body": {
+  "src": "$$ A subset B <==> forall x in A, med x in B $$\n\n等价地，取一个充分大的集合 $X$（全集），$A subset B <==> forall x in X, med(x in A => x in B)$。本课 $subset$ 与 $subset.eq$ 同义，真包含记作 $subset.neq$。"
+ },
+ "set_subprop/body": {
+  "src": "① $A subset A$；② 若 $A subset B$ 且 $B subset C$，则 $A subset C$。"
+ },
+ "set_subprop/p0": {
+  "src": "①：设 $x in A$，则 $x in A$。②：设 $x in A$，则 $x in B$，于是 $x in C$。"
+ },
+ "set_ext/body": {
+  "src": "若 $A subset B$ 且 $B subset A$，则 $A = B$。证明两个集合相等的标准方法就是证明双向包含。"
+ },
+ "set_ops/body": {
+  "src": "设 $X$ 为全集。\n\n$$ A inter B = {x : x in A, med x in B}, quad A union B = {x : x in A \" 或 \" x in B}, quad A^c = {x in X : x in.not A} $$\n\n它们分别对应 $and$、$or$、$not$。"
+ },
+ "set_laws/body": {
+  "src": "[[comm]]、[[assoc]]、[[dist]]、[[demorgan]]、[[dneg]] 等关于 $and, or, not$ 的运算律，把 $and, or, not$ 换成 $inter, union, ^c$ 后全部成立。例如\n\n$$ (A inter B)^c = A^c union B^c , wide A inter(B union C) = (A inter B) union(A inter C) . $$"
+ },
+ "set_laws/p0": {
+  "src": "对任意 $x in X$，「$x in A inter B$」就是命题「$x in A$」$and$「$x in B$」，并与补同理。所以每条集合等式两边的成员条件，正好是对应命题等价式的两边，由外延公理两边相等。下一条例题完整演示一次。"
+ },
+ "ex_set_dm/body": {
+  "src": "证明 $(A inter B)^c = A^c union B^c$。"
+ },
+ "ex_set_dm/p0": {
+  "src": "$$ x in \"左边\" & <==> not(x in A inter B) <==> not(x in A and x in B) \\ & <==> not(x in A) or not(x in B) <==> x in A^c or x in B^c <==> x in \"右边\" $$"
+ },
+ "exr_set_dist/body": {
+  "src": "仿照上一例，逐元素证明 $A inter(B union C) = (A inter B) union(A inter C)$。"
+ },
+ "ex_set_imp/body": {
+  "src": "化简 ${x in X : x in A => x in B}$。"
+ },
+ "ex_set_imp/p0": {
+  "src": "由 [[implaw]]，$x in A => x in B$ 等价于 $x in.not A$ 或 $x in B$，所以这个集合是 $A^c union B$。在 Venn 图上，它是 $A$ 之外的部分加上 $B$。"
+ },
+ "set_subeq/body": {
+  "src": "① $A subset B <==> A^c union B = X <==> A inter B^c = nothing$；\n\n② $A inter B = nothing <==> A subset B^c <==> B subset A^c$；\n\n③ $A union B = X <==> A^c subset B <==> B^c subset A$；\n\n④ $A inter B = nothing$ 且 $A union B = X$ $<==> A = B^c$。"
+ },
+ "set_subeq/p0": {
+  "src": "①：$A subset B$ 即 $forall x in X, med(x in A => x in B)$，由上一例即 $A^c union B = X$；取补并用 De Morgan 律得 $A inter B^c = nothing$。\n\n②③ 由 ① 把 $B$ 换成 $B^c$（或把 $A$ 换成 $A^c$）并用 $(B^c)^c = B$ 得到。④ 由 ② 和 ③ 合起来：$A subset B^c$ 且 $B^c subset A$。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "ex_set_contra/body": {
+  "src": "证明 $A subset B <==> B^c subset A^c$。"
+ },
+ "ex_set_contra/p0": {
+  "src": "$x in A => x in B$ 与 $x in.not B => x in.not A$ 等价（[[contrapos]]），即 $x in B^c => x in A^c$。"
+ },
+ "set_sub_cap/body": {
+  "src": "$$ A subset B inter C <==> A subset B, med A subset C $$"
+ },
+ "set_sub_cap/p0": {
+  "src": "「$=>$」由 $A subset B inter C$ 及 $B inter C subset B$，可知 $A subset B$；同理 $A subset C$。\n\n「$arrow.l.double$」设 $x in A$，则 $x in B$ 且 $x in C$，故 $x in B inter C$。"
+ },
+ "set_cup_sub/body": {
+  "src": "$$ A union B subset C <==> A subset C, med B subset C $$"
+ },
+ "set_cup_sub/p0": {
+  "src": "「$=>$」$A subset A union B subset C$，同理 $B subset C$。\n\n「$arrow.l.double$」设 $x in A union B$，不妨设 $x in A$，则 $x in C$。"
+ },
+ "fin_def/body": {
+  "src": "$$ union.big_(i = 1)^n A_i = A_1 union dots.c union A_n = {x : exists i in {1, ..., n}, med x in A_i} $$\n$$ inter.big_(i = 1)^n A_i = A_1 inter dots.c inter A_n = {x : forall i in {1, ..., n}, med x in A_i} $$"
+ },
+ "fin_dm/body": {
+  "src": "$$ (union.big_(i = 1)^n A_i)^c = inter.big_(i = 1)^n A_i^c , wide(inter.big_(i = 1)^n A_i)^c = union.big_(i = 1)^n A_i^c $$"
+ },
+ "fin_dm/p0": {
+  "src": "$x in.not union.big A_i <==> not(exists i, med x in A_i) <==> forall i, med x in.not A_i$，第二式同理。"
+ },
+ "fin_dist/body": {
+  "src": "$$ (union.big_(i = 1)^n A_i) inter B = union.big_(i = 1)^n (A_i inter B), wide(inter.big_(i = 1)^n A_i) union B = inter.big_(i = 1)^n (A_i union B) $$"
+ },
+ "fin_dist/p0": {
+  "src": "第一式：$x$ 属于左边 $<==>$ 存在 $i$ 使 $x in A_i$，且 $x in B$ $<==>$ 存在 $i$ 使 $x in A_i inter B$。第二式：$x$ 属于左边 $<==>$ 对所有 $i$ 有 $x in A_i$，或 $x in B$ $<==>$ 对所有 $i$ 有 $x in A_i union B$（若 $x in.not B$，右边要求每个 $x in A_i$）。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "fin_sub_cap/body": {
+  "src": "$$ A subset inter.big_(i = 1)^n B_i <==> forall i in {1, ..., n}, med A subset B_i $$"
+ },
+ "fin_sub_cap/p0": {
+  "src": "「$=>$」设 $i in {1, ..., n}$，则 $A subset inter.big B_i subset B_i$。「$arrow.l.double$」设 $x in A$，设 $i in {1, ..., n}$，则 $x in B_i$。"
+ },
+ "fin_cup_sub/body": {
+  "src": "$$ union.big_(i = 1)^n A_i subset B <==> forall i in {1, ..., n}, med A_i subset B $$"
+ },
+ "fin_cup_sub/p0": {
+  "src": "「$=>$」$A_i subset union.big A_i subset B$。「$arrow.l.double$」设 $x in union.big A_i$，取 $i$ 使 $x in A_i$，则 $x in B$。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "fin_mono/body": {
+  "src": "若对每个 $i in {1, ..., n}$ 有 $A_i subset B_i$，则 $union.big_(i = 1)^n A_i subset union.big_(i = 1)^n B_i$，且 $inter.big_(i = 1)^n A_i subset inter.big_(i = 1)^n B_i$。"
+ },
+ "fin_mono/p0": {
+  "src": "每个 $A_i subset B_i subset union.big B_i$，由 [[fin\\_cup\\_sub]] 得第一式；$inter.big A_i subset A_i subset B_i$，由 [[fin\\_sub\\_cap]] 得第二式。"
+ },
+ "ex_fin_cup/body": {
+  "src": "$$ union.big_(i = 1)^n (A_i union B_i) = (union.big_(i = 1)^n A_i) union(union.big_(i = 1)^n B_i) $$"
+ },
+ "ex_fin_cup/p0": {
+  "src": "「$subset$」由 [[fin\\_cup\\_sub]]，只需对每个 $i$ 证明 $A_i union B_i subset$ 右边，显然。\n\n「$supset$」由对称性，只需证明 $union.big A_i subset union.big(A_i union B_i)$，这由 [[fin\\_mono]] 得到。"
+ },
+ "ex_fin_cap/body": {
+  "src": "$$ inter.big_(i = 1)^n (A_i inter B_i) = (inter.big_(i = 1)^n A_i) inter(inter.big_(i = 1)^n B_i) $$"
+ },
+ "ex_fin_cap/p0": {
+  "src": "「$subset$」由对称性，只需证明 $inter.big(A_i inter B_i) subset inter.big A_i$，这由 [[fin\\_mono]] 得到。\n\n「$supset$」由 [[fin\\_sub\\_cap]]，只需对每个 $i$ 证明右边 $subset A_i inter B_i$，显然。"
+ },
+ "diff_def/body": {
+  "src": "$$ A without B med(= A - B) = {x : x in A, med x in.not B} = A inter B^c $$"
+ },
+ "diff_dm/body": {
+  "src": "$$ A without(union.big_(i = 1)^n B_i) = inter.big_(i = 1)^n (A without B_i), wide A without(inter.big_(i = 1)^n B_i) = union.big_(i = 1)^n (A without B_i) $$"
+ },
+ "diff_dm/p0": {
+  "src": "$$ A inter(union.big B_i)^c = A inter inter.big B_i^c = inter.big(A inter B_i^c), wide A inter(inter.big B_i)^c = A inter union.big B_i^c = union.big(A inter B_i^c) $$"
+ },
+ "ex_diff/body": {
+  "src": "证明 $A without B = A without(A inter B)$。"
+ },
+ "ex_diff/p0": {
+  "src": "对 $x in A$：$x in.not A inter B <==> x in.not B$。"
+ },
+ "diff_cor/body": {
+  "src": "若 $A inter B subset C subset B$，则 $A without C = A without B$。"
+ },
+ "diff_cor/p0": {
+  "src": "差集对减去的集合单调递减，所以 $A without(A inter B) supset A without C supset A without B$。由上一例，两端相等，因此 $A without C = A without B$。"
+ },
+ "sym_def/body": {
+  "src": "$$ A triangle.t B = (A without B) union(B without A) $$\n\n即恰好属于 $A, B$ 中一个的元素。"
+ },
+ "sym_comm_assoc/body": {
+  "src": "$$ A triangle.t B = B triangle.t A, wide A triangle.t(B triangle.t C) = (A triangle.t B) triangle.t C $$"
+ },
+ "sym_comm_assoc/p0": {
+  "src": "交换律由定义的对称性立得。结合律：$x in A triangle.t B$ 当且仅当 $x$ 恰好属于 $A, B$ 中的一个。逐一检查 $x$ 属于 $A, B, C$ 的 8 种情形，两边都恰好在 $x$ 属于其中奇数个集合时包含 $x$（Venn 图中 $A triangle.t B triangle.t C$ 是恰好在 1 个或 3 个集合里的部分）。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "sym_tri/body": {
+  "src": "$$ A triangle.t C subset(A triangle.t B) union(B triangle.t C) $$"
+ },
+ "sym_tri/p0": {
+  "src": "左边 $= (A without C) union(C without A)$。由对称性，只需证明 $A without C subset(A triangle.t B) union(B triangle.t C)$。设 $x in A$，$x in.not C$：\n\n① 若 $x in B$，则 $x in B without C subset B triangle.t C$；\n\n② 若 $x in.not B$，则 $x in A without B subset A triangle.t B$。"
+ },
+ "sym_tri_size/body": {
+  "src": "记有限集合的大小（元素个数）为 $| dot.op |$，则 $| A triangle.t C | <= | A triangle.t B | + | B triangle.t C |$。"
+ },
+ "sym_tri_size/p0": {
+  "src": "$$ | A triangle.t C | <= |(A triangle.t B) union(B triangle.t C) | <= | A triangle.t B | + | B triangle.t C | $$\n\n-# 元素个数的严格定义在 P5。"
+ },
+ "exr_sym/body": {
+  "src": "证明：\n\n$$ A inter(B triangle.t C) = (A inter B) triangle.t(A inter C), wide(union.big_(i = 1)^n A_i) triangle.t(union.big_(i = 1)^n B_i) subset union.big_(i = 1)^n (A_i triangle.t B_i) $$"
+ },
+ "idx_def/body": {
+  "src": "给一组集合编号所用的集合。例如 $A_1 , ..., A_n$ 的指标集是 ${1, ..., n}$；$A_0 , A_1 , ...$ 的指标集是 $NN$；$..., A_(-1) , A_0 , A_1 , ...$ 的指标集是 $ZZ$；${A_x : x in RR}$（比如 $A_x = {x}$）的指标集是 $RR$。指标集可以是任意集合。"
+ },
+ "fam_def/body": {
+  "src": "设 $I$ 是指标集。若对每个 $i in I$ 规定了一个集合 $A_i$，则称 ${A_i}_(i in I)$ 为一个集族。"
+ },
+ "arb_def/body": {
+  "src": "$$ union.big_(i in I) A_i = {x : exists i in I, med x in A_i}, wide inter.big_(i in I) A_i = {x : forall i in I, med x in A_i} $$\n\n通常约定指标集非空。"
+ },
+ "arb_dm/body": {
+  "src": "$$ (union.big_(i in I) A_i)^c = inter.big_(i in I) A_i^c , wide(inter.big_(i in I) A_i)^c = union.big_(i in I) A_i^c $$"
+ },
+ "arb_dm/p0": {
+  "src": "与 [[fin\\_dm]] 的证明完全相同，只是把 ${1, ..., n}$ 换成 $I$。"
+ },
+ "arb_sub/body": {
+  "src": "$$ union.big_(i in I) A_i subset B <==> forall i in I, med A_i subset B ; wide A subset inter.big_(i in I) B_i <==> forall i in I, med A subset B_i $$"
+ },
+ "arb_sub/p0": {
+  "src": "与 [[fin\\_cup\\_sub]]、[[fin\\_sub\\_cap]] 的证明相同，把 ${1, ..., n}$ 换成 $I$。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "arb_mono_idx/body": {
+  "src": "若 $I subset J$，则 $union.big_(i in I) A_i subset union.big_(i in J) A_i$，且 $inter.big_(i in I) A_i supset inter.big_(i in J) A_i$。（类比 $A subset A union B$。）"
+ },
+ "arb_mono_idx/p0": {
+  "src": "第一式：设 $i in I$，则 $i in J$，所以 $A_i subset union.big_(i in J) A_i$。第二式：只需对每个 $i in I$ 证明 $inter.big_(i in J) A_i subset A_i$；因为 $i in J$，这成立。"
+ },
+ "arb_union_idx/body": {
+  "src": "$$ union.big_(k in I union J) A_k = (union.big_(i in I) A_i) union(union.big_(j in J) A_j) $$"
+ },
+ "arb_union_idx/p0": {
+  "src": "「$subset$」设 $k in I union J$，不妨设 $k in I$，则 $A_k subset union.big_(i in I) A_i subset$ 右边。\n\n「$supset$」只需证明 $union.big_(i in I) A_i subset union.big_(k in I union J) A_k$，由 $I subset I union J$ 及 [[arb\\_mono\\_idx]] 得到。"
+ },
+ "arb_cap_idx/body": {
+  "src": "$$ inter.big_(k in I union J) A_k = (inter.big_(i in I) A_i) inter(inter.big_(j in J) A_j) $$"
+ },
+ "arb_cap_idx/p0": {
+  "src": "$x$ 属于左边 $<==>$ 对每个 $k in I union J$ 有 $x in A_k$ $<==>$ 对每个 $i in I$ 有 $x in A_i$，且对每个 $j in J$ 有 $x in A_j$。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "exr_arb/body": {
+  "src": "① 若对每个 $i in I$ 有 $A_i subset B_i$，则 $union.big A_i subset union.big B_i$，$inter.big A_i subset inter.big B_i$。\n\n② $union.big_(i in I) (A_i union B_i) = (union.big A_i) union(union.big B_i)$，$inter.big_(i in I) (A_i inter B_i) = (inter.big A_i) inter(inter.big B_i)$。"
+ },
+ "pair_def/body": {
+  "src": "有序对 $(a, b)$ 满足 $(a, b) = (c, d) <==> a = c, med b = d$。顺序有意义：例如在 $RR^2$ 中 $(2, 3) !=(3, 2)$。"
+ },
+ "prod_def/body": {
+  "src": "$$ A times B = {(a, b) : a in A, med b in B} $$\n\n于是 $(a, b) in A times B <==> a in A, med b in B$。特别地，记 $A^2 = A times A$。"
+ },
+ "prod_empty/body": {
+  "src": "$$ A times nothing = nothing, wide nothing times B = nothing $$"
+ },
+ "prod_empty/p0": {
+  "src": "不存在 $b in nothing$，所以不存在有序对 $(a, b)$ 属于 $A times nothing$。"
+ },
+ "prod_mono/body": {
+  "src": "若 $A subset B$，则 $A times C subset B times C$；若 $B subset C$，则 $A times B subset A times C$；若 $A subset B$，$C subset D$，则 $A times C subset B times D$。"
+ },
+ "prod_mono/p0": {
+  "src": "以第一式为例：设 $(x, y) in A times C$，则 $x in A$，$y in C$。于是 $x in B$，故 $(x, y) in B times C$。其余同理。"
+ },
+ "prod_cup/body": {
+  "src": "$$ A times (B union C) = (A times B) union(A times C) $$"
+ },
+ "prod_cup/p0": {
+  "src": "「$subset$」设 $x in A$，$y in B union C$。不妨设 $y in B$，则 $(x, y) in A times B$。\n\n「$supset$」由 [[prod\\_mono]]，$A times B subset A times (B union C)$，另一个同理。"
+ },
+ "prod_cap/body": {
+  "src": "$$ A times (B inter C) = (A times B) inter(A times C) $$"
+ },
+ "prod_cap/p0": {
+  "src": "$(x, y) in$ 右边 $<==> x in A, med y in B, med y in C <==> x in A, med y in B inter C$。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "prod_diff/body": {
+  "src": "$$ A times (B without C) = (A times B) without(A times C), wide A times (B triangle.t C) = (A times B) triangle.t(A times C) $$"
+ },
+ "prod_diff/p0": {
+  "src": "第一式：$(x, y) in$ 右边 $<==> x in A, med y in B$，且并非（$x in A$ 且 $y in C$）$<==> x in A, med y in B, med y in.not C$。第二式由第一式和 [[prod\\_cup]] 得到。\n\n-# 手稿中这一条留作练习，这里的证明是补充的。"
+ },
+ "prod_comp/body": {
+  "src": "在 $X times Y$ 中，\n\n$$ (A times B)^c = (A times B^c) union(A^c times B) union(A^c times B^c) $$\n\n把 $X$ 分成 $A, A^c$，$Y$ 分成 $B, B^c$，平面被分成四块，$A times B$ 之外恰好是另外三块。"
+ },
+ "prod_comp/p0": {
+  "src": "设 $(x, y) in X times Y$。按 $x in A$ 与否、$y in B$ 与否分成四种情形，恰好对应四块；$(x, y) in.not A times B$ 当且仅当不在第一种情形。"
+ },
+ "prod_capcap/body": {
+  "src": "$$ (A times B) inter(C times D) = (A inter C) times (B inter D) $$"
+ },
+ "prod_capcap/p0": {
+  "src": "$$ (x, y) in \"左边\" & <==>(x, y) in A times B, med(x, y) in C times D <==> x in A, med y in B, med x in C, med y in D \\ & <==> x in A inter C, med y in B inter D <==>(x, y) in \"右边\" $$"
+ },
+ "prod_arbcap/body": {
+  "src": "$$ inter.big_(i in I) (A_i times B_i) = (inter.big_(i in I) A_i) times (inter.big_(i in I) B_i) $$"
+ },
+ "prod_arbcap/p0": {
+  "src": "$$ (x, y) in \"左边\" & <==> forall i in I, med(x in A_i , med y in B_i) <==>(forall i in I, med x in A_i), med(forall i in I, med y in B_i) \\ & <==> x in inter.big A_i , med y in inter.big B_i <==>(x, y) in \"右边\" $$\n\n第二步用 [[qdist\\_and]]。"
+ },
+ "finprod_def/body": {
+  "src": "$$ product_(i = 1)^n A_i = A_1 times dots.c times A_n = {(a_1 , ..., a_n) : a_1 in A_1 , ..., a_n in A_n} $$\n\n特别地，若 $A_1 = dots.c = A_n = A$，记 $A^n$。$(a_1 , ..., a_n) = (b_1 , ..., b_n) <==> forall i, med a_i = b_i$。\n\n约定：一般不区分 $(A times B) times C$、$A times (B times C)$ 和 $A times B times C$，即把 $((a, b), c)$、$(a, (b, c))$、$(a, b, c)$ 看成同一个；同理不区分 $(product_(i = 1)^m A_i) times (product_(j = 1)^n A_(m + j))$ 和 $product_(k = 1)^(m + n) A_k$。"
+ },
+ "finprod_cap/body": {
+  "src": "$$ (product_(i = 1)^n A_i) inter(product_(i = 1)^n B_i) = product_(i = 1)^n (A_i inter B_i) $$"
+ },
+ "finprod_cap/p0": {
+  "src": "$(x_1 , ..., x_n) in$ 左边 $<==>$ 对每个 $i$，$x_i in A_i$ 且 $x_i in B_i$ $<==>$ 对每个 $i$，$x_i in A_i inter B_i$。"
+ },
+ "finprod_swap/body": {
+  "src": "$$ inter.big_(i in I) product_(j = 1)^n A_(i j) = product_(j = 1)^n inter.big_(i in I) A_(i j) $$"
+ },
+ "finprod_swap/p0": {
+  "src": "$$ (x_1 , ..., x_n) in \"左边\" & <==> forall i in I, med forall j in {1, ..., n}, med x_j in A_(i j) \\ & <==> forall j in {1, ..., n}, med forall i in I, med x_j in A_(i j) <==> forall j, med x_j in inter.big_(i in I) A_(i j) $$"
+ },
+ "arbprod_def/body": {
+  "src": "给定集族 ${A_i}_(i in I)$，$product_(i in I) A_i$ 的元素应该是满足 $forall i in I, med x_i in A_i$ 的 ${x_i}_(i in I)$。把它看成映射 $x : I -> union.big_(i in I) A_i$，$x_i = x(i)$：\n\n$$ product_(i in I) A_i = {x : I -> union.big_(i in I) A_i med : med forall i in I, med x(i) in A_i} $$\n\n-# 映射的定义在 P4，完整讨论在 P5。"
+ },
+ "wellorder/body": {
+  "src": "若 $nothing != A subset NN$，则 $min A$ 存在，即存在 $m in A$，使得 $forall a in A, med m <= a$。"
+ },
+ "wellorder/p0": {
+  "src": "设 $nothing != A subset NN$。对 $n in NN$，令 $p(n)$：若 $n in A$，则 $min A$ 存在。\n\n$n = 0$ 时，若 $0 in A$，则 $min A = 0$。\n\n假设 $p(0), ..., p(n)$，要证 $p(n + 1)$：假设 $n + 1 in A$。若 $A inter {0, ..., n} = nothing$，则 $min A = n + 1$；否则取 $m in A inter {0, ..., n}$，由 $p(m)$ 知 $min A$ 存在。\n\n由强数学归纳法，对所有 $n$ 有 $p(n)$。由于 $A$ 非空，取 $n in A$ 即得 $min A$ 存在。\n\n-# 良序公理作为公理不需要证明。这里说明它和两种归纳法等价。"
+ },
+ "induction/body": {
+  "src": "给定 ${p(n)}_(n in NN)$。若 $p(0)$，且 $forall n in NN, med p(n) => p(n + 1)$，则 $forall n in NN, med p(n)$。"
+ },
+ "induction/p0": {
+  "src": "用反证法，假设 $exists n in NN, med not p(n)$。令 $A = {n in NN : not p(n)}$，则 $A != nothing$。由良序公理，设 $m = min A$，即 $p(m)$ 不成立，而对所有 $n < m$ 有 $p(n)$。\n\n由 $p(0)$ 知 $0 in.not A$，故 $m >= 1$。于是 $p(m - 1)$ 成立，由假设 $p(m - 1) => p(m)$，得 $p(m)$，矛盾。"
+ },
+ "strong_ind/body": {
+  "src": "给定 ${p(n)}_(n in NN)$。若 $p(0)$，且 $forall n in NN, med(p(0) and dots.c and p(n)) => p(n + 1)$，则 $forall n in NN, med p(n)$。"
+ },
+ "strong_ind/p0": {
+  "src": "令 $q(n) = p(0) and dots.c and p(n)$。则 $q(0)$ 成立，并且 $q(n) => q(n + 1)$：假设 $p(0), ..., p(n)$，于是 $p(n + 1)$，故 $p(0) and dots.c and p(n + 1)$。\n\n由数学归纳法，$forall n in NN, med q(n)$，从而 $forall n in NN, med p(n)$。"
+ },
+ "divalg/body": {
+  "src": "设 $a, b in NN$，$b != 0$。则存在 $q, r in NN$，使得 $a = q b + r$，且 $0 <= r <= b - 1$。"
+ },
+ "divalg/p0": {
+  "src": "令 $R = {r in NN : exists q in NN, med a = q b + r}$。取 $q = 0$ 可知 $a in R$，故 $R != nothing$。由良序公理设 $r = min R$，$a = q b + r$。\n\n只需证明 $r <= b - 1$。用反证法，假设 $r >= b$，则 $r - b in NN$ 且 $a = (q + 1) b + (r - b)$，于是 $r - b in R$，但 $r - b < r$，与 $r = min R$ 矛盾。"
+ },
+ "divalg/p1": {
+  "src": "固定 $b$，对 $a$ 作归纳。$a = 0$ 时，$0 = 0 dot.op b + 0$。\n\n假设 $a = q b + r$，$0 <= r <= b - 1$。若 $r = b - 1$，则 $a + 1 = (q + 1) b + 0$；若 $0 <= r <= b - 2$，则 $a + 1 = q b + (r + 1)$，$0 <= r + 1 <= b - 1$。"
+ },
+ "sym_odd/body": {
+  "src": "$$ A_1 triangle.t dots.c triangle.t A_n = {x : x \" 恰好在奇数个 \" A_i \" 中\"} $$"
+ },
+ "sym_odd/p0": {
+  "src": "$n = 1, 2$ 时由定义成立。假设结论对 $n$ 成立，则\n\n$$ (A_1 triangle.t dots.c triangle.t A_n) triangle.t A_(n + 1) = ((A_1 triangle.t dots.c triangle.t A_n) without A_(n + 1)) union(A_(n + 1) inter(A_1 triangle.t dots.c triangle.t A_n)^c) . $$\n\n前一部分是：在 $A_1 , ..., A_n$ 中恰好出现奇数次、且 $x in.not A_(n + 1)$ 的元素；后一部分是：在 $A_1 , ..., A_n$ 中出现偶数次、且 $x in A_(n + 1)$ 的元素。两部分合起来，恰好是在 $A_1 , ..., A_(n + 1)$ 中出现奇数次的元素。"
+ },
+ "sym_trans/body": {
+  "src": "$$ A triangle.t C = (A triangle.t B) triangle.t(B triangle.t C) $$"
+ },
+ "sym_trans/p0": {
+  "src": "$$ (A triangle.t B) triangle.t(B triangle.t C) = A triangle.t(B triangle.t B) triangle.t C = A triangle.t nothing triangle.t C = A triangle.t C $$"
+ },
+ "sym_trans/p1": {
+  "src": "由 [[sym\\_odd]]，右边是在 $A, B, B, C$ 中出现奇数次的元素。$B$ 出现两次不影响奇偶，所以就是在 $A, C$ 中恰好出现一次的元素。"
+ },
+ "rel_def/body": {
+  "src": "$X$ 到 $Y$ 的二元关系是一个子集 $R subset X times Y$。特别地，若 $X = Y$，称 $R$ 是 $X$ 上的二元关系。记\n\n$$ x R y <==>(x, y) in R . $$"
+ },
+ "rel_n/body": {
+  "src": "$X_1 , ..., X_n$ 上的 $n$ 元关系是一个子集 $R subset X_1 times dots.c times X_n$。"
+ },
+ "ex_rel/body": {
+  "src": "「喜欢」「是……爸爸」「是……家人」都是一群人 $X$ 上的二元关系。$<$、$<=$ 是 $RR$ 上的二元关系；$parallel$、$bot$ 是平面上所有直线组成的集合上的二元关系；$tilde.equiv$（全等）、$~$（相似）是平面上所有三角形组成的集合上的二元关系。"
+ },
+ "rel_map/body": {
+  "src": "映射 $f : X -> Y$ 本质上是一个关系 $f subset X times Y$，满足\n\n$$ forall x in X, med exists! thin y in Y, med(x, y) in f . $$\n\n这个唯一的 $y$ 记作 $f(x)$，于是 $f$ 就是它的图像 ${(x, f(x)) : x in X}$。复合 $X limits(-->)^f Y limits(-->)^g Z$ 定义为 $(g compose f)(x) = g(f(x))$；从关系的角度看，若 $(x, y) in f$，$(y, z) in g$，则 $(x, z) in g compose f$。映射的系统讨论在 P4。"
+ },
+ "rel_comp/body": {
+  "src": "设 $R subset X times Y$，$S subset Y times Z$。定义 $S compose R subset X times Z$ 为\n\n$$ S compose R = {(x, z) in X times Z : exists y in Y, med(x, y) in R, med(y, z) in S} . $$\n\n当 $R, S$ 都是映射时，这就是映射的复合。"
+ },
+ "rel_assoc/body": {
+  "src": "设 $R subset X times Y$，$S subset Y times Z$，$T subset Z times W$，则\n\n$$ (T compose S) compose R = T compose (S compose R) . $$"
+ },
+ "rel_assoc/p0": {
+  "src": "$$ (x, w) in \"左边\" & <==> exists y in Y, med x R y, med(y, w) in T compose S \\ & <==> exists y in Y, med exists z in Z, med x R y, med y S z, med z T w \\ & <==> exists z in Z, med exists y in Y, med x R y, med y S z, med z T w \\ & <==> exists z in Z, med(x, z) in S compose R, med z T w <==>(x, w) in \"右边\" $$"
+ },
+ "eqv_def/body": {
+  "src": "$X$ 上的等价关系是一个关系 $~ med subset X^2$，满足\n\n(1) 自反性：$forall x in X, med x ~ x$；\n\n(2) 对称性：$forall x, y in X, med x ~ y => y ~ x$；\n\n(3) 传递性：$forall x, y, z in X, med(x ~ y, med y ~ z) => x ~ z$。\n\n直观上，等价关系就是某种意义上的「同」。"
+ },
+ "ex_eqv/body": {
+  "src": "$=$；命题之间的 $<=>$；直线的 $parallel$；三角形的 $tilde.equiv$、$~$；人与人之间的「同学」「同城」。"
+ },
+ "eqv_class/body": {
+  "src": "设 $~$ 是 $X$ 上的等价关系，$x in X$。$x$（关于 $~$）的等价类为\n\n$$ macron(x) = [x] = {y in X : y ~ x} . $$\n\n由自反性，$x in [x]$。"
+ },
+ "eqv_class_eq/body": {
+  "src": "$$ [x] = [y] <==> x ~ y $$"
+ },
+ "eqv_class_eq/p0": {
+  "src": "「$=>$」设 $[x] = [y]$。因为 $x ~ x$，所以 $x in [x] = [y]$，于是 $x ~ y$。\n\n「$arrow.l.double$」设 $x ~ y$。由对称性，只需证明 $[x] subset [y]$：设 $z ~ x$，由 $x ~ y$ 及传递性，$z ~ y$。"
+ },
+ "eqv_class_disj/body": {
+  "src": "若 $x tilde.not y$，则 $[x] inter [y] = nothing$。结合上一条：任意两个等价类要么相等，要么不交。"
+ },
+ "eqv_class_disj/p0": {
+  "src": "假设 $z in [x] inter [y]$，则 $z ~ x$，$z ~ y$。由对称性 $x ~ z$，再由传递性 $x ~ y$，与 $x tilde.not y$ 矛盾。"
+ },
+ "quot_def/body": {
+  "src": "设 $~$ 是 $X$ 上的等价关系。$X$ 对 $~$ 的商集（读作「$X$ 模 $~$」）是所有等价类组成的集族：\n\n$$ X \\/ ~ = {[x] : x in X} . $$"
+ },
+ "part_def/body": {
+  "src": "设集族 ${A_i}_(i in I)$ 满足 $forall i in I, med A_i subset X$。称它构成 $X$ 的一个分拆，如果\n\n① $forall i in I, med A_i != nothing$；\n\n② $forall x in X, med exists i in I, med x in A_i$（等价地，$union.big_(i in I) A_i = X$）；\n\n③ $forall i, j in I$，$A_i = A_j$ 或 $A_i inter A_j = nothing$。"
+ },
+ "eqv_to_part/body": {
+  "src": "设 $~$ 是 $X$ 上的等价关系，则 $X \\/ ~$ 构成 $X$ 的一个分拆。"
+ },
+ "eqv_to_part/p0": {
+  "src": "① 设 $x in X$，则 $x in [x]$，故 $[x] != nothing$。② 设 $x in X$，则 $x in [x] in X \\/ ~$。③ 设 $x, y in X$：若 $x ~ y$，则 $[x] = [y]$；若 $x tilde.not y$，则 $[x] inter [y] = nothing$。"
+ },
+ "part_to_eqv/body": {
+  "src": "设 ${A_i}_(i in I)$ 是 $X$ 的一个分拆。定义 $x ~ y <==> exists i in I, med x, y in A_i$（在同一块里），则 $~$ 是 $X$ 上的等价关系。"
+ },
+ "part_to_eqv/p0": {
+  "src": "① 设 $x in X$，存在 $i$ 使 $x in A_i$，于是 $x ~ x$。② 定义关于 $x, y$ 对称。③ 设 $x ~ y$，$y ~ z$，取 $x, y in A_i$，$y, z in A_j$。由 $y in A_i inter A_j$ 知 $A_i inter A_j != nothing$，所以 $A_i = A_j$，故 $x, z in A_i$，即 $x ~ z$。"
+ },
+ "part_class/body": {
+  "src": "在上一条构造的等价关系下，若 $x in X$，$i in I$，$x in A_i$，则 $[x] = A_i$。"
+ },
+ "part_class/p0": {
+  "src": "「$subset$」若 $y in [x]$，则 $y ~ x$，存在 $j$ 使 $x, y in A_j$。由 $x in A_i inter A_j$ 知 $A_i = A_j$，故 $y in A_i$。\n\n「$supset$」若 $y in A_i$，则 $x, y in A_i$，故 $y ~ x$。"
+ },
+ "eqv_part_bij/body": {
+  "src": "$X$ 上的等价关系与 $X$ 的分拆一一对应：$~ med |-> X \\/ ~$，分拆 ${A_i} |->$「在同一块里」。这两个对应互为逆。"
+ },
+ "eqv_part_bij/p0": {
+  "src": "① 从 $~$ 出发，得到分拆 $X \\/ ~$，再得到关系 $x approx y <==> exists z in X, med x, y in [z]$。要说明 $approx$ 就是 $~$：若 $x ~ y$，则 $x, y in [x]$；若 $x, y in [z]$，则 $x ~ z$，$y ~ z$，所以 $x ~ y$。\n\n② 从分拆 ${A_i}$ 出发，得到关系 $~$，要说明 $X \\/ ~ = {A_i}_(i in I)$。「$subset$」设 $x in X$，存在 $i$ 使 $x in A_i$，由 [[part\\_class]] 知 $[x] = A_i$。「$supset$」设 $i in I$，由 $A_i != nothing$ 取 $x in A_i$，则 $A_i = [x] in X \\/ ~$。"
+ },
+ "eqv_cap/body": {
+  "src": "设 ${~_i}_(i in I)$ 是一族 $X$ 上的等价关系，则 $inter.big_(i in I) ~_i$ 也是 $X$ 上的等价关系。"
+ },
+ "eqv_cap/p0": {
+  "src": "令 $~ = inter.big_(i in I) ~_i$。① 设 $x in X$，对每个 $i$，$(x, x) in ~_i$，故 $x ~ x$。② 设 $x ~ y$，对每个 $i$，$(x, y) in ~_i$，于是 $(y, x) in ~_i$，故 $y ~ x$。③ 设 $x ~ y$，$y ~ z$，对每个 $i$，$(x, y), (y, z) in ~_i$，于是 $(x, z) in ~_i$，故 $x ~ z$。"
+ },
+ "po_def/body": {
+  "src": "$X$ 上的偏序是一个关系 $<= med subset X times X$，满足\n\n① 自反性：$forall x in X, med x <= x$；\n\n② 反对称性：$forall x, y in X, med(x <= y, med y <= x) => x = y$；\n\n③ 传递性：$forall x, y, z in X, med(x <= y, med y <= z) => x <= z$。\n\n若还满足 ④ 完全性：$forall x, y in X$，$x <= y$ 或 $y <= x$，则称为全序（任意两个元素都可以比大小）。此时称 $(X, <=)$ 为偏序集（全序集）。"
+ },
+ "ex_po/body": {
+  "src": "$RR$ 上的 $<=$ 是全序；集族上的 $subset$ 是偏序，但一般不是全序：${1, 2} subset.not {1, 3}$，${1, 3} subset.not {1, 2}$。"
+ },
+ "ub_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集，$A subset X$。称 $M in X$ 是 $A$ 的一个上界（下界），如果 $forall a in A, med a <= M$（$a >= M$）。\n\n例如在 $(RR, <=)$ 中，$[1, 2]$ 有上界（$2$ 就是一个上界），$NN$ 没有上界。"
+ },
+ "ex_ub_12/body": {
+  "src": "① 在 $((1, 2), <=)$ 中，$(1, 2)$ 没有上界。② 在 $(RR, <=)$ 中，$(1, 2)$ 有上界。"
+ },
+ "ex_ub_12/p0": {
+  "src": "① 用反证法，设 $M$ 是 $(1, 2)$ 在 $(1, 2)$ 中的一个上界，则 $1 < M < 2$。于是 $(M + 2)/2 in(1, 2)$，且 $M < (M + 2)/2$，但上界要求 $M >= (M + 2)/2$，矛盾。\n\n② $2 in RR$ 就是 $(1, 2)$ 的一个上界。"
+ },
+ "max_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集。称 $M in X$ 是 $X$ 的最大元（最小元），如果 $forall x in X, med x <= M$（$M <= x$）。若存在，记为 $max X$（$min X$）。"
+ },
+ "ex_max/body": {
+  "src": "$((1, 2), <=)$ 没有最大元；$((1, 2], <=)$ 有最大元 $2$；$({nothing, {1}, {2}}, subset)$ 没有最大元；$({nothing, {1}, {2}, {1, 2, 3}}, subset)$ 有最大元 ${1, 2, 3}$。"
+ },
+ "max_uniq/body": {
+  "src": "偏序集的最大元（最小元）若存在，则唯一。"
+ },
+ "max_uniq/p0": {
+  "src": "设 $M_1 , M_2$ 都是 $X$ 的最大元。由 $M_1$ 是最大元，$M_1 >= M_2$；由 $M_2$ 是最大元，$M_2 >= M_1$。由反对称性，$M_1 = M_2$。"
+ },
+ "maximal_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集。称 $M in X$ 是一个极大元（极小元），如果\n\n$$ forall x in X, med x >= M => x = M wide(x <= M => x = M), $$\n\n即 $X$ 中没有比 $M$ 更大（更小）的元素。\n\n例如在 $({nothing, {1}, {2}}, subset)$ 中，${1}$ 和 ${2}$ 都是极大元，但没有最大元。"
+ },
+ "max_is_maximal/body": {
+  "src": "若 $M$ 是偏序集 $(X, <=)$ 的最大元，则 $M$ 是极大元。"
+ },
+ "max_is_maximal/p0": {
+  "src": "设 $x in X$ 且 $x >= M$，要证 $x = M$。由 $M$ 是最大元，$M >= x$。由反对称性，$x = M$。"
+ },
+ "two_maximal/body": {
+  "src": "若 $(X, <=)$ 有两个不同的极大元，则 $(X, <=)$ 一定没有最大元。"
+ },
+ "two_maximal/p0": {
+  "src": "设 $M_1 , M_2$ 是两个不同的极大元。用反证法，假设 $M$ 是 $X$ 的最大元，则 $M >= M_1$，$M >= M_2$。由于 $M_1 != M_2$，不妨设 $M != M_1$，这与 $M_1$ 是极大元矛盾。"
+ },
+ "ex_n_nomax/body": {
+  "src": "证明 $(NN, <=)$ 没有极大元。"
+ },
+ "ex_n_nomax/p0": {
+  "src": "若 $x in NN$，则 $x + 1 > x$，所以 $x$ 不是极大元。"
+ },
+ "total_maximal/body": {
+  "src": "设 $(X, <=)$ 是全序集，$M in X$。则 $M$ 是 $X$ 的最大元 $<==>$ $M$ 是 $X$ 的一个极大元。"
+ },
+ "total_maximal/p0": {
+  "src": "「$=>$」由 [[max\\_is\\_maximal]]。\n\n「$arrow.l.double$」设 $M$ 是极大元，要证 $forall x in X, med x <= M$。设 $x in X$，由全序，$x <= M$ 或 $x >= M$。① 若 $x <= M$，结论成立；② 若 $x >= M$，由极大性 $x = M$，也成立。"
+ },
+ "exr_ub_self/body": {
+  "src": "证明：偏序集 $(X, <=)$ 本身的上界只能是 $max X$。即若 $max X$ 存在，则它是 $X$ 在 $(X, <=)$ 中唯一的上界；若 $max X$ 不存在，则 $X$ 在 $(X, <=)$ 中没有上界。"
+ },
+ "strict_def/body": {
+  "src": "在偏序集中记 $x < y <==> x <= y$ 且 $x != y$；$x > y <==> x >= y$ 且 $x != y$。"
+ },
+ "interval_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集，$a, b in X$。定义\n\n$$ [a, b] &= {x in X : a <= x <= b}, & (a, b) &= {x in X : a < x < b}, \\ [a, b) &= {x in X : a <= x < b}, & (a, b] &= {x in X : a < x <= b} . $$"
+ },
+ "interval_conv/body": {
+  "src": "设 $(X, <=)$ 是偏序集，$a, b in X$，$I = [a, b]$。则 $I$ 满足介值性质：若 $x, y in I$，则 $forall z in X, med x <= z <= y => z in I$。"
+ },
+ "interval_conv/p0": {
+  "src": "设 $a <= x, y <= b$，再设 $x <= z <= y$。于是 $a <= x <= z <= y <= b$，由传递性 $a <= z <= b$，即 $z in I$。"
+ },
+ "ray_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集，$a, b in X$。定义\n\n$$ (- oo, b) &= {x in X : x < b}, & (- oo, b] &= {x in X : x <= b}, \\ (a, + oo) &= {x in X : x > a}, & [a, + oo) &= {x in X : x >= a}, $$\n\n以及 $(- oo, + oo) = X$。"
+ },
+ "map_def/body": {
+  "src": "称 $f : X -> Y$ 是一个映射，如果 $f subset X times Y$ 满足 $forall x in X, med exists! thin y in Y, med(x, y) in f$。记 $y = f(x)$。\n\n称 $X = op(\"dom\")(f)$ 为定义域，$Y = op(\"codom\")(f)$ 为陪域，$op(\"range\")(f) = {f(x) : x in X}$ 为值域。显然 $op(\"range\")(f) subset Y$。"
+ },
+ "surj_def/body": {
+  "src": "称 $f : X -> Y$ 是满射，如果 $op(\"range\")(f) = Y$，即 $forall y in Y, med exists x in X, med y = f(x)$。"
+ },
+ "inj_def/body": {
+  "src": "称 $f : X -> Y$ 是单射，如果 $forall x_1 , x_2 in X, med x_1 != x_2 => f(x_1) != f(x_2)$，等价地（逆否），$f(x_1) = f(x_2) => x_1 = x_2$。"
+ },
+ "bij_def/body": {
+  "src": "称 $f : X -> Y$ 是双射，如果 $f$ 既是满射又是单射。"
+ },
+ "bij_unique/body": {
+  "src": "$f : X -> Y$ 是双射 $<==> forall y in Y, med exists! thin x in X, med y = f(x)$。此时记这个 $x$ 为 $f^(-1) (y)$。"
+ },
+ "bij_unique/p0": {
+  "src": "「$=>$」设 $y in Y$。由满射，存在 $x$ 使 $y = f(x)$。若 $x_1 , x_2$ 都满足 $y = f(x_1) = f(x_2)$，由单射 $x_1 = x_2$。\n\n「$arrow.l.double$」满射显然。设 $f(x_1) = f(x_2)$，令 $y = f(x_1) = f(x_2)$，由唯一性 $x_1 = x_2$，故为单射。"
+ },
+ "id_def/body": {
+  "src": "$upright(\"id\")_X : X -> X$，$upright(\"id\")_X (x) = x$。"
+ },
+ "incl_def/body": {
+  "src": "设 $X subset Y$，定义包含映射 $i : X arrow.r.hook Y$，$i(x) = x$。"
+ },
+ "comp_def/body": {
+  "src": "设 $f : X -> Y$，$g : Y -> Z$。$g compose f : X -> Z$，$(g compose f)(x) = g(f(x))$。"
+ },
+ "comp_assoc/body": {
+  "src": "设 $X limits(-->)^f Y limits(-->)^g Z limits(-->)^h W$，则 $h compose (g compose f) = (h compose g) compose f$。"
+ },
+ "comp_assoc/p0": {
+  "src": "对 $x in X$，两边在 $x$ 处的值都是 $h(g(f(x)))$。"
+ },
+ "comp_assoc/p1": {
+  "src": "映射的复合就是关系的复合，直接由 [[rel\\_assoc]] 得到。"
+ },
+ "ex_comp_noncomm/body": {
+  "src": "举例说明复合一般不交换。"
+ },
+ "ex_comp_noncomm/p0": {
+  "src": "取 $f, g : RR -> RR$，$f(x) = x + 1$，$g(x) = x^2$。则 $(g compose f)(0) = 1$，$(f compose g)(0) = 1$；但 $(g compose f)(1) = 4$，$(f compose g)(1) = 2$。"
+ },
+ "img_def/body": {
+  "src": "设 $f : X -> Y$，$A subset X$。称 $f(A) = {f(x) : x in A}$ 为 $A$ 在 $f$ 下的像。"
+ },
+ "preimg_def/body": {
+  "src": "设 $f : X -> Y$，$B subset Y$。称 $f^(-1) (B) = {x in X : f(x) in B}$ 为 $B$ 在 $f$ 下的原像。注意 $f$ 不必可逆。"
+ },
+ "img_mono/body": {
+  "src": "设 $f : X -> Y$。① 若 $A_1 subset A_2 subset X$，则 $f(A_1) subset f(A_2)$；② 若 $B_1 subset B_2 subset Y$，则 $f^(-1) (B_1) subset f^(-1) (B_2)$；③ $op(\"range\")(f) = f(X)$，若 $A subset X$，则 $f(A) subset op(\"range\")(f)$。"
+ },
+ "img_mono/p0": {
+  "src": "①：设 $x in A_1$，则 $x in A_2$，$f(x) in f(A_2)$。②：设 $x in f^(-1) (B_1)$，则 $f(x) in B_1 subset B_2$，故 $x in f^(-1) (B_2)$。③ 由定义直接得到。"
+ },
+ "preimg_range/body": {
+  "src": "$$ f^(-1) (B) = f^(-1) (B inter op(\"range\")(f)) $$"
+ },
+ "preimg_range/p0": {
+  "src": "「$supset$」由单调性。「$subset$」设 $x in f^(-1) (B)$，则 $f(x) in B$，显然 $f(x) in op(\"range\")(f)$，故 $f(x) in B inter op(\"range\")(f)$。"
+ },
+ "img_adj/body": {
+  "src": "若 $A subset X$，$B subset Y$，则 $A subset f^(-1) (B) <==> f(A) subset B$。"
+ },
+ "img_adj/p0": {
+  "src": "$$ A subset f^(-1) (B) <==> forall a in A, med a in f^(-1) (B) <==> forall a in A, med f(a) in B <==> f(A) subset B $$"
+ },
+ "A_in_ffA/body": {
+  "src": "若 $A subset X$，则 $A subset f^(-1) (f(A))$。一般来说「$supset$」不成立。"
+ },
+ "A_in_ffA/p0": {
+  "src": "由 [[img\\_adj]]，只需证明 $f(A) subset f(A)$，显然。"
+ },
+ "ffB_in_B/body": {
+  "src": "若 $B subset Y$，则 $f(f^(-1) (B)) subset B$。一般来说「$supset$」不成立。"
+ },
+ "ffB_in_B/p0": {
+  "src": "由 [[img\\_adj]]，只需证明 $f^(-1) (B) subset f^(-1) (B)$，显然。"
+ },
+ "ffB_eq/body": {
+  "src": "若 $B subset Y$，则 $f(f^(-1) (B)) = B inter op(\"range\")(f)$。因此 $f(f^(-1) (B)) = B <==> B subset op(\"range\")(f)$；若 $f$ 是满射，则 $f(f^(-1) (B)) = B$ 恒成立。"
+ },
+ "ffB_eq/p0": {
+  "src": "「$subset$」由 [[ffB\\_in\\_B]]，$f(f^(-1) (B)) subset B$；显然 $f(f^(-1) (B)) subset op(\"range\")(f)$。\n\n「$supset$」设 $y in B inter op(\"range\")(f)$，设 $y = f(x)$，$x in X$。则 $x in f^(-1) (B)$，故 $y in f(f^(-1) (B))$。"
+ },
+ "ffA_eq/body": {
+  "src": "在 $X$ 上定义等价关系 $x ~ y <==> f(x) = f(y)$。则对 $A subset X$，\n\n$$ f^(-1) (f(A)) = union.big_(a in A) [a] supset A . $$\n\n因此 $f^(-1) (f(A)) = A <==> forall a in A, med [a] subset A <==> forall a in A, med forall x in X, med(f(x) = f(a) => x in A)$。若 $f$ 是单射，则每个 $[x] = {x}$，于是对所有 $A subset X$ 有 $f^(-1) (f(A)) = A$。"
+ },
+ "ffA_eq/p0": {
+  "src": "$$ f^(-1) (f(A)) &= {x in X : f(x) in f(A)} = {x in X : exists a in A, med f(x) = f(a)} \\ &= {x in X : exists a in A, med x ~ a} = union.big_(a in A) [a] $$\n\n（容易验证 $~$ 是等价关系。）"
+ },
+ "bij_subsets/body": {
+  "src": "若 $f$ 是双射，则 $forall A subset X, med f^(-1) (f(A)) = A$（来自单射），$forall B subset Y, med f(f^(-1) (B)) = B$（来自满射）。这说明双射不仅是点和点的一一对应，也是子集和子集的一一对应。"
+ },
+ "bij_subsets/p0": {
+  "src": "由 [[ffA\\_eq]] 和 [[ffB\\_eq]] 直接得到。"
+ },
+ "comp_img/body": {
+  "src": "设 $X limits(-->)^f Y limits(-->)^g Z$。若 $A subset X$，则 $(g compose f)(A) = g(f(A))$；若 $C subset Z$，则 $(g compose f)^(-1) (C) = f^(-1) (g^(-1) (C))$（注意次序）。"
+ },
+ "comp_img/p0": {
+  "src": "$$ (g compose f)(A) = {g(f(a)) : a in A} = {g(b) : b in f(A)} = g(f(A)) $$\n$$ x in(g compose f)^(-1) (C) <==> g(f(x)) in C <==> f(x) in g^(-1) (C) <==> x in f^(-1) (g^(-1) (C)) $$"
+ },
+ "img_union/body": {
+  "src": "$$ f(union.big_(i in I) A_i) = union.big_(i in I) f(A_i) $$"
+ },
+ "img_union/p0": {
+  "src": "$$ y in \"左边\" <==> exists x in union.big A_i , med y = f(x) <==> exists i in I, med exists x in A_i , med y = f(x) <==> exists i in I, med y in f(A_i) $$"
+ },
+ "img_cap/body": {
+  "src": "$$ f(inter.big_(i in I) A_i) subset inter.big_(i in I) f(A_i) $$\n\n一般来说「$supset$」不成立。"
+ },
+ "img_cap/p0": {
+  "src": "设 $i in I$，由单调性 $f(inter.big A_i) subset f(A_i)$，再用 [[arb\\_sub]]。"
+ },
+ "preimg_union/body": {
+  "src": "$$ f^(-1) (union.big_(j in J) B_j) = union.big_(j in J) f^(-1) (B_j) $$"
+ },
+ "preimg_union/p0": {
+  "src": "$$ x in \"左边\" <==> f(x) in union.big B_j <==> exists j, med f(x) in B_j <==> exists j, med x in f^(-1) (B_j) $$"
+ },
+ "preimg_cap/body": {
+  "src": "$$ f^(-1) (inter.big_(j in J) B_j) = inter.big_(j in J) f^(-1) (B_j), wide f^(-1) (B^c) = f^(-1) (B)^c $$\n\n原像和交、并、补都能交换，像只和并能交换。"
+ },
+ "preimg_cap/p0": {
+  "src": "$$ x in f^(-1) (inter.big B_j) <==> forall j, med f(x) in B_j <==> forall j, med x in f^(-1) (B_j) $$\n$$ x in f^(-1) (B^c) <==> f(x) in.not B <==> x in.not f^(-1) (B) $$"
+ },
+ "preimg_comp/body": {
+  "src": "| | $union.big$ | $inter.big$ | $\\ ^c$ |\n| --- | --- | --- | --- |\n| $f(dot)$ | $=$ | $subset$ | 无 |\n| $f^(-1)(dot)$ | $=$ | $=$ | $=$ |"
+ },
+ "restr_def/body": {
+  "src": "若 $f : X -> Y$，$A subset X$，称 $f |_A : A -> Y$，$f |_A (a) = f(a)$ 为 $f$ 在 $A$ 上的限制。注意 $f |_A = f compose i$，其中 $i : A arrow.r.hook X$ 是包含映射：两者都是 $A -> Y$，且对 $a in A$，$(f compose i)(a) = f(i(a)) = f(a)$。"
+ },
+ "ext_def/body": {
+  "src": "设 $f : X -> Y$，$X subset tilde(X)$，$Y subset tilde(Y)$。称 $tilde(f) : tilde(X) -> tilde(Y)$ 是 $f$ 的一个扩张，如果 $forall x in X, med tilde(f) (x) = f(x)$。限制是唯一的，扩张一般不唯一。"
+ },
+ "restr_restr/body": {
+  "src": "若 $A subset B subset X$，则 $(f |_B) |_A = f |_A$。"
+ },
+ "restr_restr/p0": {
+  "src": "$$ (f |_B) |_A = (f compose i_(B, X)) compose i_(A, B) = f compose (i_(B, X) compose i_(A, B)) = f compose i_(A, X) = f |_A $$"
+ },
+ "russell/body": {
+  "src": "设 $A = {x : x in.not x}$。问 $A in A$ 吗？若 $A in A$，则 $A in.not A$；若 $A in.not A$，则 $A in A$。\n\n结论：$A$ 不能是一个集合，不能随意用描述来定义集合。另外，集合不应该属于自己。因此，所有集合的整体不是一个集合。"
+ },
+ "welldef/body": {
+  "src": "设 $f : X -> Y$，$~$ 是 $X$ 上的等价关系。想定义 $tilde(f) : X \\/ ~ -> Y$，$tilde(f) ([x]) = f(x)$。它是良定义的（值不依赖于代表元的选取），当且仅当\n\n$$ forall x_1 , x_2 in X, med x_1 ~ x_2 => f(x_1) = f(x_2) . $$"
+ },
+ "comp_surjinj/body": {
+  "src": "设 $X limits(-->)^f Y limits(-->)^g Z$。① 若 $f, g$ 是满射，则 $g compose f$ 是满射；② 若 $f, g$ 是单射，则 $g compose f$ 是单射；③ 若 $f, g$ 是双射，则 $g compose f$ 是双射；④ 若 $g compose f$ 是单射，则 $f$ 是单射；⑤ 若 $g compose f$ 是满射，则 $g$ 是满射。"
+ },
+ "comp_surjinj/p0": {
+  "src": "①：设 $z in Z$，设 $z = g(y)$，$y in Y$；再设 $y = f(x)$，$x in X$，则 $z = (g compose f)(x)$。\n\n②：设 $(g compose f)(x_1) = (g compose f)(x_2)$，即 $g(f(x_1)) = g(f(x_2))$。由 $g$ 单，$f(x_1) = f(x_2)$；由 $f$ 单，$x_1 = x_2$。③ 由 ①②。\n\n④：设 $f(x_1) = f(x_2)$，则 $g(f(x_1)) = g(f(x_2))$，于是 $x_1 = x_2$。⑤：设 $z in Z$，设 $z = (g compose f)(x)$，则 $z = g(f(x))$，$f(x) in Y$。"
+ },
+ "inj_cancel/body": {
+  "src": "设 $f_1 , f_2 : X -> Y$，$g : Y -> Z$ 是单射。若 $g compose f_1 = g compose f_2$，则 $f_1 = f_2$。"
+ },
+ "inj_cancel/p0": {
+  "src": "设 $x in X$，有 $g(f_1 (x)) = g(f_2 (x))$，由单射 $f_1 (x) = f_2 (x)$。"
+ },
+ "surj_cancel/body": {
+  "src": "设 $f : X -> Y$ 是满射，$g_1 , g_2 : Y -> Z$。若 $g_1 compose f = g_2 compose f$，则 $g_1 = g_2$。"
+ },
+ "surj_cancel/p0": {
+  "src": "设 $y in Y$。由满射，设 $y = f(x)$，则 $g_1 (f(x)) = g_2 (f(x))$，即 $g_1 (y) = g_2 (y)$。"
+ },
+ "factor/body": {
+  "src": "任意 $f : X -> Y$ 可以写成 $X limits(-->)^g f(X) limits(-->)^i Y$，其中 $g(x) = f(x)$ 是满射，$i$ 是包含映射（单射）。"
+ },
+ "factor/p0": {
+  "src": "$op(\"range\")(g) = op(\"range\")(f) = f(X)$，故 $g$ 是满射；包含映射显然是单射；且 $(i compose g)(x) = f(x)$。"
+ },
+ "inj_leftinv/body": {
+  "src": "设 $f : X -> Y$，$X != nothing$。则 $f$ 是单射 $<==> exists g : Y -> X, med g compose f = upright(\"id\")_X$（称 $g$ 为 $f$ 的左逆）。"
+ },
+ "inj_leftinv/p0": {
+  "src": "「$arrow.l.double$」$g compose f = upright(\"id\")_X$ 是双射，所以是单射，由 [[comp\\_surjinj]] ④，$f$ 是单射。\n\n「$=>$」定义 $g : Y -> X$：若 $y in op(\"range\")(f)$，存在唯一 $x$ 使 $y = f(x)$，令 $g(y) = x$；若 $y in.not op(\"range\")(f)$，任取 $x_0 in X$，令 $g(y) = x_0$。于是 $g(f(x)) = x$，即 $g compose f = upright(\"id\")_X$。"
+ },
+ "choice/body": {
+  "src": "设 $cal(A)$ 是一个由非空集合构成的非空集族，则存在选择函数 $f : cal(A) -> union.big_(A in cal(A)) A$，满足 $forall A in cal(A) , med f(A) in A$。"
+ },
+ "choice/p0": {
+  "src": "设 $cal(A)$ 由非空集合组成。由良序定理，$union.big_(A in cal(A)) A$ 上存在良序 $<=$。令 $f(A) = min A$ 即得选择函数。"
+ },
+ "surj_rightinv/body": {
+  "src": "设 $f : X -> Y$，$X, Y != nothing$。则 $f$ 是满射 $<==> exists g : Y -> X, med f compose g = upright(\"id\")_Y$（称 $g$ 为 $f$ 的右逆）。「$=>$」依赖选择公理。"
+ },
+ "surj_rightinv/p0": {
+  "src": "「$arrow.l.double$」$f compose g = upright(\"id\")_Y$ 是满射，由 [[comp\\_surjinj]] ⑤，$f$ 是满射。\n\n「$=>$」令 $cal(A) = {f^(-1) ({y}) : y in Y}$。由 $f$ 满射，每个 $f^(-1) ({y}) != nothing$。由选择公理，存在 $h : cal(A) -> X$ 满足 $h(f^(-1) ({y})) in f^(-1) ({y})$。令 $g(y) = h(f^(-1) ({y}))$，则 $f(g(y)) = y$，即 $f compose g = upright(\"id\")_Y$。"
+ },
+ "exr_bij_inv/body": {
+  "src": "设 $X, Y != nothing$。证明 $f : X -> Y$ 是双射 $<==>$ $f$ 同时存在左逆和右逆。"
+ },
+ "card_le/body": {
+  "src": "设 $X, Y != nothing$。则存在单射 $f : X -> Y$ $<==>$ 存在满射 $g : Y -> X$（依赖选择公理）。\n\n记 $| X | <= | Y | <==>$ 存在单射 $X -> Y$；$| Y | >= | X | <==>$ 存在满射 $Y -> X$。这条定理说明两种记号一致。"
+ },
+ "card_le/p0": {
+  "src": "「$=>$」设 $f$ 单，存在 $g$ 使 $g compose f = upright(\"id\")_X$，由 [[comp\\_surjinj]] ⑤，$g$ 是满射。\n\n「$arrow.l.double$」设 $g$ 满，由 [[surj\\_rightinv]] 存在 $f$ 使 $g compose f = upright(\"id\")_X$，由 [[comp\\_surjinj]] ④，$f$ 是单射。"
+ },
+ "bij_inv/body": {
+  "src": "$f : X -> Y$ 是双射 $<==>$ $f$ 可逆，即 $exists g : Y -> X$，$g compose f = upright(\"id\")_X$，$f compose g = upright(\"id\")_Y$。此时 $g$ 唯一，称为 $f$ 的逆映射，记作 $f^(-1)$；$y = f(x) <==> x = f^(-1) (y)$。"
+ },
+ "bij_inv/p0": {
+  "src": "「$arrow.l.double$」$f$ 有左逆和右逆，由 [[comp\\_surjinj]] ④⑤ 得单且满。\n\n「$=>$」存在 $g, h$ 使 $g compose f = upright(\"id\")_X$，$f compose h = upright(\"id\")_Y$，于是 $g = g compose upright(\"id\")_Y = g compose f compose h = upright(\"id\")_X compose h = h$。唯一性同理。"
+ },
+ "bij_inv/p1": {
+  "src": "「$=>$」由 [[bij\\_unique]]，对每个 $y$ 有唯一 $x$ 使 $y = f(x)$，令 $g(y) = x$，直接验证两个等式。「$arrow.l.double$」同上。"
+ },
+ "inv_comp/body": {
+  "src": "若 $f : X -> Y$，$g : Y -> Z$ 是双射，则 $(g compose f)^(-1) = f^(-1) compose g^(-1)$。"
+ },
+ "inv_comp/p0": {
+  "src": "设 $x in X$，$y = f(x)$，$z = g(y)$，则 $(g compose f)^(-1) (z) = x$，而 $(f^(-1) compose g^(-1))(z) = f^(-1) (g^(-1) (z)) = f^(-1) (y) = x$。"
+ },
+ "csb/body": {
+  "src": "若存在单射 $f : A -> B$ 和单射 $g : B -> A$，则存在双射 $h : A -> B$。"
+ },
+ "csb/p0": {
+  "src": "不妨设 $A subset B$，$f = i : A arrow.r.hook B$（否则把 $A$ 换成 $f(A)$）。由 $g : B -> A$ 知 $g(B) subset A$，于是\n\n$$ B supset A supset g(B) supset g(A) supset g(g(B)) supset dots.c $$\n\n令 $B_0 = B$，$A_0 = A$，$B_n = g^n (B)$，$A_n = g^n (A)$，则 $B_0 supset A_0 supset B_1 supset A_1 supset dots.c$。由 $g$ 单射，$g$ 把 $B_n without A_n$ 双射地映到 $B_(n + 1) without A_(n + 1)$。\n\n定义 $h : A -> B$：在每一块 $A_n without B_(n + 1)$ 上令 $h$ 为恒等；在每一块 $B_(n + 1) without A_(n + 1)$ 上令 $h = g^(-1)$（映到 $B_n without A_n$）；在 $inter.big_n A_n$ 上令 $h$ 为恒等。$A$ 被这些块分拆，$B$ 被它们的像分拆，所以 $h$ 是双射。"
+ },
+ "prod_formal/body": {
+  "src": "设 ${A_i}_(i in I)$ 是集族，$I != nothing$。\n\n$$ product_(i in I) A_i = {(x_i)_(i in I) : forall i in I, med x_i in A_i} = {x : I -> union.big_(i in I) A_i med : med forall i in I, med x(i) in A_i} . $$"
+ },
+ "proj_def/body": {
+  "src": "设 $j in I$。第 $j$ 个投影映射 $pi_j : product_(i in I) A_i -> A_j$，$pi_j (x) = x(j)$，或写成 $pi_j ((x_i)_(i in I)) = x_j$。知道所有 $pi_j (x)$ 就知道了 $x = (pi_i (x))_(i in I)$。"
+ },
+ "ex_rn/body": {
+  "src": "$$ RR^n = {(x_1 , ..., x_n) : forall i, med x_i in RR} = {x : {1, ..., n} -> RR} $$\n$$ RR^oo = RR^omega = product_(n = 1)^oo RR = {(x_1 , x_2 , ...) : forall n in NN^* , med x_n in RR} = {x : NN^* -> RR} $$\n\n后者就是实数列的全体。"
+ },
+ "pow_def/body": {
+  "src": "$$ A^B = product_(b in B) A = {f : B -> A} wide(B != nothing) $$\n\n因此从 $X$ 到 $Y$ 的全体映射构成 $Y^X$，映射都可以看成笛卡尔积中的元素。"
+ },
+ "prod_cap_swap/body": {
+  "src": "$$ product_(i in I) inter.big_(j in J) A_(i j) = inter.big_(j in J) product_(i in I) A_(i j) $$"
+ },
+ "prod_cap_swap/p0": {
+  "src": "$$ x in \"左边\" & <==> forall i in I, med x(i) in inter.big_j A_(i j) <==> forall i, med forall j, med x(i) in A_(i j) \\ & <==> forall j, med forall i, med x(i) in A_(i j) <==> forall j, med x in product_i A_(i j) <==> x in \"右边\" $$"
+ },
+ "gen_dist/body": {
+  "src": "$$ union.big_(i in I) inter.big_(j in J_i) A_(i j) = inter.big_(f in product_(i in I) J_i) union.big_(i in I) A_(i f(i)) , wide inter.big_(i in I) union.big_(j in J_i) A_(i j) = union.big_(f in product_(i in I) J_i) inter.big_(i in I) A_(i f(i)) $$"
+ },
+ "gen_dist/p0": {
+  "src": "只证第二式。「$subset$」设 $x in$ 左边，则 $forall i in I, med exists j in J_i , med x in A_(i j)$。由选择公理，存在 $f in product_i J_i$ 使 $forall i in I, med x in A_(i f(i))$，故 $x in$ 右边。\n\n「$supset$」设 $f in product_i J_i$ 使 $forall i, med x in A_(i f(i))$。设 $i in I$，令 $j = f(i)$，于是 $x in A_(i j)$，故 $x in$ 左边。第一式取补集并用 [[arb\\_dm]] 得到。"
+ },
+ "gen_dist_cor/body": {
+  "src": "$$ union.big_(i in I) inter.big_(j in J) A_(i j) = inter.big_(f : I -> J) union.big_(i in I) A_(i f(i)) , wide inter.big_(i in I) union.big_(j in J) A_(i j) = union.big_(f : I -> J) inter.big_(i in I) A_(i f(i)) $$"
+ },
+ "gen_dist_cor/p0": {
+  "src": "在 [[gen\\_dist]] 中取所有 $J_i = J$，此时 $product_(i in I) J = J^I$。"
+ },
+ "prod_universal/body": {
+  "src": "设集合 $X$，集族 ${Y_i}_(i in I)$，映射族 ${f_i : X -> Y_i}_(i in I)$。则存在唯一映射 $f : X -> product_(i in I) Y_i$，使得 $forall j in I, med f_j = pi_j compose f$。"
+ },
+ "prod_universal/p0": {
+  "src": "唯一性：设这样的 $f$ 存在，$x in X$。对每个 $j$，$pi_j (f(x)) = f_j (x)$，因此 $f(x) = (f_i (x))_(i in I)$ 被唯一确定。\n\n存在性：定义 $f(x) = (f_i (x))_(i in I)$。设 $j in I$，$x in X$，由定义 $pi_j (f(x)) = f_j (x)$。"
+ },
+ "proj_preimg/body": {
+  "src": "设 $A_j subset X_j$，则\n\n$$ pi_j^(-1) (A_j) = product_(i in I) Y_i , wide Y_i = cases(X_i comma & i != j, A_j comma & i = j) $$\n\n例如 $A subset X$，$pi_1 : X times Y -> X$，则 $pi_1^(-1) (A) = A times Y$。"
+ },
+ "proj_preimg/p0": {
+  "src": "$$ pi_j^(-1) (A_j) = {(x_i)_(i in I) in product X_i : x_j in A_j} $$"
+ },
+ "prod_as_cap/body": {
+  "src": "设 $forall i in I, med A_i subset X_i$，则 $product_(i in I) A_i = inter.big_(i in I) pi_i^(-1) (A_i)$。例如 $A times B = pi_1^(-1) (A) inter pi_2^(-1) (B) = (A times Y) inter(X times B)$。"
+ },
+ "prod_as_cap/p0": {
+  "src": "$$ x in \"左边\" <==> forall i, med pi_i (x) = x(i) in A_i <==> forall i, med x in pi_i^(-1) (A_i) <==> x in \"右边\" $$"
+ },
+ "bracket_n/body": {
+  "src": "设 $n in NN$。定义 $[0] = nothing$；若 $n >= 1$，$[n] = {1, ..., n}$。例如 $[3] = {1, 2, 3}$。"
+ },
+ "finite_def/body": {
+  "src": "称集合 $X$ 是有限集，如果存在 $n in NN$ 和双射 $f : X -> [n]$。下一条定理说明这样的 $n$ 唯一。"
+ },
+ "fin_bij_eq/body": {
+  "src": "设 $m, n in NN$。若 $f : [m] -> [n]$ 是双射，则 $m = n$。"
+ },
+ "fin_bij_eq/p0": {
+  "src": "$n = 0, 1$ 时显然。假设命题对 $n - 1$ 成立（$n >= 1$），设 $f : [m] -> [n]$ 是双射。必要时交换两个元素，不妨设 $f(m) = n$。于是 $g : [m - 1] -> [n - 1]$，$g(x) = f(x)$ 也是双射。由归纳假设 $m - 1 = n - 1$，故 $m = n$。"
+ },
+ "exr_fin_inj/body": {
+  "src": "设 $m, n in NN$。证明：存在单射 $[m] -> [n] <==> m <= n$；存在满射 $[m] -> [n] <==> m >= n$。"
+ },
+ "card_def/body": {
+  "src": "若 $X$ 是有限集，存在唯一的 $n in NN$ 使得有双射 $f : X -> [n]$。定义 $X$ 的势（大小）为 $| X | = n$。"
+ },
+ "card_prod/body": {
+  "src": "对有限集 $A, B$，$| A times B | = | A | dot.op | B |$。P8 的乘法原理就是这一条。"
+ },
+ "card_prod/p0": {
+  "src": "设 $| A | = m$，$| B | = n$，取双射 $f : A -> [m]$，$g : B -> [n]$。令 $h(a, b) = (f(a) - 1) n + g(b) in [m n]$。由带余除法，每个 $k in [m n]$ 唯一地写成 $(i - 1) n + j$，$i in [m]$，$j in [n]$，所以 $h$ 是双射。\n\n-# 这里的证明是补充的。"
+ },
+ "countable_def/body": {
+  "src": "称 $X$ 是可数集，如果存在双射 $f : X -> NN$；称 $X$ 是至多可数集，如果存在单射 $f : X -> NN$。"
+ },
+ "atmost_iff/body": {
+  "src": "$X$ 是至多可数集 $<==> X$ 是有限集或可数集。"
+ },
+ "atmost_iff/p0": {
+  "src": "「$arrow.l.double$」若 $f : X -> [n]$ 是双射，则 $i compose f : X -> NN$ 是单射，$i : [n] arrow.r.hook NN$。可数集显然。\n\n「$=>$」设单射 $f : X -> NN$。若 $X$ 有限，结论成立。若 $X$ 无限，由 CSB 定理只需构造单射 $h : NN -> X$：任取 $h(0) in X$；$X without {h(0)}$ 无限，取 $h(1) in X without {h(0)}$；……对任意 $n$，$X without {h(0), ..., h(n - 1)}$ 无限，取 $h(n)$ 属于它。若 $m < n$，则 $h(n) != h(m)$，故 $h$ 是单射。"
+ },
+ "nxn_count/body": {
+  "src": "若 $A, B$ 至多可数，则 $A times B$ 至多可数。只需证明 $NN times NN$ 是可数集。"
+ },
+ "nxn_count/p0": {
+  "src": "按对角线 $i + j = 0, 1, 2, ...$ 依次给 $NN times NN$ 的点编号 $0, 1, 2, ...$（手稿中的蛇形路线），得到双射 $h : NN -> NN times NN$。若 $f : A -> NN$，$g : B -> NN$ 单射，则 $(a, b) |->(f(a), g(b))$ 是 $A times B -> NN times NN$ 的单射。"
+ },
+ "count_union/body": {
+  "src": "设 ${A_n}_(n in NN)$ 都是至多可数集，则 $union.big_(n in NN) A_n$ 也至多可数。"
+ },
+ "count_union/p0": {
+  "src": "对 $x in union.big A_n$，令 $g(x) = min {n in NN : x in A_n}$。由选择公理，为每个 $n$ 选定单射 $f_n : A_n -> NN$。定义 $h(x) = (g(x), f_(g(x)) (x)) in NN times NN$。\n\n若 $h(x) = h(y)$，则 $g(x) = g(y)$，$x, y in A_(g(x))$，且 $f_(g(x)) (x) = f_(g(x)) (y)$，故 $x = y$。于是 $union.big A_n limits(-->)^h NN times NN -> NN$ 是单射。"
+ },
+ "powerset_def/body": {
+  "src": "$$ cal(P) (A) = {B : B subset A} $$"
+ },
+ "cantor/body": {
+  "src": "若 $A != nothing$，则存在单射 $A -> cal(P) (A)$，但不存在双射 $A -> cal(P) (A)$。"
+ },
+ "cantor/p0": {
+  "src": "① $i(a) = {a}$ 是单射。\n\n② 用反证法，设 $f : A -> cal(P) (A)$ 是双射。令 $T = {a in A : a in.not f(a)} in cal(P) (A)$。由满射，存在 $a$ 使 $f(a) = T$。若 $a in f(a)$，则 $a in.not f(a)$；若 $a in.not f(a)$，则 $a in f(a)$。矛盾。（对比 [[russell]]。）"
+ },
+ "pow_uncount/body": {
+  "src": "若 $A$ 是可数集，则 $cal(P) (A)$ 不是可数集（也不是至多可数集）。"
+ },
+ "pow_uncount/p0": {
+  "src": "若 $cal(P) (A)$ 至多可数，由 $A arrow.r.hook cal(P) (A)$ 与 CSB 定理，$A$ 与 $cal(P) (A)$ 之间有双射，与 Cantor 定理矛盾。"
+ },
+ "nn_uncount/body": {
+  "src": "设 ${A_n}_(n in NN)$ 都是可数集，则 $product_(n in NN) A_n$ 不可数。"
+ },
+ "nn_uncount/p0": {
+  "src": "$$ | NN^NN | >= | 2^NN | = | cal(P) (NN) | > | NN | $$\n\n其中 $2^NN = {0, 1}^NN$ 与 $cal(P) (NN)$ 一一对应：子集 $A$ 对应它的指示序列。"
+ },
+ "chain_def/body": {
+  "src": "设 $(X, <=)$ 是偏序集。称 $A subset X$ 是一个链，如果 $A$ 是全序子集，即 $forall x, y in A$，$x <= y$ 或 $y <= x$。"
+ },
+ "woset_def/body": {
+  "src": "称 $X$ 上的全序 $<=$ 是良序，如果 $X$ 的每个非空子集都有最小元。例如 $(NN, <=)$ 是良序集（[[wellorder]]），$(ZZ, <=)$ 不是。"
+ },
+ "zorn/body": {
+  "src": "设 $(X, <=)$ 是偏序集。若 $X$ 中每个链都有上界，则 $X$ 必定有极大元。"
+ },
+ "zorn/p0": {
+  "src": "用反证法，假设 $X$ 没有极大元，则每个链都有严格上界。由选择公理，存在 $f : {\"链\"} -> X$，使 $f(C)$ 是 $C$ 的一个严格上界。\n\n称 $A subset X$ 是顺从集（conforming set），如果 $(A, <=)$ 是良序集，且 $forall x in A, med f(A_(< x)) = x$，其中 $A_(< x) = {y in A : y < x}$。\n\n可以证明：任意两个顺从集中，一个是另一个的前段（取最大公共前段 $I$，若 $I$ 都不等于两者，则 $min(A without I) = f(I) = min(B without I)$，$I$ 还能变大，矛盾）。于是所有顺从集的并 $tilde(A)$ 也是顺从集，且是最大的。但 $tilde(A)$ 是链，$tilde(A) union {f(tilde(A))}$ 是更大的顺从集，矛盾。\n\n-# 这个证明参考 Lewin。"
+ },
+ "zorn/p1": {
+  "src": "考虑 $X$ 中全体链构成的集族，按 $subset$ 排序。一个集合是链 $<==>$ 它的每个有限子集是链，所以这个集族是有限特征的。由 Tukey 引理存在极大链 $C_0$。设 $M$ 是 $C_0$ 的上界，则 $M$ 是 $X$ 的极大元（否则把更大的元素加入 $C_0$）。"
+ },
+ "hausdorff/body": {
+  "src": "设 $(X, <=)$ 是偏序集，$C_0 subset X$ 是一个链。则存在极大链 $C subset X$ 使 $C_0 subset C$。"
+ },
+ "hausdorff/p0": {
+  "src": "考虑 $X$ 中所有包含 $C_0$ 的链，按 $subset$ 排序。设 ${C_i}_(i in I)$ 是其中一个链，只需证明 $union.big C_i$ 是链：设 $x in C_i$，$y in C_j$，不妨设 $C_i subset C_j$，则 $x, y in C_j$，可以比大小。它就是上界，由 Zorn 引理得极大链。"
+ },
+ "tukey/body": {
+  "src": "设 $cal(F) != nothing$ 是集族，满足：$A in cal(F) <==> A$ 的每个有限子集 $F in cal(F)$（有限特征）。则 $(cal(F) , subset)$ 一定有极大元。"
+ },
+ "tukey/p0": {
+  "src": "由 Hausdorff，设 $cal(C) subset cal(F)$ 是极大链。引理：$union.big_(A in cal(C)) A in cal(F)$。设有限集 $F = {x_1 , ..., x_n} subset union.big A$，取 $x_k in A_k in cal(C)$，由于 $cal(C)$ 是链，设最大的是 $A$，则 $F subset A in cal(F)$，故 $F in cal(F)$。于是 $union.big_(A in cal(C)) A$ 是 $(cal(F) , subset)$ 的极大元。"
+ },
+ "initseg_def/body": {
+  "src": "称 $(A, <=_A)$ 是 $(B, <=_B)$ 的前段，记作 $A prec.eq B$，如果 $A subset B$；$forall x, y in A$，$x <=_A y <==> x <=_B y$；且 $forall a in A, med forall b in B without A$，$a <_B b$。"
+ },
+ "wo_thm/body": {
+  "src": "任意集合 $X$ 上都存在一个良序。"
+ },
+ "wo_thm/p0": {
+  "src": "考虑 ${(A, <=) : A subset X, med <= \" 是 \" A \" 上的良序\"}$，按前段关系 $prec.eq$ 构成偏序集。设 ${(A_i , <=_i)}$ 是链，令 $A = union.big A_i$，$x <= y <==> x <=_i y$（$x, y in A_i$），这是良定义的良序（任取 $nothing != S subset A$，$s in S inter A_i$，$m = min(S inter A_i)$ 就是 $min S$），且每个 $A_i$ 都是它的前段。\n\n由 Zorn 引理有极大的 $(Y, <=)$。若 $Y subset.neq X$，取 $x_0 in X without Y$，把 $x_0$ 放在 $Y$ 之后得到更大的良序集，矛盾。所以 $Y = X$。"
+ },
+ "ac_equiv_map/body": {
+  "src": "$$ upright(\"AC\") limits(-->)^⑥ upright(\"ZL\") limits(-->)^① upright(\"Hausdorff\") limits(-->)^② upright(\"Tukey\") limits(-->)^③ upright(\"ZL\") limits(-->)^④ upright(\"WO\") limits(-->)^⑤ upright(\"AC\") $$\n\n在平台上，每个箭头是一套证明。默认路线只用 ⑥①②④，从选择公理出发；③（Tukey ⇒ ZL）和 ⑤（WO ⇒ AC）作为「先用后证」的等价性证明挂在 Zorn 引理和选择公理下面。"
+ },
+ "field_ax/body": {
+  "src": "$(RR, + , dot.op)$ 是一个域：\n\n① $+$ 与 $dot.op$ 都满足交换律、结合律；\n\n② $exists 0 in RR, med forall a, med a + 0 = a$；$exists 1 in RR, med forall a, med a dot.op 1 = a$；\n\n③ $forall a, med exists(- a), med a + (- a) = 0$；$forall a != 0, med exists a^(-1) , med a dot.op a^(-1) = 1$；且 $1 != 0$；\n\n④ $forall a, b, c, med a(b + c) = a b + a c$。"
+ },
+ "order_ax/body": {
+  "src": "① $<=$ 是 $RR$ 上的全序：自反、反对称、传递，且任意两个数可以比大小；② $forall a, b, c, med a <= b => a + c <= b + c$；③ $forall a, b, c, med(a <= b, med c >= 0) => a c <= b c$。"
+ },
+ "complete_ax/body": {
+  "src": "称 $M$ 是 $A subset RR$ 的上界，如果 $forall a in A, med a <= M$。若 $nothing != A subset RR$ 有上界，则 $A$ 有最小的上界，称为 $A$ 的上确界，记作 $sup A$。\n\n满足域公理、序公理、完备性公理的就是完备有序域，$RR$ 定义为一个完备有序域。"
+ },
+ "inf_exists/body": {
+  "src": "若 $nothing != A subset RR$ 有下界，则 $A$ 有最大的下界，称为下确界，记作 $inf A$。"
+ },
+ "inf_exists/p0": {
+  "src": "令 $-A = {- a : a in A}$。$M$ 是 $A$ 的下界 $<==> - M$ 是 $-A$ 的上界。$-A$ 非空有上界，故 $sup(- A)$ 存在，于是 $-sup(- A)$ 是 $A$ 最大的下界。\n\n-# 手稿注明由域公理和序公理可推出，这里补充了证明。"
+ },
+ "q_ordfield/body": {
+  "src": "$(QQ, + , dot.op , <=)$ 满足域公理和序公理，是一个有序域，但不满足完备性（见下例）。"
+ },
+ "ex_q_nosup/body": {
+  "src": "$A = {x in QQ_(>= 0) : x^2 <= 2}$ 在 $QQ$ 中非空有上界，但没有最小的上界。证明见下面 Archimedes 性质之后的练习。"
+ },
+ "ex_sup12/body": {
+  "src": "$nothing !=(1, 2) subset RR$ 没有最大元，但有上确界 $sup(1, 2) = 2$。证明见「确界的性质」一节。"
+ },
+ "r_unique/body": {
+  "src": "若 $RR'$ 也满足这些公理，则 $RR tilde.equiv RR'$，即存在保持所有结构的双射 $f : RR -> RR'$。"
+ },
+ "abs_def/body": {
+  "src": "$$ | dot.op | : RR -> RR_(>= 0) , wide | x | = cases(x comma & x >= 0, -x comma & x < 0) $$"
+ },
+ "abs_max/body": {
+  "src": "$$ | x | = max(x, - x) $$"
+ },
+ "abs_max/p0": {
+  "src": "$x >= 0$ 时 $x >= - x$；$x < 0$ 时 $-x > x$。"
+ },
+ "max_le/body": {
+  "src": "$$ max(x, y) <= z <==> x <= z, med y <= z $$"
+ },
+ "max_le/p0": {
+  "src": "「$=>$」$x <= max(x, y) <= z$，同理 $y <= z$。「$arrow.l.double$」$max(x, y)$ 等于 $x$ 或 $y$。"
+ },
+ "abs_props/body": {
+  "src": "① $forall x, med | x | >= 0$，且 $| x | = 0 <==> x = 0$；② $| x y | = | x | dot.op | y |$；③ $| x + y | <= | x | + | y |$（三角不等式，见下一条）。"
+ },
+ "abs_props/p0": {
+  "src": "①：按 $x >= 0$ 与 $x < 0$ 讨论。②：按 $x, y$ 的符号分四种情形讨论。"
+ },
+ "triangle/body": {
+  "src": "$$ | x + y | <= | x | + | y | $$"
+ },
+ "triangle/p0": {
+  "src": "要证 $max(x + y, - x - y) <= max(x, - x) + max(y, - y)$。由 [[max\\_le]]，只需 ① $x + y <=$ 右边，② $-x - y <=$ 右边，两者都显然。"
+ },
+ "zero_eps/body": {
+  "src": "$$ x = 0 <==> forall epsilon > 0, med | x | <= epsilon $$"
+ },
+ "zero_eps/p0": {
+  "src": "「$=>$」显然。「$arrow.l.double$」反证，若 $x != 0$，则 $| x | > 0$，取 $epsilon = (| x |)/2 > 0$，得 $| x | <= (| x |)/2$，矛盾。"
+ },
+ "zero_eps/p1": {
+  "src": "$forall epsilon > 0, med | x | <= 0 + epsilon$，由 [[le\\_eps]]，$| x | <= 0$，又 $| x | >= 0$，故 $x = 0$。"
+ },
+ "archimedes/body": {
+  "src": "$$ forall x in RR, med exists n in NN, med n > x $$"
+ },
+ "archimedes/p0": {
+  "src": "假设 $exists x in RR, med forall n in NN, med n <= x$，即 $NN$ 有上界。设 $alpha = sup NN$。设 $n in NN$，则 $n + 1 <= alpha$，即 $n <= alpha - 1$。这说明 $alpha - 1$ 也是 $NN$ 的上界，与 $alpha = sup NN$ 矛盾。"
+ },
+ "arch_eps/body": {
+  "src": "$$ forall epsilon > 0, med exists n in NN^* , med 1/n < epsilon $$"
+ },
+ "arch_eps/p0": {
+  "src": "$1/n < epsilon <==> n > 1/epsilon$，由 Archimedes 性质存在这样的 $n$。"
+ },
+ "q_dense/body": {
+  "src": "$$ forall a < b in RR, med exists q in QQ, med a < q < b $$"
+ },
+ "q_dense/p0": {
+  "src": "取 $n in NN^*$ 使 $1/n < b - a$。由 Archimedes 性质 ${m in ZZ : m/n > a} != nothing$ 且有下界，设 $m_0$ 为其最小元。只需证 $(m_0)/n < b$。\n\n用反证法，设 $(m_0)/n >= b$，结合 $1/n < b - a$ 得 $(m_0 - 1)/n > a$，与 $m_0$ 的最小性矛盾。故 $a < (m_0)/n < b$。"
+ },
+ "irr_def/body": {
+  "src": "$$ II = RR without QQ $$"
+ },
+ "irr_dense/body": {
+  "src": "$$ forall a < b in RR, med exists x in II, med a < x < b $$"
+ },
+ "irr_dense/p0": {
+  "src": "由 $QQ$ 的稠密性，存在 $y in QQ$ 使 $a + sqrt(2) < y < b + sqrt(2)$，于是 $a < y - sqrt(2) < b$。由于 $sqrt(2) in.not QQ$（[[ex\\_sqrt2]]），$y - sqrt(2) in II$。"
+ },
+ "exr_q_sqrt2/body": {
+  "src": "证明 $A = {x in QQ_(>= 0) : x^2 < 2}$ 在 $QQ$ 中没有上确界。"
+ },
+ "exr_q_sqrt2/p0": {
+  "src": "假设 $s = sup A in QQ$，显然 $s^2 != 2$。\n\n① 若 $s^2 < 2$，取 $n > (2 s + 1)/(2 - s^2)$，则 $(s + 1/n)^2 <= s^2 + (2 s + 1)/n < 2$，于是 $s + 1/n in A$，与 $s$ 是上界矛盾。\n\n② 若 $s^2 > 2$，取 $n > (2 s)/(s^2 - 2)$，则 $(s - 1/n)^2 > s^2 - (2 s)/n > 2$，于是 $s - 1/n$ 仍是 $A$ 的上界，与 $s$ 是最小上界矛盾。"
+ },
+ "sup_uniq/body": {
+  "src": "上确界（下确界）若存在则唯一。"
+ },
+ "sup_uniq/p0": {
+  "src": "设 $s_1 , s_2$ 都是 $sup A$。$s_1$ 是最小上界而 $s_2$ 是上界，故 $s_1 <= s_2$；同理 $s_2 <= s_1$，所以 $s_1 = s_2$。"
+ },
+ "sup_max/body": {
+  "src": "设 $nothing != A subset RR$ 有上界。① 若 $sup A in A$，则 $sup A = max A$；② 若 $sup A in.not A$，则 $max A$ 不存在。"
+ },
+ "sup_max/p0": {
+  "src": "①：$sup A$ 是上界且属于 $A$。②：反证，设 $M = max A$，则 $M$ 是上界，$sup A <= M$；又 $M in A$，$M <= sup A$，故 $sup A = M in A$，矛盾。"
+ },
+ "sup_eps/body": {
+  "src": "设 $A subset RR$，$s in RR$。\n\n$$ s = sup A <==> cases(forall a in A comma med a <= s, forall epsilon > 0 comma med exists a in A comma med a > s - epsilon) $$"
+ },
+ "sup_eps/p0": {
+  "src": "「$=>$」设 $epsilon > 0$。反证，若 $forall a in A, med a <= s - epsilon$，则 $s - epsilon$ 也是上界，但 $s - epsilon < s$，矛盾。\n\n「$arrow.l.double$」反证，设 $M < s$ 也是上界。令 $epsilon = s - M > 0$，存在 $a in A$ 使 $a > s - epsilon = M$，与 $M$ 是上界矛盾。"
+ },
+ "inf_eps/body": {
+  "src": "$$ s = inf A <==> cases(forall a in A comma med s <= a, forall epsilon > 0 comma med exists a in A comma med a < s + epsilon) $$"
+ },
+ "inf_eps/p0": {
+  "src": "与 [[sup\\_eps]] 的证明对称。"
+ },
+ "le_eps/body": {
+  "src": "$$ a <= b <==> forall epsilon > 0, med a <= b + epsilon $$"
+ },
+ "le_eps/p0": {
+  "src": "「$=>$」显然。「$arrow.l.double$」反证，设 $a > b$，取 $epsilon = (a - b)/2 > 0$，则 $a > b + epsilon$，矛盾。"
+ },
+ "ex_sup12_proof/body": {
+  "src": "证明 $sup(1, 2) = 2$。"
+ },
+ "ex_sup12_proof/p0": {
+  "src": "① 设 $x in(1, 2)$，则 $x < 2$。② 设 $epsilon > 0$。若 $0 < epsilon < 2$，则 $1 < 2 - epsilon/2 < 2$，且 $2 - epsilon/2 > 2 - epsilon$；若 $epsilon >= 2$，则 $1.1 in(1, 2)$ 且 $1.1 > 1 >= 2 - epsilon$。"
+ },
+ "ex_sup_1n/body": {
+  "src": "证明 $sup {1 - 1/n : n in NN^*} = 1$。"
+ },
+ "ex_sup_1n/p0": {
+  "src": "显然 $1$ 是上界。设 $epsilon > 0$，由 [[arch\\_eps]] 存在 $n$ 使 $1/n < epsilon$，于是 $1 - 1/n > 1 - epsilon$。"
+ },
+ "sup_le_M/body": {
+  "src": "$$ sup A <= M <==> forall a in A, med a <= M $$"
+ },
+ "sup_le_M/p0": {
+  "src": "「$=>$」$a <= sup A <= M$。「$arrow.l.double$」$M$ 是上界，所以 $sup A <= M$。"
+ },
+ "sup_ops/body": {
+  "src": "$$ A + B = {a + b : a in A, med b in B}, quad A + c = {a + c : a in A}, quad c A = {c a : a in A} $$"
+ },
+ "sup_sum/body": {
+  "src": "设 $A, B$ 非空有上界，则 $sup(A + B) = sup A + sup B$。"
+ },
+ "sup_sum/p0": {
+  "src": "「$<=$」对任意 $a, b$，$a + b <= sup A + sup B$。「$>=$」设 $epsilon > 0$，存在 $a > sup A - epsilon/2$，$b > sup B - epsilon/2$，于是 $a + b > sup A + sup B - epsilon$。"
+ },
+ "sup_mono/body": {
+  "src": "若 $A subset B$（均非空有上界），则 $sup A <= sup B$。"
+ },
+ "sup_mono/p0": {
+  "src": "设 $a in A$，则 $a in B$，$a <= sup B$，再用 [[sup\\_le\\_M]]。"
+ },
+ "exr_sup_ops/body": {
+  "src": "证明 $sup(A + c) = sup A + c$；若 $c >= 0$，则 $sup(c A) = c dot.op sup A$。"
+ },
+ "c_def/body": {
+  "src": "$i^2 = - 1$，$CC = {z = a + b i : a, b in RR}$。设 $z = a + b i$，称 $op(\"Re\") z = a$ 为实部，$op(\"Im\") z = b$ 为虚部，$z = op(\"Re\") z + i op(\"Im\") z$。"
+ },
+ "c_add/body": {
+  "src": "设 $z = a + b i$，$w = c + d i$。$z plus.minus w = (a plus.minus c) + (b plus.minus d) i$，于是 $op(\"Re\")(z plus.minus w) = op(\"Re\") z plus.minus op(\"Re\") w$，虚部同理。"
+ },
+ "c_mul/body": {
+  "src": "$$ z w = (a c - b d) + (a d + b c) i $$\n\n例如 $(1 + 2 i)(3 + 4 i) = - 5 + 10 i$。"
+ },
+ "sumsq/body": {
+  "src": "$$ a^2 + b^2 = (a + b i)(a - b i) $$"
+ },
+ "sumsq/p0": {
+  "src": "$(a + b i)(a - b i) = a^2 -(b i)^2 = a^2 + b^2$。这里用到 $(CC, + , dot.op)$ 是域。"
+ },
+ "conj_def/body": {
+  "src": "$z = a + b i$ 的共轭为 $macron(z) = a - b i$。显然 $macron(macron(z)) = z$。例如 $overline(1 + 2 i) = 1 - 2 i$，$overline(3 i) = - 3 i$，$macron(5) = 5$。"
+ },
+ "conj_props/body": {
+  "src": "$$ op(\"Re\") macron(z) = op(\"Re\") z, quad op(\"Im\") macron(z) = - op(\"Im\") z, quad overline(z plus.minus w) = macron(z) plus.minus macron(w) , quad overline(z w) = macron(z) macron(w) , quad overline((z/w)) = macron(z)/macron(w) $$"
+ },
+ "conj_props/p0": {
+  "src": "写成 $z = a + b i$，$w = c + d i$ 逐项验证。以乘法为例：$overline(z w) = (a c - b d) -(a d + b c) i = (a - b i)(c - d i)$。\n\n-# 手稿中留作练习，这里补充了证明；$overline(z w) = macron(z) macron(w)$ 这一条手稿没有列出，也是补充的。"
+ },
+ "mod_def/body": {
+  "src": "$$ | z | = sqrt(a^2 + b^2) = sqrt(z macron(z)) >= 0 $$"
+ },
+ "mod_sq/body": {
+  "src": "$| z |^2 = z macron(z)$；若 $z != 0$，$macron(z) = (| z |^2)/z$。"
+ },
+ "mod_sq/p0": {
+  "src": "由 [[sumsq]]。"
+ },
+ "mod_mul/body": {
+  "src": "$$ | z w | = | z | dot.op | w | $$"
+ },
+ "mod_mul/p0": {
+  "src": "只需证 $| z w |^2 = | z |^2 | w |^2$，即 $z w overline(z w) = z macron(z) w macron(w)$，由 $overline(z w) = macron(z) macron(w)$ 得到。"
+ },
+ "c_inv/body": {
+  "src": "$$ 1/z = macron(z)/(| z |^2) = a/(a^2 + b^2) - b/(a^2 + b^2) i wide(z != 0) $$"
+ },
+ "c_inv/p0": {
+  "src": "$z dot.op macron(z)/(| z |^2) = (z macron(z))/(| z |^2) = 1$。"
+ },
+ "c_div/body": {
+  "src": "$$ z/w = z dot.op 1/w = (z macron(w))/(| w |^2) wide(w != 0) $$"
+ },
+ "c_div/p0": {
+  "src": "由 [[c\\_inv]]。"
+ },
+ "polar_def/body": {
+  "src": "设 $z = a + b i != 0$，$r = | z |$，$a = r cos theta$，$b = r sin theta$，$theta = arg z$（在相差 $2 k pi$ 的意义下唯一）。则\n\n$$ z = r(cos theta + i sin theta), $$\n\n$r$ 是长度，$theta$ 是角度。"
+ },
+ "polar_mul/body": {
+  "src": "若 $z = r(cos theta + i sin theta)$，$w = s(cos phi + i sin phi)$，则\n\n$$ z w = r s(cos(theta + phi) + i sin(theta + phi)) . $$"
+ },
+ "polar_mul/p0": {
+  "src": "$$ (cos theta + i sin theta)(cos phi + i sin phi) &= (cos theta cos phi - sin theta sin phi) + i(cos theta sin phi + sin theta cos phi) \\ &= cos(theta + phi) + i sin(theta + phi) $$"
+ },
+ "euler/body": {
+  "src": "$$ e^(i theta) = cos theta + i sin theta wide(theta in RR) $$"
+ },
+ "euler/p0": {
+  "src": "在 $CC$ 中定义 $e^z = sum_(n = 0)^oo (z^n)/(n!)$，则\n\n$$ e^(i theta) = (1 - (theta^2)/(2!) + (theta^4)/(4!) - dots.c) + i(theta - (theta^3)/(3!) + (theta^5)/(5!) - dots.c) = cos theta + i sin theta . $$\n\n-# 级数收敛与重排的严格性留到分析课。"
+ },
+ "euler_mul/body": {
+  "src": "若 $z != 0$，$z = r e^(i theta)$，且 $(r e^(i theta))(s e^(i phi)) = r s e^(i(theta + phi))$。"
+ },
+ "euler_mul/p0": {
+  "src": "由 [[euler]] 和 [[polar\\_mul]]。"
+ },
+ "roots_unity/body": {
+  "src": "设 $n in NN^*$，$z^n = 1$ 的解为\n\n$$ z = e^(i (2 k pi)/n) = cos (2 k pi)/n + i sin (2 k pi)/n , wide 0 <= k <= n - 1, $$\n\n共 $n$ 个。"
+ },
+ "roots_unity/p0": {
+  "src": "设 $z = r e^(i theta)$，则 $z^n = r^n e^(i n theta) = 1$，于是 $r^n = 1$，$n theta = 2 k pi$，故 $r = 1$，$theta = (2 k pi)/n in [0, 2 pi)$，即 $0 <= k <= n - 1$。"
+ },
+ "roots_zeta/body": {
+  "src": "设 $zeta = e^(i (2 pi)/n)$，则 $z^n = 1$ 的解集是 ${1 = zeta^0 , zeta, zeta^2 , ..., zeta^(n - 1)}$。"
+ },
+ "roots_zeta/p0": {
+  "src": "$$ e^(i (2 k pi)/n) = (e^(i (2 pi)/n))^k = zeta^k $$"
+ },
+ "quad_c/body": {
+  "src": "设 $a, b, c in RR$，$a != 0$，$a z^2 + b z + c = 0$。若 $b^2 - 4 a c >= 0$，$z = (-b plus.minus sqrt(b^2 - 4 a c))/(2 a)$；若 $b^2 - 4 a c < 0$，$z = (-b plus.minus i sqrt(4 a c - b^2))/(2 a)$。"
+ },
+ "quad_c/p0": {
+  "src": "$$ (z + b/(2 a))^2 = (b^2 - 4 a c)/(4 a^2) $$\n\n若 $b^2 - 4 a c >= 0$，直接开方。若 $b^2 - 4 a c < 0$，则 $4 a c - b^2 > 0$，$(z + b/(2 a))^2 = - (4 a c - b^2)/((2 a)^2) = (plus.minus (i sqrt(4 a c - b^2))/(2 a))^2$。"
+ },
+ "add_principle/body": {
+  "src": "若 $A, B$ 是有限集，$A inter B = nothing$，则 $| A union B | = | A | + | B |$。"
+ },
+ "add_principle/p0": {
+  "src": "设 $f : A -> [m]$，$g : B -> [n]$ 是双射。定义 $h : A union B -> [m + n]$：$a in A$ 时 $h(a) = f(a)$，$b in B$ 时 $h(b) = m + g(b)$。由 $A inter B = nothing$，$h$ 良定义且是双射。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "mul_principle/body": {
+  "src": "$$ | A times B | = | A | dot.op | B | $$"
+ },
+ "mul_principle/p0": {
+  "src": "$A times B = union.big_(a in A) {a} times B$，各块两两不交，每块有 $| B |$ 个元素。对 $| A |$ 归纳并用加法原理，得 $| A times B | = | A | dot.op | B |$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "fact_def/body": {
+  "src": "$$ k! = cases(1 comma & k = 0, k(k - 1) dots.c 1 comma & k >= 1) $$"
+ },
+ "perm_def/body": {
+  "src": "从 $n$ 个不同元素中选出 $k$ 个排成一排，方法数为\n\n$$ P_n^k = n(n - 1)(n - 2) dots.c(n - k + 1) . $$"
+ },
+ "perm_def/p0": {
+  "src": "第 1 个位置有 $n$ 种选择，第 2 个位置有 $n - 1$ 种，……，第 $k$ 个位置有 $n - k + 1$ 种，由乘法原理相乘。"
+ },
+ "binom_def/body": {
+  "src": "设 $| A | = n$。\n\n$$ binom(n, k) = C_n^k = | {B subset A : | B | = k} | = (P_n^k)/(k!) = (n!)/(k!(n - k)!) . $$"
+ },
+ "binom_def/p0": {
+  "src": "先选出 $k$ 个元素的子集，再把它们排成一排，共 $binom(n, k) dot.op k!$ 种，这正是 $P_n^k$。"
+ },
+ "ex_binom_sym/body": {
+  "src": "证明 $binom(n, k) = binom(n, n - k)$。"
+ },
+ "ex_binom_sym/p0": {
+  "src": "两边都等于 $(n!)/(k!(n - k)!)$。"
+ },
+ "ex_binom_sym/p1": {
+  "src": "设 $| A | = n$。${B subset A : | B | = k} -> {C subset A : | C | = n - k}$，$B |-> B^c$ 是双射，逆映射是 $C |-> C^c$。\n\n这种完全不依靠代数的证明称为组合证明，往往就是构造双射。"
+ },
+ "count_maps/body": {
+  "src": "设 $| A | = m$，$| B | = n$。① $| {f : A -> B} | = n^m$；② 设 $m <= n$，$| {f : A -> B \" 单射\"} | = P_n^m$；③ 设 $m = n$，$| {f : A -> B \" 双射\"} | = n!$。"
+ },
+ "count_maps/p0": {
+  "src": "①：每个 $a in A$ 的像 $f(a)$ 有 $n$ 种选择。②：设 $A = {a_1 , ..., a_m}$，$f(a_1), ..., f(a_m)$ 两两不同，就是排列。③：$m = n$ 时单射即双射，$P_n^n = n!$。"
+ },
+ "stars_bars/body": {
+  "src": "方程 $x_1 + dots.c + x_k = n$，$x_1 , ..., x_k >= 0$ 的整数解个数为 $binom(n + k - 1, n) = binom(n + k - 1, k - 1)$。（把 $n$ 枚硬币分给 $k$ 个人的方法数。）"
+ },
+ "stars_bars/p0": {
+  "src": "把 $n$ 枚硬币排成一排，放入 $k - 1$ 块挡板，共 $n + k - 1$ 个位置。选出 $n$ 个位置放硬币，其余放挡板；第 $i$ 段的硬币数就是 $x_i$。"
+ },
+ "ex_stars_pos/body": {
+  "src": "求 $x_1 + dots.c + x_k = n$，$x_1 , ..., x_k >= 1$ 的整数解个数。"
+ },
+ "ex_stars_pos/p0": {
+  "src": "令 $y_i = x_i - 1 >= 0$，则 $y_1 + dots.c + y_k = n - k$。答案 $binom((n - k) + k - 1, k - 1) = binom(n - 1, k - 1)$。"
+ },
+ "ex_stars_pos/p1": {
+  "src": "$n$ 枚硬币之间有 $n - 1$ 个空位，选出 $k - 1$ 个放挡板：$binom(n - 1, k - 1)$。"
+ },
+ "ex_lattice/body": {
+  "src": "每次只能向右或向上走一格，从 $(0, 0)$ 到 $(m, n)$ 有多少条不同的路径？"
+ },
+ "ex_lattice/p0": {
+  "src": "共走 $m + n$ 步，其中 $m$ 步向右、$n$ 步向上。答案 $binom(m + n, n) = binom(m + n, m)$。"
+ },
+ "multinom_coef/body": {
+  "src": "设 $| A | = n$，把 $A$ 分成两两不交的 $A_1 , ..., A_k$，$| A_i | = n_i$，$n_1 + dots.c + n_k = n$。方法数为\n\n$$ binom(n, n_1 comma ... comma n_k) = (n!)/(n_1 ! dots.c n_k !) . $$\n\n特别地，$binom(n, k) = binom(n, k comma thin n - k)$。"
+ },
+ "multinom_coef/p0": {
+  "src": "$$ binom(n, n_1) binom(n - n_1, n_2) dots.c binom(n - n_1 - dots.c - n_(k - 1), n_k) = (n!)/(n_1 !(n - n_1)!) dot.op ((n - n_1)!)/(n_2 !(n - n_1 - n_2)!) dots.c = (n!)/(n_1 ! dots.c n_k !) $$\n\n中间的阶乘逐项约掉，最后一项的分母是 $n_k ! 0!$。"
+ },
+ "binom_thm/body": {
+  "src": "$$ (x + y)^n = sum_(k = 0)^n binom(n, k) x^k y^(n - k) = sum_(k = 0)^n binom(n, k) x^(n - k) y^k $$"
+ },
+ "binom_thm/p0": {
+  "src": "$(x + y)^n$ 是 $n$ 个 $(x + y)$ 相乘。展开时从每个括号里取 $x$ 或 $y$；取到 $k$ 个 $x$ 的方式有 $binom(n, k)$ 种，每种得到 $x^k y^(n - k)$。"
+ },
+ "multinom_thm/body": {
+  "src": "$$ (x_1 + dots.c + x_k)^n = sum_(n_1 + dots.c + n_k = n \\ n_1 , ..., n_k >= 0) (n!)/(n_1 ! dots.c n_k !) x_1^(n_1) dots.c x_k^(n_k) $$"
+ },
+ "multinom_thm/p0": {
+  "src": "从 $n$ 个括号中，选 $n_1$ 个取 $x_1$，$n_2$ 个取 $x_2$，……，方法数就是 [[multinom\\_coef]]。"
+ },
+ "pigeon/body": {
+  "src": "把 $n + 1$ 个物体放进 $n$ 个盒子，至少有一个盒子含有至少 2 个物体。即若 $a_1 + dots.c + a_n = n + 1$，$a_i >= 0$，则 $exists i, med a_i >= 2$。"
+ },
+ "pigeon/p0": {
+  "src": "设 $forall i, med a_i <= 1$，则 $n + 1 = a_1 + dots.c + a_n <= n$，矛盾。"
+ },
+ "ceil_lemma/body": {
+  "src": "若 $a in ZZ$，$x in RR$，则 $a < ceil(x) <==> a < x$。"
+ },
+ "ceil_lemma/p0": {
+  "src": "$ceil(x) - 1 < x <= ceil(x)$。于是 $a < x <==> a <= ceil(x) - 1 <==> a < ceil(x)$（$a$ 是整数）。"
+ },
+ "pigeon_gen/body": {
+  "src": "把 $n$ 个物体放进 $k$ 个盒子，至少有一个盒子含有至少 $ceil(n \\/ k)$ 个物体。即若 $a_1 + dots.c + a_k = n$，则 $exists i, med a_i >= ceil(n \\/ k)$。"
+ },
+ "pigeon_gen/p0": {
+  "src": "设 $forall i, med a_i < ceil(n \\/ k)$，由引理 $a_i < n/k$，于是 $n = a_1 + dots.c + a_k < n$，矛盾。"
+ },
+ "ex_pigeon_sq/body": {
+  "src": "在边长为 1 的正方形中选 5 个点，证明必定有 2 个点的距离不超过 $sqrt(2)/2$。"
+ },
+ "ex_pigeon_sq/p0": {
+  "src": "把正方形分成 4 个边长 $1/2$ 的小正方形。由鸽笼原理，有 2 个点 $p, q$ 落在同一个小正方形中，它们的距离不超过小正方形的对角线长 $sqrt(2)/2$。"
+ },
+ "incl_excl/body": {
+  "src": "$$ | A union B | = | A | + | B | - | A inter B | $$\n$$ | A union B union C | = | A | + | B | + | C | - | A inter B | - | A inter C | - | B inter C | + | A inter B inter C | $$\n$$ | A_1 union dots.c union A_n | = sum_i | A_i | - sum_(i < j) | A_i inter A_j | + sum_(i < j < l) | A_i inter A_j inter A_l | - dots.c + (- 1)^(n + 1) | A_1 inter dots.c inter A_n | $$"
+ },
+ "incl_excl/p0": {
+  "src": "设 $x$ 恰好在 $A_1 , ..., A_n$ 中的 $k >= 1$ 个集合里。它在 $sum | A_i |$ 里被算了 $binom(k, 1)$ 次，在 $sum | A_i inter A_j |$ 里被算了 $binom(k, 2)$ 次，……只需证明\n\n$$ 1 = binom(k, 1) - binom(k, 2) + dots.c + (- 1)^(k + 1) binom(k, k) , $$\n\n即 $sum_(j = 0)^k (- 1)^j binom(k, j) = 0$。由二项式定理，这就是 $(1 - 1)^k = 0$。"
+ },
+ "ex_ie_100/body": {
+  "src": "求 ${1, ..., 100}$ 中是 2 的倍数或 3 的倍数的数的个数。"
+ },
+ "ex_ie_100/p0": {
+  "src": "设 $A$ 为 2 的倍数，$B$ 为 3 的倍数，则 $A inter B$ 为 6 的倍数。$| A union B | = 50 + 33 - 16 = 67$。"
+ },
+ "div_def/body": {
+  "src": "设 $a, b in ZZ$，$a != 0$。称 $a divides b$（$b$ 是 $a$ 的倍数，$a$ 是 $b$ 的因数）$<==> exists c in ZZ, med b = a c$。例如 $2 divides 6$，$6 divides.not 2$，$2 divides 0$（因为 $0 = 2 dot.op 0$）。"
+ },
+ "div_props/body": {
+  "src": "在 $ZZ$ 上：① 若 $a divides b$，$b divides c$，则 $a divides c$；② 若 $a divides b$，$b divides a$，则 $a = plus.minus b$；③ 若 $a != 0$，则 $a divides a$。因此在 $NN^*$ 上，$divides$ 是一个偏序关系。"
+ },
+ "div_props/p0": {
+  "src": "①：设 $b = a d$，$c = b e$，则 $c = a(d e)$。②：设 $b = a d$，$a = b e$，则 $a = a(d e)$，$a != 0$，故 $d e = 1$，$d = e = plus.minus 1$。③：$a = a dot.op 1$。"
+ },
+ "div_lin/body": {
+  "src": "若 $a divides b$，$a divides c$，则对任意 $m, n in ZZ$，$a divides(m b + n c)$。手稿写的是 $a divides(b + c)$。"
+ },
+ "div_lin/p0": {
+  "src": "设 $b = a d$，$c = a e$，则 $m b + n c = a(m d + n e)$。"
+ },
+ "prime_def/body": {
+  "src": "若 $n in NN$，$n >= 2$，且 $n$ 只有 $1, n$ 两个正因数，称 $n$ 是素数，例如 $2, 3, 5, 7, ...$。称 $n$ 是合数 $<==> exists a, b in NN^*$，$n = a b$，$a, b >= 2$，例如 $4, 6, 8, 9, ...$。$NN^*$ 分成三部分：$1$、素数、合数。"
+ },
+ "prime_factor/body": {
+  "src": "设 $n in NN^*$，$n >= 2$，则存在素数 $p$ 使 $p divides n$。"
+ },
+ "prime_factor/p0": {
+  "src": "① 若 $n$ 是素数，$n divides n$。② 若 $n$ 不是素数，设 $m$ 是除 1 以外 $n$ 的最小因数，只需证 $m$ 是素数。反证，设 $k divides m$，$1 < k < m$，则 $k divides n$，与 $m$ 的最小性矛盾。"
+ },
+ "euclid_primes/body": {
+  "src": "素数有无穷多个。"
+ },
+ "euclid_primes/p0": {
+  "src": "设素数只有有限多个 $p_1 , ..., p_k$。令 $N = p_1 dots.c p_k + 1 >= 2$。由引理 $N$ 有素因数 $p_i$，但 $p_i divides p_1 dots.c p_k$，于是 $p_i divides 1$，矛盾。"
+ },
+ "gcd_def/body": {
+  "src": "设 $m, n in NN^*$，称 $m, n$ 最大的公因数为 $gcd(m, n)$。例如 $gcd(12, 18) = 6$。"
+ },
+ "euclid_step/body": {
+  "src": "若 $a = q b + r$，则 $gcd(a, b) = gcd(b, r)$。反复使用，直到余数为 0。例如 $gcd(24, 60) = gcd(24, 12) = 12$。"
+ },
+ "euclid_step/p0": {
+  "src": "设 $d divides b$。由 $r = a - q b$ 及 $a = q b + r$，$d divides a <==> d divides r$。所以 $a, b$ 的公因数与 $b, r$ 的公因数完全相同，最大的也相同。"
+ },
+ "bezout/body": {
+  "src": "设 $a, b in NN^*$，则存在 $m, n in ZZ$，使 $gcd(a, b) = m a + n b$。"
+ },
+ "bezout/p0": {
+  "src": "$$ a &= q_0 b + r_0 , med b = q_1 r_0 + r_1 , med r_0 = q_2 r_1 + r_2 , med ..., med r_(n + 1) = q_(n + 3) r_(n + 2) + 0 $$\n\n于是 $gcd(a, b) = gcd(b, r_0) = dots.c = r_(n + 2)$。倒推：$r_(n + 2) = (dots.c) r_n + (dots.c) r_(n + 1) = (dots.c) r_(n - 1) + (dots.c) r_n = dots.c = (dots.c) a + (dots.c) b$。"
+ },
+ "bezout/p1": {
+  "src": "令 $S = {m a + n b > 0 : m, n in ZZ}$，非空，设 $d = min S$。带余除法 $a = q d + r$，$0 <= r < d$，而 $r = a - q d$ 也是 $a, b$ 的整系数组合，由最小性 $r = 0$，故 $d divides a$，同理 $d divides b$。又 $a, b$ 的任意公因数整除 $d$，所以 $d = gcd(a, b)$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "coprime_iff/body": {
+  "src": "设 $a, b in NN^*$。$gcd(a, b) = 1 <==> exists m, n in ZZ, med m a + n b = 1$。"
+ },
+ "coprime_iff/p0": {
+  "src": "「$=>$」由 Bézout。「$arrow.l.double$」设 $d divides a$，$d divides b$，则 $d divides(m a + n b) = 1$，故 $d = 1$。"
+ },
+ "gcd_div/body": {
+  "src": "设 $a, b, d in NN^*$，则 $d divides a$ 且 $d divides b <==> d divides gcd(a, b)$。"
+ },
+ "gcd_div/p0": {
+  "src": "「$arrow.l.double$」$d divides gcd(a, b) divides a$，同理 $d divides b$。「$=>$」设 $gcd(a, b) = m a + n b$，则 $d divides gcd(a, b)$。"
+ },
+ "euclid_lemma/body": {
+  "src": "设 $p$ 是素数，$a, b in NN^*$。若 $p divides a b$，则 $p divides a$ 或 $p divides b$。对合数一般不成立：$4 divides 2 dot.op 2$，但 $4 divides.not 2$。"
+ },
+ "euclid_lemma/p0": {
+  "src": "设 $p divides a b$，$p divides.not a$，只需证 $p divides b$。由 $gcd(p, a) divides p$，$gcd(p, a) = 1$ 或 $p$；由 $p divides.not a$，$gcd(p, a) = 1$。于是存在 $m, n$ 使 $m p + n a = 1$，两边乘 $b$：$m b p + n a b = b$。$p divides m b p$，$p divides n a b$，故 $p divides b$。"
+ },
+ "euclid_lemma_n/body": {
+  "src": "设 $p$ 是素数，若 $p divides a_1 dots.c a_n$，则 $p divides a_1$ 或 …… 或 $p divides a_n$。"
+ },
+ "euclid_lemma_n/p0": {
+  "src": "由 $p divides(a_1 dots.c a_(n - 1)) a_n$，$p divides a_1 dots.c a_(n - 1)$ 或 $p divides a_n$，再对前者归纳。"
+ },
+ "fta/body": {
+  "src": "设 $n in NN^*$，$n >= 2$。则存在素数 $p_1 , ..., p_k$ 使 $n = p_1 dots.c p_k$，并且在不考虑先后次序的意义下，这种分解是唯一的。"
+ },
+ "fta/p0": {
+  "src": "存在性：$2 = 2$。设 $2, ..., n - 1$ 都能写成素数的乘积。若 $n$ 是素数，$n = n$；若 $n$ 是合数，令 $p$ 是 $n$ 的最小的大于 1 的因数，则 $p$ 是素数，$n = p dot.op n/p$，$n/p < n$，由归纳假设 $n/p$ 能写成素数的乘积。\n\n唯一性：设 $n = p_1 dots.c p_k = q_1 dots.c q_l$。由 $p_1 divides q_1 dots.c q_l$，存在 $j$ 使 $p_1 divides q_j$，不妨设 $j = 1$，于是 $p_1 = q_1$，消去得 $p_2 dots.c p_k = q_2 dots.c q_l$，由强归纳法得证。"
+ },
+ "fta_std/body": {
+  "src": "$n = p_1^(alpha_1) dots.c p_k^(alpha_k)$，其中 $p_1 < dots.c < p_k$ 是素数，$alpha_1 , ..., alpha_k in NN^*$。"
+ },
+ "lcm_def/body": {
+  "src": "$op(\"lcm\")(a, b)$ 是 $a, b$ 的最小正公倍数。"
+ },
+ "gcd_lcm_fta/body": {
+  "src": "设 $a = p_1^(alpha_1) dots.c p_k^(alpha_k)$，$b = p_1^(beta_1) dots.c p_k^(beta_k)$，$alpha_i , beta_i >= 0$。则\n\n① $a divides b <==> forall i, med alpha_i <= beta_i$；\n\n② $gcd(a, b) = p_1^(min(alpha_1 , beta_1)) dots.c p_k^(min(alpha_k , beta_k))$；\n\n③ $op(\"lcm\")(a, b) = p_1^(max(alpha_1 , beta_1)) dots.c p_k^(max(alpha_k , beta_k))$。\n\n于是 $gcd(a, b) op(\"lcm\")(a, b) = a b$，且 $a divides e, med b divides e <==> op(\"lcm\")(a, b) divides e$。"
+ },
+ "gcd_lcm_fta/p0": {
+  "src": "①：若 $b = a c$，把 $c$ 也分解，由唯一性比较各素数的指数；反之直接构造 $c$。②③ 由 ① 逐个素数取指数的最小值或最大值。最后，$min + max = alpha_i + beta_i$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "cong_def/body": {
+  "src": "设 $n in NN^*$，$a, b in ZZ$。称 $a$ 与 $b$ 模 $n$ 同余 $<==> n divides(a - b)$，记作 $a equiv b (mod n)$。例如 $1 equiv 11 (mod 10)$，$-3 equiv 7 (mod 10)$。"
+ },
+ "cong_eqv/body": {
+  "src": "设 $n in NN^*$，则 $equiv (mod n)$ 是 $ZZ$ 上的一个等价关系，称为同余关系。"
+ },
+ "cong_eqv/p0": {
+  "src": "① $a - a = 0$，$n divides 0$。② 若 $n divides(a - b)$，则 $n divides(b - a)$。③ 若 $n divides(a - b)$，$n divides(b - c)$，则 $n divides((a - b) + (b - c)) = a - c$。"
+ },
+ "cong_classes/body": {
+  "src": "设 $n in NN^*$，则模 $n$ 的同余类恰好是 ${[0], [1], ..., [n - 1]}$，且两两不同。"
+ },
+ "cong_classes/p0": {
+  "src": "① 设 $a in ZZ$，$a = q n + r$，$0 <= r <= n - 1$，则 $a equiv r$，$a in [r]$。（$a < 0$ 时对 $-a$ 用带余除法再调整。）\n\n② 设 $0 <= i < j <= n - 1$，反证 $i equiv j$，则 $n divides(j - i)$，但 $1 <= j - i <= n - 1$，矛盾。（像钟表：$11 + 3 equiv 2 (mod 12)$。）"
+ },
+ "mod_arith/body": {
+  "src": "设 $a equiv b (mod n)$，$c equiv d (mod n)$，则 ① $a + c equiv b + d (mod n)$；② $a c equiv b d (mod n)$。"
+ },
+ "mod_arith/p0": {
+  "src": "①：$n divides((a - b) + (c - d))$。②：$n divides(a - b) c = a c - b c$，故 $a c equiv b c$；同理 $n divides b(c - d)$，$b c equiv b d$；由传递性 $a c equiv b d$。"
+ },
+ "zn_def/body": {
+  "src": "$$ ZZ \\/ n ZZ = ZZ \\/ equiv (mod n) = {[0], ..., [n - 1]} = {macron(0) , ..., overline(n - 1)} $$\n\n定义 $[a] + [b] = [a + b]$，$[a] dot.op [b] = [a b]$。由 [[mod\\_arith]]，它们是良定义的。$(ZZ \\/ n ZZ, + , dot.op)$ 是一个环：加法与乘法交换、结合，乘法对加法分配，$[0]$ 与 $[1]$ 是单位元，$[a] + [- a] = [0]$。"
+ },
+ "zp_field/body": {
+  "src": "设 $p$ 是素数，则 $(ZZ \\/ p ZZ, + , dot.op)$ 是一个域，记作 $FF_p$。即 $macron(0) != macron(1)$，且若 $macron(a) != macron(0)$，存在 $macron(b)$ 使 $macron(a) macron(b) = macron(1)$。等价地，若 $p divides.not a$，存在 $b$ 使 $a b equiv 1 (mod p)$。"
+ },
+ "zp_field/p0": {
+  "src": "由 $p divides.not a$ 知 $gcd(p, a) = 1$。由 Bézout，存在 $c, b$ 使 $p c + a b = 1$，故 $a b equiv 1 (mod p)$。"
+ },
+ "fermat/body": {
+  "src": "若 $p$ 是素数，$p divides.not a$，则 $a^(p - 1) equiv 1 (mod p)$。"
+ },
+ "fermat/p0": {
+  "src": "在 $FF_p$ 中，映射 $macron(x) |-> macron(a) macron(x)$ 在 ${macron(1) , ..., overline(p - 1)}$ 上是单射（两边乘 $macron(a)^(-1)$），因此是双射。于是\n\n$$ product_(x = 1)^(p - 1) (a x) equiv product_(x = 1)^(p - 1) x (mod p) , $$\n\n即 $a^(p - 1) (p - 1)! equiv(p - 1)!$。$(p - 1)!$ 在 $FF_p$ 中可逆，消去得 $a^(p - 1) equiv 1$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "fermat_cor/body": {
+  "src": "若 $p divides.not a$，则 $a^n equiv a^(thin n mod(p - 1)) (mod p)$。"
+ },
+ "fermat_cor/p0": {
+  "src": "设 $n = q(p - 1) + r$，则 $a^n = (a^(p - 1))^q a^r equiv a^r$。"
+ },
+ "phi_def/body": {
+  "src": "$$ phi(n) = | {1 <= m <= n : gcd(m, n) = 1} | $$"
+ },
+ "euler_thm/body": {
+  "src": "若 $gcd(a, n) = 1$，则 $a^(phi(n)) equiv 1 (mod n)$。$n = p$ 时就是 Fermat 小定理。"
+ },
+ "euler_thm/p0": {
+  "src": "令 $R = {x : 1 <= x <= n, med gcd(x, n) = 1}$，$| R | = phi(n)$。由 Bézout，$a$ 和 $R$ 中每个元素模 $n$ 都可逆，所以 $x |-> a x mod n$ 是 $R$ 到 $R$ 的单射，因此是双射。与 Fermat 小定理同理，相乘并消去 $product_(x in R) x$ 得 $a^(phi(n)) equiv 1$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "phi_formula/body": {
+  "src": "$$ phi(p) = p - 1, wide phi(p^n) = p^n - p^(n - 1) = p^n (1 - 1/p) $$\n$$ phi(n) = phi(p_1^(alpha_1)) dots.c phi(p_k^(alpha_k)) = n product_(p divides n) (1 - 1/p) $$\n\n第二行的乘法分拆来自中国剩余定理。"
+ },
+ "ex_phi12/body": {
+  "src": "计算 $phi(12)$。"
+ },
+ "ex_phi12/p0": {
+  "src": "$$ phi(12) = 12(1 - 1/2)(1 - 1/3) = 4, wide phi(12) = phi(2^2) phi(3) = (4 - 2) dot.op 2 = 4 $$"
+ },
+ "wilson/body": {
+  "src": "设 $p$ 是素数，则 $(p - 1)! equiv - 1 (mod p)$。例如 $4! = 24 equiv - 1 (mod 5)$。"
+ },
+ "wilson/p0": {
+  "src": "$p = 2$ 时显然。$p >= 3$ 时，在 $FF_p$ 中把 $macron(1) , ..., overline(p - 1)$ 与各自的逆元配对。$x^2 equiv 1$ 等价于 $p divides(x - 1)(x + 1)$，所以只有 $macron(1)$ 和 $overline(p - 1)$ 是自己的逆元。其余两两配对乘积为 $macron(1)$，故 $(p - 1)! equiv 1 dot.op (p - 1) equiv - 1$。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ },
+ "crt/body": {
+  "src": "设 $m_1 , ..., m_k$ 两两互素，则\n\n$$ f : ZZ \\/ m_1 dots.c m_k ZZ -> product_(i = 1)^k ZZ \\/ m_i ZZ, wide f([a]) = ([a]_(m_1) , ..., [a]_(m_k)) $$\n\n是双射。等价地，同余方程组 $a equiv a_i (mod m_i)$（$1 <= i <= k$）在模 $m_1 dots.c m_k$ 下存在唯一解。例如 $ZZ \\/ 12 ZZ -> ZZ \\/ 3 ZZ times ZZ \\/ 4 ZZ$，$6 |->(0, 2)$。"
+ },
+ "crt/p0": {
+  "src": "$f$ 良定义：若 $a equiv b (mod m_1 dots.c m_k)$，则对每个 $i$ 有 $a equiv b (mod m_i)$。\n\n单射：若对每个 $i$，$m_i divides(a - b)$，由两两互素，$op(\"lcm\")(m_1 , ..., m_k) = m_1 dots.c m_k divides(a - b)$。\n\n两边都有 $m_1 dots.c m_k$ 个元素（[[card\\_prod]]），有限集之间等大小的单射就是双射。\n\n-# 手稿中没有写出这个证明，这里是补充的。"
+ }
+}

@@ -1,0 +1,6 @@
+[Unit]
+Description=Maki 数据库备份
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/maki-backup

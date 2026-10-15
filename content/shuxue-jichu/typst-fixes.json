@@ -1,0 +1,3 @@
+{
+ "preimg_comp/body": "| | $union.big$ | $inter.big$ | $\\ ^c$ |\n| --- | --- | --- | --- |\n| $f(dot)$ | $=$ | $subset$ | 无 |\n| $f^(-1)(dot)$ | $=$ | $=$ | $=$ |"
+}
