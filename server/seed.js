@@ -131,6 +131,38 @@ async function seedCourse(c, force) {
   return true;
 }
 
+/* 内容勘误：content/<课>/patches.json 里的「把 old 换成 new」。
+   只改源文里还原样包含 old 的地方（线上已经改过的不动），每个节点记一个新版本；重复启动不会重复改 */
+async function applyPatches(c) {
+  const f = path.join(__dirname, '..', 'content', c.slug, 'patches.json');
+  if (!fs.existsSync(f) || (c.settings || {}).format !== 'typst') return;
+  const { summary, patches } = JSON.parse(fs.readFileSync(f, 'utf8'));
+  const byNode = {};
+  for (const p of patches) (byNode[p.id] = byNode[p.id] || []).push(p);
+  for (const [id, ps] of Object.entries(byNode)) {
+    const row = await one('SELECT data_json, version FROM nodes WHERE course = ? AND id = ?', c.slug, id);
+    if (!row) continue;
+    const n = row.data_json, slots = [];
+    for (const p of ps) {
+      const x = (fieldsOf(n).find(([w]) => w === p.field) || [])[1];
+      if (!x || x.src == null || !x.src.includes(p.old)) continue;
+      x.src = x.src.replace(p.old, () => p.new);
+      if (!slots.includes(x)) slots.push(x);
+    }
+    if (!slots.length) continue;
+    const out = await renderMany(slots.map(x => x.src));
+    if (out.some(o => o.errors.length)) { console.warn(`  勘误 ${c.slug}/${id} 编译出错，跳过`); continue; }
+    slots.forEach((x, i) => { x.body = out[i].html; });
+    await tx(async () => {
+      const v = ((await one('SELECT MAX(version) AS v FROM versions WHERE course = ? AND target = ?', c.slug, id)) || {}).v || row.version;
+      await run('UPDATE nodes SET data_json = ?, version = ?, updated_at = ? WHERE course = ? AND id = ?', JSON.stringify(n), v + 1, now(), c.slug, id);
+      await run('INSERT INTO versions(course,target,version,data_json,summary,author_id,reviewer_id,created_at) VALUES (?,?,?,?,?,?,?,?)', c.slug, id, v + 1, JSON.stringify(n), summary, null, null, now());
+      await run('UPDATE courses SET updated_at = ? WHERE slug = ?', now(), c.slug);
+    });
+    console.log(`勘误：${c.title} / ${n.title}`);
+  }
+}
+
 /* 彻底删除的课程：启动时清掉数据库里与它有关的一切（课程、节点、版本、提交、反馈、进度、路线、权限、日志） */
 const PURGED = [];
 async function purge() {
@@ -147,7 +179,7 @@ async function purge() {
     console.log(`已彻底删除课程 ${slug}`);
   }
 }
-async function seedAll(force, only) { await migrate(); for (const c of COURSES) await seedCourse(c, force && (!only || only === c.slug)); await purge(); }
+async function seedAll(force, only) { await migrate(); for (const c of COURSES) { await seedCourse(c, force && (!only || only === c.slug)); await applyPatches(c); } await purge(); }
 
 /* node server/seed.js --force --only=kaoyan 只重新导入一门课 */
 const ONLY = (process.argv.find(a => a.startsWith('--only=')) || '').slice(7) || null;
