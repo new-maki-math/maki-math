@@ -137,7 +137,7 @@ async function purge() {
   for (const slug of PURGED) {
     if (!await one('SELECT 1 AS x FROM courses WHERE slug = ?', slug)) continue;
     await tx(async () => {
-      for (const t of ['nodes', 'versions', 'course_roles', 'applications', 'submissions', 'score_events', 'feedback', 'user_state', 'routes']) await run(`DELETE FROM ${t} WHERE course = ?`, slug);
+      for (const t of ['nodes', 'versions', 'course_roles', 'applications', 'submissions', 'score_events', 'feedback', 'user_state', 'routes', 'drafts']) await run(`DELETE FROM ${t} WHERE course = ?`, slug);
       await run('DELETE FROM audit_log WHERE detail LIKE ?', `%"${slug}"%`);
       await run('DELETE FROM courses WHERE slug = ?', slug);
     });

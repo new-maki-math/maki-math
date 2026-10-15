@@ -133,6 +133,45 @@ test('完整流程', async () => {
   const hist = await anon('GET', '/api/node/shuxue-jichu/prop/history');
   assert.equal(hist.body.versions.length, 3);
 
+  /* 打包提交：先存进待提交（草稿篮），再一次性提交多个节点 + 结构调整 */
+  assert.deepEqual((await ed('GET', '/api/draft/shuxue-jichu')).body.items, []);
+  const ex1 = { type: 'example', imp: 1, title: '例：打包一', body: '判断 $2 > 1$ 是不是命题。', attach: ['prop'], sols: [{ name: '直接', deps: ['prop'], body: '是。' }] };
+  const ex2 = { type: 'exercise', imp: 1, title: '练习：打包二', body: '仿照 [[ex_b1]] 再举一个例子。', attach: ['ex_b1'], sols: [{ name: '提示', deps: ['ex_b1'], body: '比如 $3 > 2$。' }] };
+  assert.equal((await ed('PUT', '/api/draft/shuxue-jichu', { items: [{ target: 'ex_b1', data: ex1, bubble: 'b1a', isNew: true }], summary: '草稿' })).status, 200);
+  assert.equal((await ed('GET', '/api/draft/shuxue-jichu')).body.items[0].target, 'ex_b1');
+  assert.equal((await anon('PUT', '/api/draft/shuxue-jichu', { items: [] })).status, 401);
+  const Bnow = (await one("SELECT tree_json FROM courses WHERE slug = 'shuxue-jichu'")).tree_json;
+  const B2 = JSON.parse(JSON.stringify(Bnow)); B2.b1a.desc = '打包时顺手改的简介';
+  const N1 = (await one("SELECT data_json FROM nodes WHERE course = 'shuxue-jichu' AND id = 'prop'")).data_json;
+  const batch = { B: B2, items: [{ target: 'ex_b1', data: ex1, bubble: 'b1a' }, { target: 'ex_b2', data: ex2, bubble: 'b1a' }, { target: 'prop', data: { ...N1, body: '命题：能判断真假的陈述句。' } }] };
+  /* 包里引用了不存在的节点：整包被挡下，并指出是哪一个 */
+  const badB = await ed('POST', '/api/check/shuxue-jichu', { kind: 'batch', payload: { items: [batch.items[1]] } });
+  assert.equal(badB.body.ok, false);
+  assert.equal((await ed('POST', '/api/submissions', { course: 'shuxue-jichu', kind: 'batch', payload: { items: [batch.items[0], batch.items[0]] }, summary: 'x' })).status, 400);
+  assert.equal((await ed('POST', '/api/check/shuxue-jichu', { kind: 'batch', payload: batch })).body.ok, true);
+  const bs = await ed('POST', '/api/submissions', { course: 'shuxue-jichu', kind: 'batch', payload: batch, summary: '一次加两道题' });
+  assert.equal(bs.status, 200, JSON.stringify(bs.body));
+  const rvB = (await admin('GET', '/api/review')).body.submissions.find(x => x.id === bs.body.id);
+  assert.equal(rvB.n_items, 3); assert.equal(rvB.has_tree, true);
+  const detB = await admin('GET', `/api/submissions/${bs.body.id}`);
+  assert.equal(detB.body.current.N.ex_b1, null);
+  assert.match(detB.body.current.N.prop.body, /陈述句/);
+  /* 审核前「命题」又被别人改了一版：通过时提示已合并 */
+  const okB = await admin('POST', `/api/submissions/${bs.body.id}/decide`, { approve: true, score: 3 });
+  assert.equal(okB.status, 200, JSON.stringify(okB.body));
+  assert.equal(okB.body.count, 3);
+  const ids = (await pool.query("SELECT id FROM nodes WHERE course = 'shuxue-jichu' AND id IN ('ex_b1','ex_b2')")).rows.map(r => r.id).sort();
+  assert.deepEqual(ids, ['ex_b1', 'ex_b2']);
+  assert.match((await one("SELECT data_json FROM nodes WHERE course = 'shuxue-jichu' AND id = 'prop'")).data_json.src, /能判断真假的陈述句/);
+  const treeAfter = (await one("SELECT tree_json FROM courses WHERE slug = 'shuxue-jichu'")).tree_json;
+  assert.equal(treeAfter.b1a.desc, '打包时顺手改的简介');
+  assert.ok(treeAfter.b1a.kids.indexOf('ex_b1') < treeAfter.b1a.kids.indexOf('ex_b2'));
+  assert.ok(await one("SELECT 1 AS x FROM versions WHERE course = 'shuxue-jichu' AND target = '#tree' AND summary LIKE '打包提交%'"));
+  assert.equal((await ed('GET', '/api/me')).body.score.accepted, 5);   // 包里 3 个节点各算一次
+  /* 清空草稿 */
+  assert.equal((await ed('PUT', '/api/draft/shuxue-jichu', { items: [] })).status, 200);
+  assert.equal((await one("SELECT COUNT(*)::int AS n FROM drafts")).n, 0);
+
   /* 反馈 → 处理 → 公开 */
   /* 访客也能反馈，但要先做计算验证 */
   assert.equal((await anon('POST', '/api/feedback/shuxue-jichu/prop', { kind: '内容有错', text: 'x' })).status, 400);

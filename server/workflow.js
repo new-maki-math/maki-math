@@ -68,7 +68,8 @@ async function cleanNode(d, typst) {
   const variants = vs.filter(v => String(v.src != null ? v.src : v.body || '').trim()).map(v => ({ name: str(v.name || '等价说法', 30, '说法名称').trim() || '等价说法', body: body(v, '说法正文') }));
   if (variants.length) n.variants = variants;
   if (course.isQ(n.type)) n.attach = ids(d.attach);
-  const ps = Array.isArray(d.proofs) ? d.proofs : Array.isArray(d.sols) ? d.sols : [];
+  /* 正文是空的证明（比如新建时默认带的那一套，没填）直接丢掉 */
+  const ps = (Array.isArray(d.proofs) ? d.proofs : Array.isArray(d.sols) ? d.sols : []).filter(p => p && String(p.src != null && (/^\s*</.test(p.body || '') || !p.body) ? p.src : p.body || '').trim());
   const proofs = ps.slice(0, 8).map(p => ({ name: str(p.name || '证明', 30, '证明名称'), deps: ids(p.deps), body: body(p, '证明正文') }));
   if (course.isQ(n.type)) n.sols = proofs; else if (proofs.length || ['thm', 'prop', 'axiom', 'method'].includes(n.type)) n.proofs = proofs;
   if (typst) {
@@ -125,19 +126,44 @@ async function applyToState(st, kind, target, payload) {
   return { B, N, data };
 }
 
+/* 打包：先换结构（如果有），再按顺序应用每个节点的改动；顺序检查对最后的整体做一次 */
+const BATCH_MAX = 60;
+async function applyBatch(st, payload) {
+  const items = Array.isArray(payload.items) ? payload.items : [];
+  if (!items.length && !payload.B) throw httpError(400, '打包里没有任何改动');
+  if (items.length > BATCH_MAX) throw httpError(400, `一次最多打包 ${BATCH_MAX} 个节点，请分几次提交`);
+  const seen = new Set();
+  let cur = { ...st, B: payload.B ? cleanTree(payload.B) : JSON.parse(JSON.stringify(st.B)), N: JSON.parse(JSON.stringify(st.N)) };
+  const datas = [];
+  for (const it of items) {
+    const target = String((it && it.target) || '');
+    if (seen.has(target)) throw httpError(400, `节点「${target}」在打包里出现了两次`);
+    seen.add(target);
+    let next;
+    try { next = await applyToState(cur, 'node', target, it || {}); }
+    catch (e) { e.message = `「${(it && it.data && it.data.title) || target}」：${e.message}`; if (e.problems) e.problems = e.problems.map(p => `「${(it.data && it.data.title) || target}」${p}`); throw e; }
+    datas.push({ target, bubble: it.bubble, pos: it.pos, data: next.data === undefined ? null : next.data });
+    cur = { ...cur, B: next.B, N: next.N };
+  }
+  return { B: cur.B, N: cur.N, items: datas, tree: !!payload.B };
+}
+
 async function submit(user, slug, { kind, target, payload, summary }) {
   if (!canEdit(user, slug)) throw httpError(403, '你还没有这门课的编辑权限，请先申请成为编辑');
   const st = await course.load(slug);
   if (!st) throw httpError(404, '课程不存在');
   summary = str(summary || '', 200, '变更摘要').trim();
   if (!summary) throw httpError(400, '每次修改都要写变更摘要');
-  if (!['node', 'tree'].includes(kind)) throw httpError(400, '提交类型不对');
+  if (!['node', 'tree', 'batch'].includes(kind)) throw httpError(400, '提交类型不对');
   if (kind === 'tree') target = '#tree';
-  const next = await applyToState(st, kind, target, payload || {});
+  if (kind === 'batch') target = '#batch';
+  const next = kind === 'batch' ? await applyBatch(st, payload || {}) : await applyToState(st, kind, target, payload || {});
   const problems = await course.checkFull(st, next.B, next.N);
   if (problems.length) { const e = httpError(422, '没有通过顺序检查'); e.problems = problems.slice(0, 30); throw e; }
-  const base = kind === 'tree' ? st.meta.tree_version : (st.ver[target] ? st.ver[target].v : 0);
-  const stored = kind === 'node' ? { ...payload, data: next.data === undefined ? null : next.data } : payload;
+  const base = kind === 'node' ? (st.ver[target] ? st.ver[target].v : 0) : st.meta.tree_version;
+  /* 打包：记下每个节点提交时的版本，审核时用来提示「中间被别人改过」 */
+  const stored = kind === 'node' ? { ...payload, data: next.data === undefined ? null : next.data }
+    : kind === 'batch' ? { ...(payload.B ? { B: payload.B } : {}), items: next.items.map(it => ({ ...it, base: st.ver[it.target] ? st.ver[it.target].v : 0 })) } : payload;
   const id = await insert('INSERT INTO submissions(course,kind,target,base_version,payload_json,summary,author_id,created_at) VALUES (?,?,?,?,?,?,?,?)',
     slug, kind, target, base, JSON.stringify(stored), summary, user.id, now());
   await log(user.id, 'submit', { id, slug, target });
@@ -152,6 +178,19 @@ async function writeState(slug, st, next, kind, target, summary, authorId, revie
       slug, '#tree', v, JSON.stringify({ B: next.B, graph: st.graph }), summary, authorId, reviewerId, now());
     return v;
   }
+  const v = await writeNode(slug, next, target, summary, authorId, reviewerId);
+  /* 结构变化（新增或删除节点）也要记一次树的版本 */
+  if (JSON.stringify(next.B) !== JSON.stringify(st.B)) await writeTree(slug, st, next, `随「${target}」一起变化：${summary}`, authorId, reviewerId);
+  return v;
+}
+async function writeTree(slug, st, next, summary, authorId, reviewerId) {
+  const tv = st.meta.tree_version + 1;
+  await run('UPDATE courses SET tree_json = ?, tree_version = ?, updated_at = ? WHERE slug = ?', JSON.stringify(next.B), tv, now(), slug);
+  await run('INSERT INTO versions(course,target,version,data_json,summary,author_id,reviewer_id,created_at) VALUES (?,?,?,?,?,?,?,?)',
+    slug, '#tree', tv, JSON.stringify({ B: next.B, graph: st.graph }), summary, authorId, reviewerId, now());
+  return tv;
+}
+async function writeNode(slug, next, target, summary, authorId, reviewerId) {
   const lastV = (await one('SELECT MAX(version) AS v FROM versions WHERE course = ? AND target = ?', slug, target) || {}).v || 0;
   const v = lastV + 1, data = next.N[target];
   if (data) await run('INSERT INTO nodes(course,id,data_json,version,reviewer_id,updated_at) VALUES (?,?,?,?,?,?) ON CONFLICT(course,id) DO UPDATE SET data_json=excluded.data_json, version=excluded.version, reviewer_id=excluded.reviewer_id, updated_at=excluded.updated_at',
@@ -160,13 +199,6 @@ async function writeState(slug, st, next, kind, target, summary, authorId, revie
   await run('UPDATE courses SET updated_at = ? WHERE slug = ?', now(), slug);
   await run('INSERT INTO versions(course,target,version,data_json,summary,author_id,reviewer_id,created_at) VALUES (?,?,?,?,?,?,?,?)',
     slug, target, v, data ? JSON.stringify(data) : null, summary, authorId, reviewerId, now());
-  /* 结构变化（新增或删除节点）也要记一次树的版本 */
-  if (JSON.stringify(next.B) !== JSON.stringify(st.B)) {
-    const tv = st.meta.tree_version + 1;
-    await run('UPDATE courses SET tree_json = ?, tree_version = ?, updated_at = ? WHERE slug = ?', JSON.stringify(next.B), tv, now(), slug);
-    await run('INSERT INTO versions(course,target,version,data_json,summary,author_id,reviewer_id,created_at) VALUES (?,?,?,?,?,?,?,?)',
-      slug, '#tree', tv, JSON.stringify({ B: next.B, graph: st.graph }), `随「${target}」一起变化：${summary}`, authorId, reviewerId, now());
-  }
   return v;
 }
 
@@ -189,6 +221,24 @@ async function decide(reviewer, id, { approve, score, note }) {
     await run('SELECT 1 FROM courses WHERE slug = ? FOR UPDATE', s.course);
     course.invalidate(s.course);
     const st = await course.load(s.course);
+    if (s.kind === 'batch') {
+      const p = s.payload_json;
+      const changed = (p.items || []).filter(it => (st.ver[it.target] ? st.ver[it.target].v : 0) !== (it.base || 0)).map(it => (st.N[it.target] || {}).title || it.target);
+      const treeMoved = p.B && st.meta.tree_version !== s.base_version;
+      const warn = changed.length || treeMoved ? `提交之后这些内容已经被别人改过，已按最新内容合并：${[...changed, ...(treeMoved ? ['课程结构'] : [])].join('、')}` : null;
+      const next = await applyBatch(st, p);
+      const problems = await course.checkFull(st, next.B, next.N);
+      if (problems.length) { const e = httpError(422, '按当前课程内容，这个打包已经不能通过顺序检查'); e.problems = problems.slice(0, 30); throw e; }
+      for (const it of next.items) await writeNode(s.course, next, it.target, s.summary, s.author_id, reviewer.id);
+      if (JSON.stringify(next.B) !== JSON.stringify(st.B)) await writeTree(s.course, st, next, `打包提交：${s.summary}`, s.author_id, reviewer.id);
+      await run('UPDATE submissions SET status = ?, reviewer_id = ?, score = ?, review_note = ?, decided_at = ? WHERE id = ?', 'approved', reviewer.id, score, note, now(), id);
+      /* 打包里每个节点都算一次被采纳（结构改动另算一次），不让打包吃亏 */
+      const n = Math.max(1, next.items.length + (p.B && !next.items.length ? 1 : 0));
+      for (let i = 0; i < n; i++) await run('INSERT INTO score_events(user_id,course,delta,reason,submission_id,created_at) VALUES (?,?,?,?,?,?)', s.author_id, s.course, score, 'accepted', id, now());
+      course.invalidate(s.course);
+      await log(reviewer.id, 'approve', { id, batch: next.items.length });
+      return { status: 'approved', count: next.items.length, warning: warn };
+    }
     const cur = s.kind === 'tree' ? st.meta.tree_version : (st.ver[s.target] ? st.ver[s.target].v : 0);
     const warn = cur !== s.base_version ? `提交之后内容已经被改过（当时是第 ${s.base_version} 版，现在是第 ${cur} 版），已按最新内容合并。` : null;
     const next = await applyToState(st, s.kind, s.target, s.payload_json);
@@ -357,5 +407,24 @@ async function decideRoute(u, id, { approve, featured, note }) {
   await log(u.id, 'route_approve', { id });
 }
 
-module.exports = { applyToState, submit, decide, rollback, scoreOf, apply, decideApp, canHandleApp, addFeedback, resolveFeedback, FB_KINDS,
+/* ---------- 草稿篮 ---------- */
+async function getDraft(user, slug) {
+  const r = await one('SELECT data_json, updated_at FROM drafts WHERE user_id = ? AND course = ?', user.id, slug);
+  return r ? { ...r.data_json, updatedAt: r.updated_at } : { items: [], B: null, updatedAt: null };
+}
+async function saveDraft(user, slug, d) {
+  if (!canEdit(user, slug)) throw httpError(403, '你还没有这门课的编辑权限');
+  if (!await course.load(slug)) throw httpError(404, '课程不存在');
+  const items = (Array.isArray(d && d.items) ? d.items : []).slice(0, BATCH_MAX).map(it => ({
+    target: str(String(it.target || ''), 40, '节点编号'), data: it.data === null ? null : it.data && typeof it.data === 'object' ? it.data : null,
+    ...(it.bubble ? { bubble: str(String(it.bubble), 40, '泡泡') } : {}), ...(it.isNew ? { isNew: true } : {}), base: Number(it.base) || 0, savedAt: Number(it.savedAt) || now() }));
+  const data = { items, B: d && d.B && typeof d.B === 'object' ? d.B : null, summary: str(String((d && d.summary) || ''), 200, '变更摘要') };
+  const size = JSON.stringify(data).length;
+  if (size > 6_000_000) throw httpError(413, '草稿太大了，请先提交一部分');
+  if (!items.length && !data.B && !data.summary) await run('DELETE FROM drafts WHERE user_id = ? AND course = ?', user.id, slug);
+  else await run('INSERT INTO drafts(user_id,course,data_json,updated_at) VALUES (?,?,?,?) ON CONFLICT(user_id,course) DO UPDATE SET data_json = excluded.data_json, updated_at = excluded.updated_at', user.id, slug, JSON.stringify(data), now());
+  return { ok: true };
+}
+
+module.exports = { applyToState, applyBatch, getDraft, saveDraft, BATCH_MAX, submit, decide, rollback, scoreOf, apply, decideApp, canHandleApp, addFeedback, resolveFeedback, FB_KINDS,
   saveRoute, requestShare, decideRoute, cleanNode, sanitize, toHtml, PROMOTE, isTypst, convertNode };

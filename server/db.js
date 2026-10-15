@@ -206,6 +206,17 @@ CREATE TABLE IF NOT EXISTS audit_log (
 ALTER TABLE feedback ADD COLUMN IF NOT EXISTS ip_hash TEXT;
 ALTER TABLE courses ADD COLUMN IF NOT EXISTS prereqs_json JSONB NOT NULL DEFAULT '[]';
 ALTER TABLE courses ADD COLUMN IF NOT EXISTS settings_json JSONB NOT NULL DEFAULT '{}';
+/* 打包提交：一次提交多个节点（和结构改动） */
+ALTER TABLE submissions DROP CONSTRAINT IF EXISTS submissions_kind_check;
+ALTER TABLE submissions ADD CONSTRAINT submissions_kind_check CHECK (kind IN ('node','tree','batch'));
+/* 编辑的草稿篮：还没提交的改动，存在服务器上，换设备也在 */
+CREATE TABLE IF NOT EXISTS drafts (
+  user_id BIGINT NOT NULL REFERENCES users(id),
+  course TEXT NOT NULL,
+  data_json JSONB NOT NULL,
+  updated_at BIGINT NOT NULL,
+  PRIMARY KEY (user_id, course)
+);
 `;
 async function migrate() { await pool.query(SCHEMA); }
 async function close() { await pool.end(); }

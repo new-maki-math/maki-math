@@ -181,7 +181,7 @@ app.put('/api/state/:slug', async req => {
 });
 app.get('/api/me/submissions', async req => {
   const u = need(req);
-  return { items: await all('SELECT s.id, s.course, s.kind, s.target, s.summary, s.status, s.score, s.review_note, s.created_at, s.decided_at, r.nickname AS reviewer FROM submissions s LEFT JOIN users r ON r.id = s.reviewer_id WHERE s.author_id = ? ORDER BY s.id DESC LIMIT 100', u.id) };
+  return { items: await all(`SELECT s.id, s.course, s.kind, s.target, CASE WHEN s.kind = 'batch' THEN jsonb_array_length(COALESCE(s.payload_json->'items', '[]'::jsonb)) END AS n_items, (s.kind = 'batch' AND (s.payload_json->'B') IS NOT NULL) AS has_tree, s.summary, s.status, s.score, s.review_note, s.created_at, s.decided_at, r.nickname AS reviewer FROM submissions s LEFT JOIN users r ON r.id = s.reviewer_id WHERE s.author_id = ? ORDER BY s.id DESC LIMIT 100`, u.id) };
 });
 app.get('/api/me/applications', async req => ({ items: await all('SELECT id, kind, course, status, note, created_at FROM applications WHERE user_id = ? ORDER BY id DESC', need(req).id) }));
 app.post('/api/applications', async req => { const u = need(req); await wf.apply(u, req.body || {}); return { ok: true }; });
@@ -207,21 +207,24 @@ app.post('/api/feedback/:slug/:id', async req => {
 });
 
 /* ---------- 编辑提交 ---------- */
-app.post('/api/submissions', async req => {
+app.post('/api/submissions', { bodyLimit: 8_000_000 }, async req => {
   const u = need(req), b = req.body || {};
   limit(req, 'submit', 20);
   const id = await wf.submit(u, String(b.course || ''), b);
   return { id };
 });
-app.post('/api/check/:slug', async req => {
+/* 草稿篮：还没提交的改动 */
+app.get('/api/draft/:slug', async req => wf.getDraft(need(req), req.params.slug));
+app.put('/api/draft/:slug', { bodyLimit: 8_000_000 }, async req => { const u = need(req); limit(req, 'draft', 60); return wf.saveDraft(u, req.params.slug, req.body || {}); });
+app.post('/api/check/:slug', { bodyLimit: 8_000_000 }, async req => {
   const u = need(req);
   if (!auth.canEdit(u, req.params.slug)) throw auth.httpError(403, '你还没有这门课的编辑权限');
   const b = req.body || {};
-  try { return await wfCheck(await needCourse(req.params.slug), b.kind, b.kind === 'tree' ? '#tree' : String(b.target || ''), b.payload || {}); }
+  try { return await wfCheck(await needCourse(req.params.slug), b.kind, b.kind === 'tree' ? '#tree' : b.kind === 'batch' ? '#batch' : String(b.target || ''), b.payload || {}); }
   catch (e) { if (e.statusCode && e.statusCode < 500) return { ok: false, problems: e.problems || [e.message] }; throw e; }
 });
 async function wfCheck(st, kind, target, payload) {
-  const next = await wf.applyToState(st, kind, target, payload);
+  const next = kind === 'batch' ? await wf.applyBatch(st, payload) : await wf.applyToState(st, kind, target, payload);
   const p = await course.checkFull(st, next.B, next.N);
   return { ok: !p.length, problems: p.slice(0, 30) };
 }
@@ -244,7 +247,7 @@ app.get('/api/review', async req => {
   const cs = await reviewCourses(u), q = `(${cs.map(() => '?').join(',') || "''"})`;
   return {
     counts: await reviewCounts(u),
-    submissions: await all(`SELECT s.id, s.course, s.kind, s.target, s.summary, s.created_at, s.base_version, a.nickname AS author FROM submissions s JOIN users a ON a.id = s.author_id WHERE s.status = 'pending' AND s.course IN ${q} ORDER BY s.id`, ...cs),
+    submissions: await all(`SELECT s.id, s.course, s.kind, s.target, CASE WHEN s.kind = 'batch' THEN jsonb_array_length(COALESCE(s.payload_json->'items', '[]'::jsonb)) END AS n_items, (s.kind = 'batch' AND (s.payload_json->'B') IS NOT NULL) AS has_tree, s.summary, s.created_at, s.base_version, a.nickname AS author FROM submissions s JOIN users a ON a.id = s.author_id WHERE s.status = 'pending' AND s.course IN ${q} ORDER BY s.id`, ...cs),
     feedback: await all(`SELECT f.id, f.course, f.node_id, f.kind, f.text, f.created_at, a.nickname AS author FROM feedback f LEFT JOIN users a ON a.id = f.user_id WHERE f.status = 'open' AND f.course IN ${q} ORDER BY f.id`, ...cs),
     routes: (await all(`SELECT r.id, r.course, r.title, r.descr, r.items_json AS items, r.want_featured, r.approved_json IS NOT NULL AS reshare, a.nickname AS owner, a.is_teacher AS teacher FROM routes r JOIN users a ON a.id = r.owner_id WHERE r.status = 'pending' AND r.course IN ${q} ORDER BY r.updated_at`, ...cs)),
     applications: await Promise.all((await all("SELECT p.*, u.nickname FROM applications p JOIN users u ON u.id = p.user_id WHERE p.status = 'pending' ORDER BY p.id"))
@@ -257,7 +260,7 @@ app.get('/api/submissions/:id', async req => {
   if (!s) throw auth.httpError(404, '提交不存在');
   if (s.author_id !== u.id && !auth.canReview(u, s.course)) throw auth.httpError(403, '无权查看');
   const st = await needCourse(s.course);
-  const current = s.kind === 'tree' ? { B: st.B } : (st.N[s.target] || null);
+  const current = s.kind === 'tree' ? { B: st.B } : s.kind === 'batch' ? { B: st.B, N: Object.fromEntries((s.payload_json.items || []).map(it => [it.target, st.N[it.target] || null])) } : (st.N[s.target] || null);
   return { submission: { ...s, payload: s.payload_json, payload_json: undefined }, current, authorScore: await wf.scoreOf(s.author_id, s.course) };
 });
 app.post('/api/submissions/:id/decide', async req => { const r = await wf.decide(need(req), Number(req.params.id), req.body || {}); course.invalidateAll(); return r; });

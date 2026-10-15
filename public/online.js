@@ -74,6 +74,7 @@ async function loadMe() {
   try {
     const r = await api('GET', `/api/me?course=${SLUG}`);
     ME.user = r.user; ME.pending = r.pending || {};
+    if (r.user && isEditor()) loadDraft();
     if (r.user) {
       const local = S.hand.length || S.mastered.size;
       if (r.state && (r.state.hand.length || r.state.mastered.length)) {
@@ -109,6 +110,7 @@ function pathOfRoute0(r) {
     case 'sub': return `/review`;
     case 'edit': return `/edit/${r.id || 'new'}`;
     case 'tree': return '/edit/tree';
+    case 'draft': return '/edit/draft';
     case 'shared': return `/r/${r.token}`;
     default: return '/';
   }
@@ -129,6 +131,7 @@ function routeOfPath() {
   if ((m = /^\/invite\/([\w-]+)$/.exec(p))) return { v: 'invite', token: m[1] };
   if (p === '/review') return { v: 'review', tab: ['fb', 'routes', 'apps', 'users'].includes(q.get('tab')) ? q.get('tab') : undefined };
   if (p === '/edit/tree') return { v: 'tree' };
+  if (p === '/edit/draft') return { v: 'draft' };
   if ((m = /^\/edit\/(\w+)$/.exec(p))) return m[1] === 'new' ? { v: 'edit', bubble: q.get('b') } : { v: 'edit', id: m[1] };
   if ((m = /^\/r\/([\w-]+)$/.exec(p))) return { v: 'shared', token: m[1] };
   return { v: 'home' };
@@ -152,6 +155,7 @@ page = function (r) {
     case 'sub': return '<p class="none">正在载入提交……</p>';
     case 'edit': return viewEdit(r);
     case 'tree': return viewTree(r);
+    case 'draft': return viewDraft();
     case 'shared': return '<p class="none">正在载入路线……</p>';
     case 'routes': return viewRoutesOnline();
     default: return corePage(r);
@@ -168,6 +172,7 @@ bindPage = function (r) {
   if (r.v === 'sub') loadSub(r.id);
   if (r.v === 'shared') loadShared(r.token);
   if (r.v === 'edit') initEdit(r);
+  if (r.v === 'draft') drawDraftChecks();
 };
 const coreUpdateNav = updateNav;
 updateNav = function () {
@@ -184,6 +189,7 @@ renderSide = function () {
   if (!nav) return;
   const v = cur().v;
   let extra = '';
+  if (isEditor() && drCount()) extra += `<button class="side-btn" data-act="go" data-v="draft" ${v === 'draft' ? 'aria-current="page"' : ''}><span>待提交</span><span class="count">${drCount()}</span></button>`;
   if (isReviewerAny()) extra += `<button class="side-btn" data-act="go" data-v="review" ${v === 'review' || v === 'sub' ? 'aria-current="page"' : ''}><span>审核台</span>${ME.pending.review ? `<span class="count">${ME.pending.review}</span>` : ''}</button>`;
   if (ME.user) extra += `<button class="side-btn" data-act="go" data-v="me" ${v === 'me' ? 'aria-current="page"' : ''}><span>${esc(ME.user.nickname)}</span></button>`;
   else extra += `<button class="side-btn" data-act="go" data-v="login" ${v === 'login' ? 'aria-current="page"' : ''} style="font-size:12px;color:var(--muted)"><span>编辑登录</span></button>`;
@@ -193,7 +199,8 @@ window.nodeFoot = id => {
   const by = (window.COURSE.reviewers || {})[id];
   const v = (window.COURSE.ver || {})[id] || 1;
   let h = `<div class="foot"><span>放行：${by ? esc(by) + '（审核者）' : 'Maki（首次录入）'}</span><span>第 ${v} 版，撰写者不公开</span></div>`;
-  if (isEditor()) h += `<div class="acts"><button class="btn" data-act="editnode" data-id="${id}">修改这个节点</button><button class="btn" data-act="newnode" data-b="${nparent[id]}">在这一节新增节点</button></div>`;
+  if (isEditor() && drItem(id)) h += `<p class="small" style="margin:10px 0 0">这个节点${drItem(id).data ? '有改动' : '已标记删除'}，在「<button class="ref" data-act="go" data-v="draft">待提交</button>」里，还没提交审核。</p>`;
+  if (isEditor()) h += `<div class="acts"><button class="btn" data-act="editnode" data-id="${id}">${drItem(id) ? '继续修改' : '修改这个节点'}</button><button class="btn" data-act="newnode" data-b="${nparent[id]}">在这一节新增节点</button></div>`;
   return h;
 };
 const coreMidIdle = midIdle;
@@ -280,7 +287,7 @@ function viewMe() {
   return `<div class="notes"><h1 class="h1">${esc(u.nickname)}</h1><p class="muted" style="margin:6px 0 0">${esc([u.email, u.phone].filter(Boolean).join(' · '))}${roles.length ? ' · ' + roles.map(esc).join('、') : ' · 普通用户'}</p>` +
     '<div class="acts"><button class="btn" data-act="logout">退出登录</button></div>' +
     sec('修改密码', '<form class="fb-form" id="pw-form" style="max-width:420px"><input class="field" id="pw-old" type="password" autocomplete="current-password" placeholder="原密码"><input class="field" id="pw-new" type="password" autocomplete="new-password" placeholder="新密码，至少 8 位"><button class="btn" type="submit" style="justify-self:start">修改</button><p class="small" id="pw-msg" style="margin:0"></p></form>') +
-    sec('我的提交', '<div id="my-subs"><p class="none">载入中……</p></div>') +
+    sec('我的提交', (isEditor() && drCount() ? `<p style="margin:0 0 10px"><button class="btn" data-act="go" data-v="draft">待提交：${drCount()} 项还没提交</button></p>` : '') + '<div id="my-subs"><p class="none">载入中……</p></div>') +
     sec('申请', `<div id="my-apps"></div>
       <details class="fb"><summary>申请认证老师</summary><form class="fb-form" data-form="app" data-kind="teacher"><p class="small" style="margin:0">认证后，你建的路线会带「老师」标识。请写明学校或机构、任教科目，可以附上教学作品链接。</p><textarea name="material" placeholder="例如：某某中学数学老师，教高一、高二……"></textarea><button class="btn primary" type="submit" style="justify-self:start">提交申请</button></form></details>
       <details class="fb"><summary>申请成为编辑</summary><form class="fb-form" data-form="app" data-kind="editor"><label class="small">课程</label><select name="course">${opts}</select><p class="small" style="margin:0">请附上一份样稿：挑一个定理，写出陈述和完整证明（可以用 $公式$）。由这门课的审核者评估。</p><textarea name="material" style="min-height:140px"></textarea><button class="btn primary" type="submit" style="justify-self:start">提交申请</button></form></details>
@@ -292,7 +299,7 @@ async function loadMine() {
   try {
     const [s, a] = await Promise.all([api('GET', '/api/me/submissions'), api('GET', '/api/me/applications')]);
     const box = $('#my-subs');
-    if (box) box.innerHTML = s.items.length ? '<div class="refs-only">' + s.items.map(x => `<div class="rrow" style="padding:8px 12px;display:block"><div><strong>${esc(x.summary)}</strong> <span class="small">${x.kind === 'tree' ? '结构' : esc((N[x.target] || {}).title || x.target)} · ${fmtDate(x.created_at)} · ${STATUS[x.status]}${x.reviewer ? ' · 审核：' + esc(x.reviewer) : ''}</span></div>${x.review_note ? `<div class="small">审核意见：${esc(x.review_note)}</div>` : ''}</div>`).join('') + '</div>'
+    if (box) box.innerHTML = s.items.length ? '<div class="refs-only">' + s.items.map(x => `<div class="rrow" style="padding:8px 12px;display:block"><div><strong>${esc(x.summary)}</strong> <span class="small">${subLabel(x)} · ${fmtDate(x.created_at)} · ${STATUS[x.status]}${x.reviewer ? ' · 审核：' + esc(x.reviewer) : ''}</span></div>${x.review_note ? `<div class="small">审核意见：${esc(x.review_note)}</div>` : ''}</div>`).join('') + '</div>'
       : `<p class="none">${isEditor() ? '还没有提交。在节点页点「修改这个节点」开始。' : '成为编辑后，你的修改会出现在这里。'}</p>`;
     const ab = $('#my-apps');
     if (ab) ab.innerHTML = a.items.length ? '<ul class="plain" style="margin-bottom:8px">' + a.items.map(x => `<li>${{ teacher: '认证老师', editor: '编辑', reviewer: '审核者' }[x.kind]}${x.course ? `（${esc(courseTitle(x.course))}）` : ''}：${STATUS[x.status]}${x.note ? `，${esc(x.note)}` : ''}</li>`).join('') + '</ul>' : '';
@@ -318,7 +325,7 @@ async function loadReview(r) {
     if (al && REV.sends) al.innerHTML = `<p class="small" style="margin:-6px 0 14px">过去 24 小时发出验证码：短信 ${REV.sends.sms} 条，邮件 ${REV.sends.email} 封。</p>` +
       (REV.sends.capHits.length ? `<div class="stmt" style="border-color:var(--red,#c0392b);margin-bottom:14px"><strong>注意：</strong>过去 24 小时有 ${REV.sends.capHits.length} 次触发了发送上限，可能有人在刷验证码。上限会自动挡住，不会多花钱；如果持续出现，可以在配置里调低上限。</div>` : '');
     let h = '';
-    if (tab === 'subs') h = REV.submissions.length ? '<div class="results">' + REV.submissions.map(s => s.course !== SLUG ? `<a class="res" href="${courseBase(s.course)}/review"><span class="res-t"><span>${esc(s.summary)}</span><span class="small">《${esc(courseTitle(s.course))}》的提交 · ${esc(s.author)} · 到那门课里审核 ›</span></span></a>` : `<button class="res" data-act="opensub" data-id="${s.id}"><span class="res-t"><span>${esc(s.summary)}</span><span class="small">${s.kind === 'tree' ? '调整结构' : (N[s.target] ? '修改：' + esc(N[s.target].title) : '新增：' + esc(s.target))} · ${esc(s.author)} · ${fmtDate(s.created_at)}</span></span></button>`).join('') + '</div>' : '<p class="none">没有待审的提交。</p>';
+    if (tab === 'subs') h = REV.submissions.length ? '<div class="results">' + REV.submissions.map(s => s.course !== SLUG ? `<a class="res" href="${courseBase(s.course)}/review"><span class="res-t"><span>${esc(s.summary)}</span><span class="small">《${esc(courseTitle(s.course))}》的提交 · ${esc(s.author)} · 到那门课里审核 ›</span></span></a>` : `<button class="res" data-act="opensub" data-id="${s.id}"><span class="res-t"><span>${esc(s.summary)}</span><span class="small">${s.kind === 'node' ? (N[s.target] ? '修改：' + esc(N[s.target].title) : '新增：' + esc(s.target)) : subLabel(s)} · ${esc(s.author)} · ${fmtDate(s.created_at)}</span></span></button>`).join('') + '</div>' : '<p class="none">没有待审的提交。</p>';
     if (tab === 'fb') h = REV.feedback.length ? '<div class="routes">' + REV.feedback.map(f => f.course !== SLUG ? `<article class="route"><div class="route-h"><span class="chip t-ex">${esc(f.kind)}</span><a class="ref" href="${courseBase(f.course)}/review?tab=fb">《${esc(courseTitle(f.course))}》的反馈，到那门课里处理 ›</a></div><p>${esc(f.text)}</p></article>` : `<article class="route"><div class="route-h"><span class="chip t-ex">${esc(f.kind)}</span><button class="ref" data-act="node" data-id="${f.node_id}">${esc((N[f.node_id] || {}).title || f.node_id)}</button><span class="small">${esc(f.author || '')} · ${fmtDate(f.created_at)}</span></div><p>${esc(f.text)}</p><form class="fb-form" data-form="resolve" data-id="${f.id}"><textarea name="resolution" placeholder="处理结果（会公开显示在节点页）"></textarea><button class="btn primary" type="submit" style="justify-self:start">标记为已处理</button></form></article>`).join('') + '</div>' : '<p class="none">没有待处理的反馈。</p>';
     if (tab === 'routes') h = REV.routes.length ? '<div class="routes">' + REV.routes.map(r => r.course !== SLUG ? `<article class="route"><div class="route-h"><h2 class="h3">${esc(r.title)}</h2><a class="ref" href="${courseBase(r.course)}/review?tab=routes">《${esc(courseTitle(r.course))}》的路线，到那门课里审核 ›</a></div></article>` : `<article class="route"><div class="route-h"><h2 class="h3">${esc(r.title)}</h2><span class="small">${esc(r.owner)}</span>${r.teacher ? '<span class="teacher">老师</span>' : ''}${r.reshare ? '<span class="chip t-ex">修改后重新提交</span>' : ''}</div><p>${esc(r.descr)}</p><ol class="plain" style="margin:0 0 10px">${r.items.map(x => `<li>${N[x.id] ? refBtn(x.id) : esc(x.id)}${x.ref ? '（附录）' : ''}${x.note ? `<div class="small">过渡：${esc(x.note)}</div>` : ''}</li>`).join('')}</ol>` +
       `<form class="fb-form" data-form="route" data-id="${r.id}">${r.want_featured ? '<label class="small"><input type="checkbox" name="featured" checked> 作者希望进推荐列表；勾选即放进「讲义推荐」</label>' : ''}<textarea name="note" placeholder="审核意见（拒绝时必填）"></textarea><div class="acts" style="margin:0"><button class="btn primary" type="submit" data-approve="1">通过</button><button class="btn" type="submit" data-approve="0">不通过</button></div></form></article>`).join('') + '</div>' : '<p class="none">没有待审的路线。</p>';
@@ -328,6 +335,7 @@ async function loadReview(r) {
     box().innerHTML = h; typeset(box());
   } catch (e) { fail(e); if (box()) box().innerHTML = `<p class="none">${esc(e.message)}</p>`; }
 }
+const subLabel = x => x.kind === 'tree' ? '调整结构' : x.kind === 'batch' ? `打包：${x.n_items || 0} 个节点${x.has_tree ? ' + 结构' : ''}` : esc((N[x.target] || {}).title || x.target);
 const toHtmlLite = src => /^\s*</.test(src) ? src : String(src).split(/\n\s*\n/).map(p => /^\$\$[\s\S]*\$\$$/.test(p.trim()) ? p : `<p>${esc(p)}</p>`).join('');
 function showLink(url, label) {
   const box = $('#inv-out');
@@ -361,7 +369,7 @@ async function renderUsers(q) {
 function nodePreviewHTML(n) {
   if (!n) return '<p class="none">（删除这个节点）</p>';
   const q = n.type === 'example' || n.type === 'exercise', ps = n.proofs || n.sols || [];
-  const nm = id => N[id] ? N[id].title : titleOf(id);
+  const nm = id => N[id] ? N[id].title : (window.titleOfExtra || {})[id] || (drItem(id) && drItem(id).data ? drItem(id).data.title : titleOf(id));
   return `<div class="mini-meta"><span class="chip ${TYPE[n.type][1]}">${TYPE[n.type][0]}</span><span class="stars s${n.imp}">${'★'.repeat(n.imp)}</span></div><div class="mini-title">${esc(n.title)}</div>` +
     `${(n.alias || []).length ? `<p class="small">别名：${n.alias.map(esc).join('、')}</p>` : ''}${(n.deps || []).length ? `<p class="small">前置：${n.deps.map(d => esc(nm(d))).join('、')}</p>` : ''}${(n.attach || []).length ? `<p class="small">挂靠：${n.attach.map(d => esc(nm(d))).join('、')}</p>` : ''}` +
     `<div class="stmt">${fmt(n.body, id => `<span class="xref">${esc(nm(id))}</span>`)}</div>` +
@@ -373,6 +381,7 @@ async function loadSub(id) {
   try {
     const r = await api('GET', `/api/submissions/${id}`), s = r.submission;
     const nodeNew = s.kind === 'node' && !r.current;
+    if (s.kind === 'batch') return renderBatchSub(r);
     let h = `<div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>审核台</span><span class="sep">›</span><span class="now">提交 #${s.id}</span></div>` +
       `<h1 class="h2">${esc(s.summary)}</h1><p class="muted" style="margin:6px 0 14px">${esc(s.author)} · ${fmtDate(s.created_at)} · ${s.kind === 'tree' ? '调整结构' : nodeNew ? `新增节点「${esc(s.target)}」，放在「${esc((B[s.payload.bubble] || {}).title || s.payload.bubble)}」` : '修改节点'} · 作者被采纳 ${r.authorScore.accepted} 次</p>`;
     if (s.kind === 'node') {
@@ -386,6 +395,25 @@ async function loadSub(id) {
     } else h += `<p class="small" style="margin-top:14px">状态：${STATUS[s.status]}${s.review_note ? `，${esc(s.review_note)}` : ''}</p>`;
     v.innerHTML = h; typeset(v);
   } catch (e) { fail(e); v.innerHTML = `<p class="none">${esc(e.message)}</p>`; }
+}
+/* 打包提交：逐个节点对比，结构改动单独列出 */
+function renderBatchSub(r) {
+  const v = $('#view'), s = r.submission, p = s.payload, items = p.items || [];
+  /* 包里新节点的标题也要能显示（被包里其他节点引用时） */
+  const extra = {}; items.forEach(it => { if (it.data && !N[it.target]) extra[it.target] = it.data.title; });
+  const saveTitle = window.titleOfExtra; window.titleOfExtra = extra;
+  const kind = it => !it.data ? '删除' : r.current.N[it.target] ? '修改' : '新增';
+  let h = `<div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>审核台</span><span class="sep">›</span><span class="now">提交 #${s.id}</span></div>` +
+    `<h1 class="h2">${esc(s.summary)}</h1><p class="muted" style="margin:6px 0 14px">${esc(s.author)} · ${fmtDate(s.created_at)} · 打包提交：${items.length} 个节点${p.B ? ' + 结构调整' : ''} · 作者被采纳 ${r.authorScore.accepted} 次</p>` +
+    `<p class="small">这是一个整包：通过就全部发布，不通过就全部退回（请在意见里写明哪几个要改）。</p>`;
+  if (p.B) { const diff = treeDiff(r.current.B, p.B); h += `<details class="fb" open><summary>结构调整（${diff.length} 处）</summary><div class="stmt"><ul class="plain">${diff.map(d => `<li>${esc(d)}</li>`).join('') || '<li>结构没有变化</li>'}</ul></div></details>`; }
+  h += items.map((it, i) => `<details class="fb" ${items.length <= 5 ? 'open' : ''}><summary>${i + 1}. 【${kind(it)}】${esc(it.data ? it.data.title : (r.current.N[it.target] || {}).title || it.target)} <span class="small">${esc(it.target)}${kind(it) === '新增' && it.bubble ? ` · 放在「${esc(((p.B || B)[it.bubble] || {}).title || it.bubble)}」` : ''}</span></summary>` +
+    `<div class="cmp"><div><p class="sec-label">现在</p>${r.current.N[it.target] ? nodePreviewHTML(r.current.N[it.target]) : '<p class="none">（新节点）</p>'}</div><div><p class="sec-label">提交后</p>${nodePreviewHTML(it.data)}</div></div></details>`).join('');
+  window.titleOfExtra = saveTitle;
+  if (s.status === 'pending' && isReviewer() && (s.author_id !== ME.user.id || ME.user.isAdmin)) {
+    h += `<form class="fb-form" data-form="decide" data-id="${s.id}" style="margin-top:18px;max-width:560px"><label class="small" for="sc">质量评分（整包一个分，计入作者隐藏分，作者看不到）</label><select id="sc" name="score"><option value="3">3 分：很好</option><option value="2" selected>2 分：合格</option><option value="1">1 分：勉强</option></select><textarea name="note" placeholder="审核意见（不通过时必填，写明哪几个节点要改）"></textarea><div id="dec-msg"></div><div class="acts" style="margin:0"><button class="btn primary" type="submit" data-approve="1">全部通过并发布</button><button class="btn" type="submit" data-approve="0">整包退回</button></div></form>`;
+  } else h += `<p class="small" style="margin-top:14px">状态：${STATUS[s.status]}${s.review_note ? `，${esc(s.review_note)}` : ''}</p>`;
+  v.innerHTML = h; typeset(v);
 }
 function treeDiff(a, b) {
   const out = [], label = (T, x) => T[x] ? (T[x].title || '（分组）') : N[x] ? N[x].title : x;
@@ -419,7 +447,8 @@ const TYPE_OPTS = [['def', '定义'], ['thm', '定理'], ['prop', '性质'], ['m
 let ED = null;
 function bubbleOptions(sel) {
   const out = [];
-  (function w(b, depth) { for (const k of B[b].kids) if (B[k]) { if (B[k].title) out.push(`<option value="${k}" ${k === sel ? 'selected' : ''}>${'　'.repeat(depth)}${esc(B[k].tag ? chLabel(k) : B[k].title)}</option>`); w(k, B[k].title ? depth + 1 : depth); } })('root', 0);
+  const T = DR.B || B;   // 待提交里调过结构的话，用调整后的结构（可以放进新建的泡泡）
+  (function w(b, depth) { for (const k of T[b].kids) if (T[k]) { if (T[k].title) out.push(`<option value="${k}" ${k === sel ? 'selected' : ''}>${'　'.repeat(depth)}${esc(T[k].tag && B[k] ? chLabel(k) : T[k].title)}</option>`); w(k, T[k].title ? depth + 1 : depth); } })('root', 0);
   return out.join('');
 }
 /* 前置课程的节点目录：编辑器里可以引用「课程:节点」 */
@@ -485,14 +514,18 @@ function toSimple(h) {
 }
 function viewEdit(r) {
   if (!isEditor()) return '<div class="empty-box"><p>只有这门课的编辑可以修改内容。</p><button class="btn" data-act="go" data-v="me">去申请成为编辑</button></div>';
-  const n = r.id ? N[r.id] : null;
+  if (!DR.loaded) { loadDraft().then(() => { if (cur() === r) soft(); }); return '<p class="none">载入中……</p>'; }
+  /* 待提交里已经有这个节点的改动：接着改草稿 */
+  const dr = r.id ? drItem(r.id) : null, drNew = !!(dr && !N[r.id]);
+  const n = r.id ? N[r.id] || (dr && dr.data) : null;
   if (r.id && !n) return '<p class="none">节点不存在。</p>';
-  if (n && pf(r.id).some(p => p.body == null)) { window.ensureBodies([r.id]).then(() => { if (cur() === r) soft(); }, () => toast('载入失败')); return '<p class="none">载入中……</p>'; }
-  if (n && TYP && !SRC[r.id]) { api('GET', `/api/src/${SLUG}/${r.id}`).then(x => { SRC[r.id] = x; if (cur() === r) soft(); }, () => toast('载入源文失败')); return '<p class="none">载入中……</p>'; }
+  if (!dr && n && pf(r.id).some(p => p.body == null)) { window.ensureBodies([r.id]).then(() => { if (cur() === r) soft(); }, () => toast('载入失败')); return '<p class="none">载入中……</p>'; }
+  if (!dr && n && TYP && !SRC[r.id]) { api('GET', `/api/src/${SLUG}/${r.id}`).then(x => { SRC[r.id] = x; if (cur() === r) soft(); }, () => toast('载入源文失败')); return '<p class="none">载入中……</p>'; }
   ED = n ? JSON.parse(JSON.stringify(n)) : { type: 'thm', imp: 2, title: '', alias: [], deps: [], body: '', proofs: [{ name: '证明', deps: [], body: '' }] };
   if (!ED.proofs && !ED.sols && !['def', 'note'].includes(ED.type)) ED.proofs = [];
   ED.deps = ED.deps || []; ED.alias = ED.alias || []; (ED.proofs || ED.sols || []).forEach(p => { p.deps = p.deps || []; });
-  if (TYP) {
+  if (dr) { /* 草稿里存的就是编辑器的格式（正文是源文） */ }
+  else if (TYP) {
     const S = n ? SRC[r.id] : { src: '', proofs: [], variants: [] };
     ED.body = S.src || ''; (ED.proofs || ED.sols || []).forEach((p, i) => { p.body = S.proofs[i] || ''; });
     ED.variants = (ED.variants || []).map((v, i) => ({ name: v.name, body: S.variants[i] || '' }));
@@ -501,13 +534,14 @@ function viewEdit(r) {
     ED.variants = (ED.variants || []).map(v => ({ name: v.name, body: toSimple(v.body) }));
   }
   loadExtCatalog();
-  const opts = Object.keys(N).map(id => `<option value="${esc(N[id].title)} · ${id}"></option>`).join('') + Object.entries(EXTCAT).map(([k, v]) => `<option value="${esc(v[0])}（${esc(v[2])}） · ${k}"></option>`).join('');
-  return `<div class="notes"><div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>${n ? '修改节点' : '新增节点'}</span></div>
-  <h1 class="h1">${n ? esc(n.title) : '新增节点'}</h1>
+  const opts = Object.keys(N).map(id => `<option value="${esc(N[id].title)} · ${id}"></option>`).join('') + DR.items.filter(it => it.data && !N[it.target]).map(it => `<option value="${esc(it.data.title)}（待提交） · ${esc(it.target)}"></option>`).join('') + Object.entries(EXTCAT).map(([k, v]) => `<option value="${esc(v[0])}（${esc(v[2])}） · ${k}"></option>`).join('');
+  const isNew = !N[r.id];
+  return `<div class="notes"><div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>${isNew ? '新增节点' : '修改节点'}</span>${drCount() ? `<span class="sep">·</span><button class="ref" data-act="go" data-v="draft">待提交 ${drCount()} 项</button>` : ''}</div>
+  <h1 class="h1">${n ? esc(n.title) : '新增节点'}</h1>${dr ? `<p class="small" style="margin:4px 0 0">${dr.data ? '正在接着改「待提交」里的草稿。' : '这个节点在「待提交」里标记为删除；在这里保存会改成修改。'}</p>` : ''}
   ${TYP ? TYP_HELP : '<p class="muted" style="margin:6px 0 14px">写法：空一行分段；<code>$公式$</code> 是行内公式，<code>$$公式$$</code> 是独立公式；<code>[[节点编号]]</code> 引用别的节点。含表格、列表的内容直接写 HTML。提交后由审核者放行，系统会先检查顺序。</p>'}
   <datalist id="node-list">${opts}</datalist>
   <form class="fb-form" id="ed-form" style="max-width:none">
-    ${n ? '' : `<label class="small" for="ed-id">节点编号（字母、数字、下划线，提交后不能改）</label><input class="field" id="ed-id" placeholder="例如 thm_cantor"><label class="small" for="ed-bub">放在哪一节</label><select id="ed-bub">${bubbleOptions(r.bubble)}</select>`}
+    ${!isNew ? '' : drNew ? `<p class="small">节点编号：<code>${esc(r.id)}</code>（新增，放在「${esc(((DR.B || B)[dr.bubble] || {}).title || dr.bubble)}」）</p>` : `<label class="small" for="ed-id">节点编号（字母、数字、下划线，提交后不能改）</label><input class="field" id="ed-id" placeholder="例如 thm_cantor"><label class="small" for="ed-bub">放在哪一节</label><select id="ed-bub">${bubbleOptions(r.bubble)}</select>`}
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label class="small" for="ed-type">类型</label><select id="ed-type">${TYPE_OPTS.map(([k, l]) => `<option value="${k}" ${ED.type === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
     <div><label class="small" for="ed-imp">重要性</label><select id="ed-imp">${[3, 2, 1].map(i => `<option value="${i}" ${ED.imp === i ? 'selected' : ''}>${'★'.repeat(i)} ${IMP[i]}</option>`).join('')}</select></div></div>
     <label class="small" for="ed-title">标题</label><input class="field" id="ed-title" value="${esc(ED.title)}">
@@ -521,12 +555,13 @@ function viewEdit(r) {
     <button type="button" class="btn" data-act="addproof" style="justify-self:start">＋ 再加一套证明</button>
     <div class="acts"><button type="button" class="btn" data-act="edpreview">预览</button><button type="button" class="btn" data-act="edcheck">检查顺序</button></div>
     <div id="ed-out"></div>
-    <label class="small" for="ed-sum">变更摘要（必填，会记入版本历史）</label><input class="field" id="ed-sum" placeholder="例如：补全了第二种情形的证明">
-    <div class="acts"><button type="submit" class="btn primary">提交审核</button>${n ? '<button type="button" class="btn" data-act="eddelete">删除这个节点</button>' : ''}</div>
+    <p class="small" style="margin:8px 0 0">改完先「放进待提交」，可以接着改别的节点，最后在「待提交」里一起提交审核。</p>
+    <div class="acts"><button type="submit" class="btn primary">放进待提交</button>${!isNew ? '<button type="button" class="btn" data-act="eddelete">删除这个节点</button>' : drNew ? '<button type="button" class="btn" data-act="drrm" data-id="' + esc(r.id) + '">不要这个新节点了</button>' : ''}</div>
+    ${drCount() || dr ? '' : `<details class="fb"><summary>只改这一个？直接提交审核</summary><div class="fb-form"><label class="small" for="ed-sum">变更摘要（必填，会记入版本历史）</label><input class="field" id="ed-sum" placeholder="例如：补全了第二种情形的证明"><button type="button" class="btn" data-act="edsubmitnow" style="justify-self:start">直接提交审核</button></div></details>`}
   </form></div>`;
 }
 function depsUI(key, list) {
-  return `<div class="links" style="margin-bottom:6px">${list.map((d, i) => `<span class="link">${esc(N[d] ? N[d].title : EXTCAT[d] ? `《${EXTCAT[d][2]}》${EXTCAT[d][0]}` : titleOf(d))}<button type="button" class="ic" style="width:20px;height:20px" data-act="deprm" data-k="${key}" data-i="${i}" aria-label="移除">${ICON.x}</button></span>`).join('') || '<span class="none">无</span>'}</div><input class="field" list="node-list" data-depadd="${key}" placeholder="输入标题搜索，选中后回车添加">`;
+  return `<div class="links" style="margin-bottom:6px">${list.map((d, i) => `<span class="link">${esc(N[d] ? N[d].title : EXTCAT[d] ? `《${EXTCAT[d][2]}》${EXTCAT[d][0]}` : drItem(d) && drItem(d).data ? drItem(d).data.title + '（待提交）' : titleOf(d))}<button type="button" class="ic" style="width:20px;height:20px" data-act="deprm" data-k="${key}" data-i="${i}" aria-label="移除">${ICON.x}</button></span>`).join('') || '<span class="none">无</span>'}</div><input class="field" list="node-list" data-depadd="${key}" placeholder="输入标题搜索，选中后回车添加">`;
 }
 function getList(key) { if (key === 'deps') return ED.deps; if (key === 'attach') return ED.attach || (ED.attach = []); const i = +key.split(':')[1]; return proofsArr()[i].deps; }
 const proofsArr = () => ED.sols || ED.proofs || (ED.proofs = []);
@@ -554,11 +589,14 @@ function initEdit() { drawEditorParts(); if (TYP) document.querySelectorAll('#ed
 function edPayload() {
   readForm();
   const r = cur(), id = r.id || ($('#ed-id') ? $('#ed-id').value.trim() : '');
-  return { target: id, payload: r.id ? { data: ED } : { data: ED, bubble: $('#ed-bub').value } };
+  const dr = r.id ? drItem(r.id) : null;
+  return { target: id, payload: N[id] ? { data: ED } : { data: ED, bubble: dr && dr.bubble ? dr.bubble : ($('#ed-bub') || {}).value } };
 }
 async function edCheck() {
   const p = edPayload();
-  try { const r = await api('POST', `/api/check/${SLUG}`, { kind: 'node', target: p.target, payload: p.payload }); $('#ed-out').innerHTML = r.ok ? '<div class="legal">通过顺序检查，可以提交。</div>' : problemsHTML(r.problems); }
+  /* 连同待提交里的其他改动一起检查（这样可以引用待提交里的新节点） */
+  const items = DR.items.filter(it => it.target !== p.target).concat([{ target: p.target, data: p.payload.data, bubble: p.payload.bubble }]);
+  try { const r = await api('POST', `/api/check/${SLUG}`, { kind: 'batch', payload: drPayload(items) }); $('#ed-out').innerHTML = r.ok ? `<div class="legal">通过顺序检查${DR.items.length ? '（连同待提交里的其他改动）' : ''}。</div>` : problemsHTML(r.problems); }
   catch (e) { $('#ed-out').innerHTML = problemsHTML(e.problems || [e.message]); }
 }
 async function edPreview() {
@@ -582,6 +620,30 @@ async function edPreview() {
   if (n.variants) n.variants = n.variants.map(v => ({ ...v, body: lite(v.body) }));
   const out = $('#ed-out'); clearMath(out); out.innerHTML = `<div class="sec-label">预览</div>${nodePreviewHTML(n)}`; typeset(out);
 }
+/* 放进待提交：先在服务器上编译、检查（连同待提交里的其他改动），过了才放进去 */
+async function edToDraft(del) {
+  const p = edPayload();
+  if (!p.target) { toast('请填节点编号'); $('#ed-id').focus(); return; }
+  if (!/^[A-Za-z0-9_]{1,40}$/.test(p.target)) { toast('节点编号只能用字母、数字、下划线'); return; }
+  if (!N[p.target] && !cur().id && drItem(p.target)) { toast('待提交里已经有同样编号的新节点'); return; }
+  const data = del ? null : ED;
+  if (del && drItem(p.target) && !N[p.target]) { return drRemove(p.target); }
+  const items = DR.items.filter(it => it.target !== p.target).concat([{ target: p.target, data, bubble: p.payload.bubble }]);
+  const out = $('#ed-out'); out.innerHTML = '<p class="none">正在检查……</p>';
+  try {
+    const r = await api('POST', `/api/check/${SLUG}`, { kind: 'batch', payload: drPayload(items) });
+    if (!r.ok) { out.innerHTML = problemsHTML(r.problems); out.scrollIntoView({ block: 'center' }); return; }
+    await drPut(p.target, data ? JSON.parse(JSON.stringify(data)) : null, N[p.target] ? {} : { isNew: true, bubble: p.payload.bubble });
+    toast(`${del ? '已标记删除' : '已放进待提交'}（共 ${drCount()} 项）`);
+    if (H.i > 0) hmove(-1); else go({ v: 'draft' });
+  } catch (e) { out.innerHTML = problemsHTML(e.problems || [e.message]); out.scrollIntoView({ block: 'center' }); }
+}
+async function drRemove(id) {
+  DR.items = DR.items.filter(x => x.target !== id);
+  try { await saveDraft(true); } catch (e) { return; }
+  toast('已移出待提交'); renderSide();
+  if (cur().v === 'edit') { if (N[id]) soft(); else go({ v: 'draft' }); } else soft();
+}
 async function edSubmit(del) {
   const p = edPayload(), summary = $('#ed-sum').value.trim();
   if (!summary) { toast('请写变更摘要'); $('#ed-sum').focus(); return; }
@@ -592,16 +654,86 @@ async function edSubmit(del) {
   } catch (e) { $('#ed-out').innerHTML = problemsHTML(e.problems || [e.message]); $('#ed-out').scrollIntoView({ block: 'center' }); }
 }
 
+/* ================= 待提交（草稿篮） =================
+   编辑可以先改很多个节点（含新增、删除）和结构，攒在这里，最后一次性提交审核。
+   草稿存在服务器上，换设备也在；审核者整包一起看、一起通过或退回。 */
+const DR = { items: [], B: null, summary: '', loaded: false };
+const DR_MAX = 60;
+const drItem = id => DR.items.find(x => x.target === id);
+const drCount = () => DR.items.length + (DR.B ? 1 : 0);
+const drTitle = it => it.data ? it.data.title || it.target : N[it.target] ? N[it.target].title : it.target;
+async function loadDraft() {
+  try {
+    const d = await api('GET', `/api/draft/${SLUG}`);
+    DR.items = Array.isArray(d.items) ? d.items : []; DR.B = d.B || null; DR.summary = d.summary || ''; DR.loaded = true;
+    if (DR.B && !TB) TB = JSON.parse(JSON.stringify(DR.B));
+    renderSide(); if (['node', 'draft'].includes(cur().v)) soft();
+  } catch (e) { }
+}
+let drT;
+function saveDraft(now) {
+  clearTimeout(drT);
+  const run = () => api('PUT', `/api/draft/${SLUG}`, { items: DR.items, B: DR.B, summary: DR.summary }).catch(e => { toast('待提交没能保存到服务器：' + e.message); throw e; });
+  if (now) return run();
+  drT = setTimeout(() => run().catch(() => { }), 600);
+  return Promise.resolve();
+}
+function drPut(target, data, extra) {
+  const i = DR.items.findIndex(x => x.target === target);
+  if (i < 0 && DR.items.length >= DR_MAX) throw new Error(`待提交里最多放 ${DR_MAX} 个节点，请先提交一部分`);
+  const it = { target, data, savedAt: Date.now(), base: (window.COURSE.ver || {})[target] || 0, ...(extra || {}) };
+  if (i < 0) DR.items.push(it); else DR.items[i] = { ...DR.items[i], ...it };
+  renderSide();
+  return saveDraft(true);
+}
+/* 打包提交的内容：结构（如果改过）+ 每个节点 */
+const drPayload = (items = DR.items, b = DR.B) => ({ ...(b ? { B: b } : {}), items: items.map(it => ({ target: it.target, data: it.data, ...(it.bubble ? { bubble: it.bubble } : {}) })) });
+function viewDraft() {
+  if (!isEditor()) return '<div class="empty-box"><p>只有这门课的编辑可以修改内容。</p></div>';
+  const kind = it => !it.data ? '<span class="chip t-ex">删除</span>' : it.isNew || !N[it.target] ? '<span class="chip t-def">新增</span>' : '<span class="chip t-thm">修改</span>';
+  const ver = window.COURSE.ver || {};
+  const T = DR.B || B;
+  const rows = DR.items.map((it, i) => `<li class="hitem"><div class="hitem-top"><span class="hnum">${i + 1}</span><span class="htitle">${kind(it)} ${esc(drTitle(it))} <span class="small">${esc(it.target)}${it.isNew && it.bubble ? ` · 放在「${esc((T[it.bubble] || {}).title || it.bubble)}」` : ''}</span>${N[it.target] && (ver[it.target] || 0) !== (it.base || 0) ? '<span class="small" style="color:var(--red,#c0392b)"> · 你改了之后，别人也改过这个节点，审核时会按最新内容合并</span>' : ''}</span>
+    <div class="hctl">${it.data ? `<button class="btn" data-act="editnode" data-id="${esc(it.target)}">修改</button>` : ''}<button class="btn ghost" data-act="drrm" data-id="${esc(it.target)}">移出</button></div></div></li>`).join('');
+  const td = DR.B ? treeDiff(B, DR.B) : [];
+  const tree = DR.B ? `<li class="hitem"><div class="hitem-top"><span class="hnum">·</span><span class="htitle"><span class="chip t-method">结构</span> 调整了课程结构 <span class="small">${esc(td.slice(0, 3).join('；') || '没有变化')}${td.length > 3 ? '……' : ''}</span></span><div class="hctl"><button class="btn" data-act="go" data-v="tree">修改</button><button class="btn ghost" data-act="drrmtree">移出</button></div></div></li>` : '';
+  return `<div class="notes"><div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>待提交</span></div><h1 class="h1">待提交</h1>
+  <p class="muted" style="margin:6px 0 14px">在节点页点「修改这个节点」或「新增节点」，改完点「放进待提交」，就会出现在这里。可以先攒很多个，最后一起提交；审核者会整包一起看，一起通过或退回。草稿存在服务器上，换设备也在。最多 ${DR_MAX} 个节点。</p>
+  ${drCount() ? `<ol class="hlist">${tree}${rows}</ol>
+  <div class="acts"><button class="btn" data-act="drcheck">检查顺序（整包）</button><button class="btn ghost" data-act="drclear">全部清空</button></div><div id="dr-out"></div>
+  <label class="small" for="dr-sum">变更摘要（必填，会记入每个节点的版本历史）</label><input class="field" id="dr-sum" value="${esc(DR.summary)}" placeholder="例如：补全第三章的例题和练习">
+  <div class="acts"><button class="btn primary" data-act="drsubmit">全部提交审核（${drCount()} 项）</button></div>`
+    : `<div class="empty-box"><p>待提交里还没有东西。</p><button class="btn" data-act="go" data-v="kb">去知识库挑节点</button></div>`}</div>`;
+}
+function drawDraftChecks() { const s = $('#dr-sum'); if (s) s.addEventListener('input', () => { DR.summary = s.value; saveDraft(); }); }
+async function drCheck() {
+  const out = $('#dr-out'); out.innerHTML = '<p class="none">正在检查……</p>';
+  try { const r = await api('POST', `/api/check/${SLUG}`, { kind: 'batch', payload: drPayload() }); out.innerHTML = r.ok ? '<div class="legal">整包通过顺序检查，可以提交。</div>' : problemsHTML(r.problems); }
+  catch (e) { out.innerHTML = problemsHTML(e.problems || [e.message]); }
+}
+async function drSubmit(btn) {
+  const summary = ($('#dr-sum') || {}).value.trim();
+  if (!summary) { toast('请写变更摘要'); $('#dr-sum').focus(); return; }
+  btn.disabled = true;
+  try {
+    await api('POST', '/api/submissions', { course: SLUG, kind: 'batch', payload: drPayload(), summary });
+    const n = drCount();
+    DR.items = []; DR.B = null; DR.summary = ''; TB = null; await saveDraft(true);
+    toast(`已提交 ${n} 项，等审核者放行`); go({ v: 'me' });
+  } catch (e) { btn.disabled = false; $('#dr-out').innerHTML = problemsHTML(e.problems || [e.message]); $('#dr-out').scrollIntoView({ block: 'center' }); }
+}
+
 /* 结构编辑：调整泡泡里的顺序、移动节点、改名、有序与无序 */
 let TB = null, TSEL = null;
 function viewTree() {
   if (!isEditor()) return '<div class="empty-box"><p>只有这门课的编辑可以调整结构。</p></div>';
-  TB = TB || JSON.parse(JSON.stringify(B)); TSEL = TSEL || 'b1';
+  TB = TB || JSON.parse(JSON.stringify(DR.B || B)); TSEL = TB[TSEL] ? TSEL : Object.keys(TB).find(k => k !== 'root') || 'root';
   return `<div class="notes"><div class="crumbs"><span class="arrows"><button data-act="hback" aria-label="返回">${ICON.left}</button></span><span>调整结构</span></div><h1 class="h1">调整结构</h1>
   <p class="muted" style="margin:6px 0 14px">先选一个泡泡，再调整它里面的顺序，或把节点移到别的泡泡。改完检查顺序，再提交审核。</p>
   <label class="small" for="tb-sel">泡泡</label><select id="tb-sel">${treeOptions(TSEL)}</select><div id="tb-box" style="margin-top:12px">${treeBox()}</div>
-  <div id="tb-out"></div><label class="small" for="tb-sum">变更摘要（必填）</label><input class="field" id="tb-sum">
-  <div class="acts"><button class="btn" data-act="tbcheck">检查顺序</button><button class="btn primary" data-act="tbsubmit">提交审核</button><button class="btn ghost" data-act="tbreset">放弃改动</button></div></div>`;
+  <div id="tb-out"></div>
+  <div class="acts"><button class="btn" data-act="tbcheck">检查顺序</button><button class="btn primary" data-act="tbdraft">放进待提交</button><button class="btn ghost" data-act="tbreset">放弃改动</button></div>
+  ${drCount() ? '' : `<details class="fb"><summary>只调结构？直接提交审核</summary><div class="fb-form"><label class="small" for="tb-sum">变更摘要（必填）</label><input class="field" id="tb-sum"><button class="btn" data-act="tbsubmit" style="justify-self:start">直接提交审核</button></div></details>`}</div>`;
 }
 function treeOptions(sel) {
   const out = [];
@@ -623,14 +755,19 @@ function tbRead() { const b = TB[TSEL]; const t = $('#tb-title'); if (!t) return
 function tbRedraw() { $('#tb-box').innerHTML = treeBox(); $('#tb-sel').innerHTML = treeOptions(TSEL); }
 async function tbSend(submit) {
   tbRead();
-  const summary = $('#tb-sum').value.trim();
+  const summary = ($('#tb-sum') || {}).value ? $('#tb-sum').value.trim() : '';
   try {
-    if (submit) {
+    if (submit === 'draft') {
+      const r = await api('POST', `/api/check/${SLUG}`, { kind: 'batch', payload: drPayload(DR.items, TB) });
+      if (!r.ok) { $('#tb-out').innerHTML = problemsHTML(r.problems); return; }
+      DR.B = JSON.parse(JSON.stringify(TB)); await saveDraft(true); renderSide();
+      toast(`已放进待提交（共 ${drCount()} 项）`); go({ v: 'draft' });
+    } else if (submit) {
       if (!summary) { toast('请写变更摘要'); return; }
       await api('POST', '/api/submissions', { course: SLUG, kind: 'tree', payload: { B: TB }, summary });
       TB = null; toast('已提交，等审核者放行'); go({ v: 'me' });
     } else {
-      const r = await api('POST', `/api/check/${SLUG}`, { kind: 'tree', payload: { B: TB } });
+      const r = await api('POST', `/api/check/${SLUG}`, { kind: 'batch', payload: drPayload(DR.items, TB) });
       $('#tb-out').innerHTML = r.ok ? '<div class="legal">通过顺序检查，可以提交。</div>' : problemsHTML(r.problems);
     }
   } catch (e) { $('#tb-out').innerHTML = problemsHTML(e.problems || [e.message]); }
@@ -746,12 +883,19 @@ document.addEventListener('click', async e => {
     case 'rmproof': readForm(); proofsArr().splice(+t.dataset.i, 1); drawEditorParts(); break;
     case 'edpreview': edPreview(); break;
     case 'edcheck': edCheck(); break;
-    case 'eddelete': edSubmit(true); break;
+    case 'eddelete': if (t.dataset.arm) edToDraft(true); else { t.dataset.arm = 1; t.textContent = '再点一次：标记删除（放进待提交）'; } break;
+    case 'edsubmitnow': edSubmit(false); break;
+    case 'drrm': if (t.dataset.arm || cur().v === 'draft') drRemove(t.dataset.id); else { t.dataset.arm = 1; t.textContent = '再点一次确认'; } break;
+    case 'drrmtree': DR.B = null; TB = null; try { await saveDraft(true); } catch (er) { } renderSide(); soft(); break;
+    case 'drclear': if (t.dataset.arm) { DR.items = []; DR.B = null; DR.summary = ''; TB = null; try { await saveDraft(true); } catch (er) { } renderSide(); soft(); } else { t.dataset.arm = 1; t.textContent = '再点一次：清空所有未提交的改动'; } break;
+    case 'drcheck': drCheck(); break;
+    case 'drsubmit': drSubmit(t); break;
     case 'tbmove': { tbRead(); const k = TB[TSEL].kids, i = +t.dataset.i, j = i + +t.dataset.d; [k[i], k[j]] = [k[j], k[i]]; tbRedraw(); break; }
     case 'tbadd': { tbRead(); const name = $('#tb-new').value.trim(); if (!name) { toast('请填新泡泡的名称'); break; } let id; do { id = 'bb' + Math.random().toString(36).slice(2, 7); } while (TB[id]); TB[id] = { title: name, ordered: true, kids: [] }; TB[TSEL].kids.push(id); tbRedraw(); break; }
     case 'tbcheck': tbSend(false); break;
     case 'tbsubmit': tbSend(true); break;
     case 'tbreset': TB = null; soft(); break;
+    case 'tbdraft': tbSend('draft'); break;
     case 'rtcopy': { const k = t.dataset.k, i = +t.dataset.i; copyRoute(k === 'feat' ? FEAT[i] : k === 'mine' ? MINE[i] : window._shared); break; }
     case 'rtshare': try { await api('POST', `/api/routes/${t.dataset.id}/share`); toast('已申请分享，审核通过后会生成链接'); loadRoutes(); } catch (er) { fail(er); } break;
     case 'rtdel': if (t.dataset.arm) { try { await api('DELETE', `/api/routes/${t.dataset.id}`); loadRoutes(); } catch (er) { fail(er); } } else { t.dataset.arm = 1; t.textContent = '再点一次确认删除'; } break;
@@ -775,7 +919,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && t.dataset && t.dataset.depadd) {
     e.preventDefault();
     const m = /·\s*((?:[a-z0-9-]+:)?\w+)$/.exec(t.value), id = m ? m[1] : t.value.trim();
-    if (!N[id] && !(isExt(id) && EXTCAT[id])) { toast('请从下拉列表里选一个节点'); return; }
+    if (!N[id] && !(isExt(id) && EXTCAT[id]) && !(drItem(id) && drItem(id).data)) { toast('请从下拉列表里选一个节点'); return; }
     readForm(); const l = getList(t.dataset.depadd); if (!l.includes(id)) l.push(id); drawEditorParts();
     const again = document.querySelector(`[data-depadd="${t.dataset.depadd}"]`); if (again) again.focus();
   }
@@ -786,7 +930,7 @@ document.addEventListener('change', e => {
 document.addEventListener('submit', async e => {
   const f = e.target, data = Object.fromEntries(new FormData(f).entries()), btn = e.submitter;
   if (f.id === 'lg-form') { e.preventDefault(); return submitLogin(f); }
-  if (f.id === 'ed-form') { e.preventDefault(); return edSubmit(false); }
+  if (f.id === 'ed-form') { e.preventDefault(); return edToDraft(false); }
   if (f.id === 'iv-form') { e.preventDefault(); return submitInvite(f); }
   if (f.id === 'pw-form') {
     e.preventDefault();
@@ -811,7 +955,7 @@ document.addEventListener('submit', async e => {
     if (kind === 'usersearch') renderUsers(data.q || '');
     if (kind === 'decide') {
       const r = await api('POST', `/api/submissions/${f.dataset.id}/decide`, { approve: btn.dataset.approve === '1', score: +data.score, note: data.note });
-      toast(r.status === 'approved' ? `已发布为第 ${r.version} 版${r.warning ? '。' + r.warning : ''}` : '已退回');
+      toast(r.status === 'approved' ? `${r.count != null ? `已发布 ${r.count} 个节点` : `已发布为第 ${r.version} 版`}${r.warning ? '。' + r.warning : ''}` : '已退回');
       setTimeout(() => { location.href = BASE + '/review'; }, r.status === 'approved' ? 1200 : 300);
     }
     if (kind === 'rollback') { const r = await api('POST', '/api/rollback', { course: SLUG, target: f.dataset.id, version: +f.dataset.v, reason: data.reason }); toast(`已回滚，生成第 ${r.version} 版`); setTimeout(() => location.reload(), 1000); }
